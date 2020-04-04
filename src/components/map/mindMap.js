@@ -20,30 +20,26 @@ class MindMap extends Component {
     };
 
     this.events = {
-      click: (event) => this.onClick(event),
-      dragStart: (event) => this.onDragStart(event.pointer.DOM),
-      dragging: (event) => this.onDragging(event.pointer.DOM),
+      click:      (event) => this.onClick(event),
+      dragStart:  (event) => this.onDragStart(event.pointer.DOM),
+      dragging:   (event) => this.onDragging(event.pointer.DOM),
       selectNode: (event) => this.onSelectNode(event.nodes[0]),
     }
   }
 
   //Init functions--------------------------->
   setState(stateObj) {
-    console.log(stateObj);
-    
     if (this.mounted) {
       super.setState(stateObj);
     }
   }
 
   measure = (data) => {
-    console.log("measure");
     this.state.network.redraw();
     this.state.network.fit();
   }
 
   getNetwork = data => {
-    console.log(data);
     this.setState({ network: data });    
   };
 
@@ -70,17 +66,44 @@ class MindMap extends Component {
   //On event functions--------------------------->
 
   onClick = (e) => {
-    console.log(e.pointer.canvas);
-    
+    //console.log(e.pointer.canvas);
   }
+
 
   onDragStart = (coords) => {
     let selectedNode = this.state.network.getNodeAt(coords);
+
+    //Select all internal nodes fo selected one (children of children of ...)
     if(selectedNode && selectedNode!==1){
       this.setState({selectedNode: selectedNode});
-      let childNodes = this.state.network.getConnectedNodes(selectedNode, 'to'); //Don't work id = 0 !
-      childNodes.push(selectedNode);
-      this.state.network.selectNodes(childNodes);
+
+      let allChildNode = new Set(),
+          temporaryParent = new Set(),
+          toAdd = new Set(),
+          end = false;
+    
+      temporaryParent.add(selectedNode);
+      do {
+        end = false;        
+        if(temporaryParent.size > 0){
+          temporaryParent.forEach(node => {
+            allChildNode.add(node);        
+            let childNodes = this.state.network.getConnectedNodes(node, 'to');
+            if(childNodes.length > 0){
+              childNodes.map(el => {
+                toAdd.add(el);                
+              });                        
+              end = true;
+            };
+          }); 
+        }
+
+        temporaryParent.clear();
+        toAdd.forEach(elem => { temporaryParent.add(elem); });  
+        toAdd.clear();
+
+      } while (end);
+      this.state.network.selectNodes([...allChildNode]);
     } 
   }
 
@@ -108,7 +131,6 @@ class MindMap extends Component {
     this.setState({counter: newId})
     this.state.network.body.data.nodes.add({id: newId, label: 'new', x: newX, y: newY});
     this.state.network.body.data.edges.add({from: parentId, to: newId});
-    this.state.network.editNode(newId);
   }
 
   //Render function--------------------------->
