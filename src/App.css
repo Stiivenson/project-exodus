@@ -4,6 +4,7 @@
   height: 100vh;
   border: none;
   margin: 0 auto;
+  font-family: "Roboto-Regular";
 }
 .map-button{
   position: absolute;
@@ -11,33 +12,24 @@
   left: 50%;
 }
 
+/* 
+@font-face {
+  font-family: "Roboto-Regular"; 
+  src: url("./styles/fonts/Roboto/Roboto-Regular.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: normal; 
+} 
 
-.App {
-  text-align: center;
-}
+@font-face {
+  font-family: "Roboto-Italic"; 
+  src: url("./styles/fonts/Roboto/Roboto-Italic.ttf") format("truetype"); 
+  font-style: italic; 
+  font-weight: normal; 
+} 
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
+@font-face {
+  font-family: "Roboto-Bold"; 
+  src: url("./styles/fonts/Roboto/Roboto-Bold.ttf") format("truetype"); 
+  font-style: normal; 
+  font-weight: bold; 
+}  */

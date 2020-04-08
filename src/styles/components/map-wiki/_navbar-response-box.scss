@@ -1,0 +1,23 @@
+/*------------------------------------*\
+    #NAVBAR-RESPONSE-BOX
+\*------------------------------------*/
+
+.navbar-response-box{
+    position: absolute;
+    z-index: 100;
+
+    width: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    margin-top: 40px;
+
+    background-color: $white;
+    border-left: 1px solid #d0d0d0;
+
+    transition: .3s width;
+    &.opened{
+        width: 450px;
+    }
+}

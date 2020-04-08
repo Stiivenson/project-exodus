@@ -1,0 +1,37 @@
+// colors
+$gray-navigation: #3C3C3C;
+$gray-navigation-hover: #080808;
+$white: #fff;
+$dark-white: #F8F8F8;
+
+$blue: #4267b2;
+
+$bg-default: #e9ebee;
+$navbar-default-bg: #fff;
+$gray-base: #000;
+$navbar-height: 40px;
+
+$border-radius: 7px 7px;
+
+$gray-darker: lighten($gray-base, 13.5%) !default; // #222
+$gray-dark: lighten($gray-base, 20%) !default; // #333
+$gray: lighten($gray-base, 33.5%) !default; // #555
+$gray-light: lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter: lighten($gray-base, 93.5%) !default; // #eee
+
+$brand-primary: darken(#428bca, 6.5%) !default; // #337ab7
+$brand-success: #5cb85c !default;
+$brand-info: #5bc0de !default;
+$brand-warning: #f0ad4e !default;
+$brand-danger: #d9534f !default;
+
+// fonts
+
+/*------------------------------------*\
+    #MAIN-NAVBAR
+\*------------------------------------*/
+$main-navbar-height: 40px;
+$main-navbar-icons-path: '../../static/icons/';
+
+// Borders ============================
+$border-base: 2px solid $gray-lighter;

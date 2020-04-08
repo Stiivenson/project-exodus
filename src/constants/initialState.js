@@ -3,10 +3,10 @@ export default {
         nodes:[
             {
                 id: 1,
-                label: 'Web',
-                chosen: false,
+                label: 'MindProject',
                 color:{
-                    background: '#319CFF',
+                   //background: '#319CFF',
+                    background: '#ffffff',
                     border: '#000000'
                 },
                 fixed:{
@@ -16,17 +16,20 @@ export default {
                 font:{
                     align: 'center',
                     bold: true,
-                    color: '#ffffff',
-                    face: 'arial',      
+                    color: '#000000',
+                    face: 'Roboto-Regular',    
+                    multi: true,  
                     size: 26
                 },
                 margin: { 
-                    top: 15, 
+                    top: 20, 
                     bottom: 15, 
                     right: 20,       
-                    left: 20 },
-                x: 0,
-                y: 0
+                    left: 20 
+                },
+                shapeProperties:{
+                  borderRadius: 20
+                }             
             }
         ],
         edges:[{}],
@@ -75,7 +78,7 @@ export default {
               multiselect: true
             },
             manipulation: {
-              enabled: true,
+              enabled: false,
               initiallyActive: false,
               addNode: (data, callback) => {
                 let newId = this.state.counter + 1

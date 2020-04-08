@@ -16,7 +16,8 @@ class MindMap extends Component {
       counter: 1,
       selectedNode: 1,
       network: null,
-      edit_mode: false
+      edit_mode: false,
+      scale: 0
     };
 
     this.events = {
@@ -29,18 +30,20 @@ class MindMap extends Component {
 
   //Init functions--------------------------->
   setState(stateObj) {
+    console.log('stateObj:', stateObj);
     if (this.mounted) {
       super.setState(stateObj);
     }
   }
 
-  measure = (data) => {
+  measure = () => {
+    console.log('measure');
     this.state.network.redraw();
     this.state.network.fit();
   }
 
   getNetwork = data => {
-    this.setState({ network: data });    
+    this.setState({ network: data });   
   };
 
   getEdges = data => {
@@ -50,12 +53,16 @@ class MindMap extends Component {
   };
 
   componentWillMount() {
+    console.log('componentWillMount');
     this.mounted = true;
   }
 
   componentDidMount() {
+    console.log('componentDidMount');
     this.mounted = true;
     window.addEventListener("resize", this.measure);
+    console.log(this.state.network);
+    
   }
 
   componentWillUnmount() {
@@ -66,14 +73,14 @@ class MindMap extends Component {
   //On event functions--------------------------->
 
   onClick = (e) => {
-    //console.log(e.pointer.canvas);
+    console.log();
   }
 
 
   onDragStart = (coords) => {
     let selectedNode = this.state.network.getNodeAt(coords);
 
-    //Select all internal nodes fo selected one (children of children of ...)
+    //Select all internal nodes of selected one (children of children of ...)
     if(selectedNode && selectedNode!==1){
       this.setState({selectedNode: selectedNode});
 
@@ -111,26 +118,51 @@ class MindMap extends Component {
   }
 
   onSelectNode = (id) => {
-    if(id){
+    if(id){     
       this.setState({selectedNode: id});
-      console.log('onSelectNode ', this.state.selectedNode);
     }
   }
 
   //UI functions--------------------------->
-  
   //Add new Node to selected one
   addNode = () => {
     let newId = this.state.counter + 1,
         parentId = this.state.selectedNode,
-        parentCoords =   this.state.network.getPositions(parentId);
+        parentCoords =   this.state.network.getPositions(parentId),
+        len = this.state.network.canvas.body.nodes[parentId].labelModule.size.width;
 
-    let newX = parentCoords[parentId].x + 100,
+    let newX = parentCoords[parentId].x + len + 100,
         newY = parentCoords[parentId].y;
 
     this.setState({counter: newId})
-    this.state.network.body.data.nodes.add({id: newId, label: 'new', x: newX, y: newY});
+    this.state.network.body.data.nodes.add({
+      id: newId, 
+      label: 'New Element',
+      color:{
+        background: '#319CFF',
+        border: '#000000'
+      },
+      font:{
+          align: 'center',
+          bold: true,
+          color: '#000000',
+          face: 'Roboto-Light',  
+          multi: true,
+          size: 20
+      },
+      margin: { 
+          top: 10, 
+          bottom: 10, 
+          right: 15,       
+          left: 15 }, 
+      x: newX, 
+      y: newY
+    });
     this.state.network.body.data.edges.add({from: parentId, to: newId});
+  }
+
+  getScale = () => {
+    console.log(this.state.network.getScale());
   }
 
   //Render function--------------------------->

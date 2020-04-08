@@ -1,0 +1,70 @@
+/*------------------------------------*\
+    #MAIN-NAVBAR
+\*------------------------------------*/
+.main-navbar{
+    position: absolute;
+    z-index: 100;
+
+    width: 100%;
+    height: $main-navbar-height;
+    top: 0;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+
+    background-color: $gray-navigation;
+    color: $white;
+}
+
+.main-navbar__buttons{
+    width: auto;
+    height: 100%;
+
+    display: flex;
+    flex-flow: row nowrap; 
+    align-items: center;
+
+    &.--left{
+        justify-content: flex-start;
+    }
+    &.--center{
+        justify-content: center;
+    }
+    &.--right{
+        justify-content: flex-end;
+    }
+}
+
+
+.main-navbar__button{
+    width: $main-navbar-height;
+    height: $main-navbar-height;
+
+    background-size: auto;
+    background-repeat: no-repeat; 
+    background-position: center;
+
+    cursor: pointer;
+
+    transition: .3s background-color;
+    &:hover{        
+        background-color: $gray-navigation-hover;
+    }
+
+    &.--main-menu{
+        background-image: url('../../static/icons/icon-home.svg');
+    }
+    &.--maps-list{
+        background-image: url('../../static/icons/icon-map.svg');
+    }
+    &.--search{
+        background-image: url('../../static/icons/icon-search.svg');
+    }
+    &.--folder{
+        background-image: url('../../static/icons/icon-directory.svg');
+    }
+    &.--question{
+        background-image: url('../../static/icons/icon-question.svg');
+    }
+}

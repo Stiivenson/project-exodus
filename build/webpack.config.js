@@ -31,8 +31,15 @@ module.exports = {
         test: /(\.css|\.scss)$/,
         loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
+      { 
+        test: /\.(jpe?g|png|gif|svg)$/i, 
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        } 
+      },
       {
-        test: /\.(eot|svg|woff|woff2|otf|ttf)$/,
+        test: /\.(eot|woff|woff2|otf|ttf)$/,
         exclude: /node_modules/,
         loader: 'file-loader',
         options: {

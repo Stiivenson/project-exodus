@@ -1,0 +1,31 @@
+// Globals ============================
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+}
+
+.map-container {
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  border: none; 
+   
+    .vis-react {
+      position: relative;
+      z-index: 10; 
+
+      height: 100%;
+      width: 100%;    
+
+      background-color: $dark-white;
+    }
+    .map-button{
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+    }      
+}
+
+// Defaults ============================
