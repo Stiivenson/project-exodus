@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
 import {sendMapConfig} from './actions/sendMapConfig'
-import MindMap from './components/map-wiki/mindMap';
+import MindMap from './components/map-wiki/mind-map';
 import Navbar from './components/map-wiki/navbar';
 
 

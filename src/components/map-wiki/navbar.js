@@ -15,10 +15,13 @@ class Navbar extends Component{
         console.log(e.target);
         console.log(e.target.classList[1]);
         let cl = e.target.classList[1];
-        this.setState({
-            title: cl,
-            opened: true
-        });            
+        if(cl){
+            this.setState({
+                title: cl,
+                opened: true
+            });  
+        }
+                  
     }
 
     render(){
@@ -29,18 +32,18 @@ class Navbar extends Component{
 
         return(
             <>
-            <div className='main-navbar'>
+            <div className='main-navbar' onClick={this.onNavButtonClick}>
                 <div className='main-navbar__buttons --left'>
-                    <div className='main-navbar__button --main-menu' onClick={this.onNavButtonClick}></div>
-                    <div className='main-navbar__button --maps-list' onClick={this.onNavButtonClick}></div>
+                    <div className='main-navbar__button --main-menu' ></div>
+                    <div className='main-navbar__button --maps-list' ></div>
                 </div>
                 <div className='main-navbar__buttons --center'>
                     MindProject
                 </div>
                 <div className='main-navbar__buttons --right'>
-                    <div className='main-navbar__button --search' onClick={this.onNavButtonClick}></div>
-                    <div className='main-navbar__button --folder' onClick={this.onNavButtonClick}></div>
-                    <div className='main-navbar__button --question' onClick={this.onNavButtonClick}></div>
+                    <div className='main-navbar__button --search'></div>
+                    <div className='main-navbar__button --folder' ></div>
+                    <div className='main-navbar__button --question'></div>
                 </div>
 
             </div>

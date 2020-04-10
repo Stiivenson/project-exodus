@@ -78,24 +78,6 @@ export default {
               navigationButtons: true,
               multiselect: true
             },
-            manipulation: {
-              enabled: false,
-              initiallyActive: false,
-              addNode: (data, callback) => {
-                let newId = this.state.counter + 1
-                data.id = newId;       
-                this.setState({counter: newId})
-                console.log(data); 
-    
-                console.log(this.state.network.body.data);
-                let from_id = this.state.selectedNode;    
-                callback(data);
-              },
-              addEdge: (data, callback) => {
-                console.log('addEdge');
-                
-              }
-            },
             physics:{
               enabled: false
             }

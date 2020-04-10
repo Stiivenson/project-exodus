@@ -1,7 +1,9 @@
 // colors
 $gray-navigation: #3C3C3C;
 $gray-navigation-hover: #080808;
+
 $map-edit-form: #212121;
+$map-selection-bar-gray: #c3c3c3;
 
 $blue: #0094FF;
 $dark-blue: #026DBA;
@@ -32,11 +34,18 @@ $brand-danger: #d9534f !default;
 
 // fonts
 
+//icons
+$icons-path: '../../static/icons/';
+
 /*------------------------------------*\
     #MAIN-NAVBAR
 \*------------------------------------*/
 $main-navbar-height: 40px;
-$icons-path: '../../static/icons/';
+
+/*------------------------------------*\
+    #MAP-UI-SECELTION-BAR
+\*------------------------------------*/
+$map-selection-bar-height: 200px;
 
 // Borders ============================
 $border-base: 2px solid $gray-lighter;

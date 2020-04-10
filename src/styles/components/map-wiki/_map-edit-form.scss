@@ -4,7 +4,7 @@
 
 .map-edit-form-container{
     position: absolute;
-    z-index: 11;
+    z-index: 50;
 
     top: 0;
     height: 100%;
@@ -58,7 +58,7 @@
     background-size: auto;
     background-repeat: no-repeat; 
     background-position: center;
-    background-image: url('#{$icons-path}icon-form-edit.svg');
+    background-image: url('#{$icons-path}map-form/icon-form-edit.svg');
 }
 .map-edit-form__title{
     font-size: 20px;
