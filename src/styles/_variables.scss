@@ -1,10 +1,15 @@
 // colors
 $gray-navigation: #3C3C3C;
 $gray-navigation-hover: #080808;
+$map-edit-form: #212121;
+
+$blue: #0094FF;
+$dark-blue: #026DBA;
+
 $white: #fff;
 $dark-white: #F8F8F8;
 
-$blue: #4267b2;
+
 
 $bg-default: #e9ebee;
 $navbar-default-bg: #fff;
@@ -31,7 +36,7 @@ $brand-danger: #d9534f !default;
     #MAIN-NAVBAR
 \*------------------------------------*/
 $main-navbar-height: 40px;
-$main-navbar-icons-path: '../../static/icons/';
+$icons-path: '../../static/icons/';
 
 // Borders ============================
 $border-base: 2px solid $gray-lighter;

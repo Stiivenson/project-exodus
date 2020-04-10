@@ -53,18 +53,18 @@
     }
 
     &.--main-menu{
-        background-image: url('../../static/icons/icon-home.svg');
+        background-image: url('#{$icons-path}icon-home.svg');
     }
     &.--maps-list{
-        background-image: url('../../static/icons/icon-map.svg');
+        background-image: url('#{$icons-path}icon-map.svg');
     }
     &.--search{
-        background-image: url('../../static/icons/icon-search.svg');
+        background-image: url('#{$icons-path}icon-search.svg');
     }
     &.--folder{
-        background-image: url('../../static/icons/icon-directory.svg');
+        background-image: url('#{$icons-path}icon-directory.svg');
     }
     &.--question{
-        background-image: url('../../static/icons/icon-question.svg');
+        background-image: url('#{$icons-path}icon-question.svg');
     }
 }

@@ -1,9 +1,13 @@
 // Globals ============================
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Roboto-Regular';
     margin: 0;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
+}
+
+input {
+  font-family: 'Roboto-Regular';
 }
 
 .map-container {
@@ -11,7 +15,7 @@ body {
   height: 100vh;
   margin: 0 auto;
   border: none; 
-   
+
     .vis-react {
       position: relative;
       z-index: 10; 
@@ -25,7 +29,26 @@ body {
       position: absolute;
       bottom: 50px;
       left: 50%;
-    }      
+    } 
+    .hover-div{
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      left: 0;
+      top: 0;
+
+      opacity: 0;
+      pointer-events: none;
+      transition: .3s all;
+
+      &.--visible{
+        opacity: 1;
+        left: 50%;
+        top: 50%;
+        pointer-events: all;
+      }
+    }     
 }
 
 // Defaults ============================

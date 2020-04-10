@@ -74,6 +74,7 @@ export default {
             interaction:{
               dragNodes:true,
               dragView: true,
+              hover: true,
               navigationButtons: true,
               multiselect: true
             },
