@@ -2,36 +2,46 @@ import React, {ReactDOM, Component } from 'react';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
-import {sendMapConfig} from './actions/sendMapConfig'
-import MindMap from './components/map-wiki/mind-map';
-import Navbar from './components/map-wiki/navbar';
+import MindMap from './components/mind-map';
+import Navbar from './components/navbar';
+import DndDocTree from './components/dnd-doc-tree';
+
+import { sendCreatedNode } from './actions/map-component';
+import { sendNodeDataToTree } from "./actions/dnd-doc-tree-component";
 
 
 class App extends Component{
   constructor(props){
     super(props);
-    console.log(this.props);
-    
     this.state={   
-      map_component: this.props.map_component
     }
   }
 
-  //При обновлении store - обновялем this.state
-  static getDerivedStateFromProps(props, state) {
-    if (state.branches !== props.branches) {
-      return { branches: props.branches}
-    }
-    return null
+  recieveCreatedNode = (data) => {
+    this.props.sendCreatedNode(data);
+  }
+
+  recieveNodeForTree = (id) => {
+    this.props.sendNodeDataToTree(id);
+  }
+
+  handleTreeFileCreation = (id) => {
+    // this.props.sendFileToCreate(id);
   }
 
   render(){
-    return(
+    return(      
       <div className="map-container">
         <Navbar/>
         <div className='vis-react'>
-          <MindMap map_component={this.state.map_component}/>
+          <MindMap map_component={this.props.mapComponent} 
+                    recieveCreatedNode={this.recieveCreatedNode}
+                    recieveNodeForTree={this.recieveNodeForTree}
+          />
         </div>
+        <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
+                    handleTreeFileCreation={this.handleTreeFileCreation}
+        />
       </div>
     );
   }
@@ -39,19 +49,27 @@ class App extends Component{
 
 const mapStateToProps = state => {
   console.log('mapStateToProps - ', state);
-  
+
   return {
-    map_component: state.map_component
+    mapComponent: state.map_component,
+    docTree_NodeId:  state.dnd_doc_tree_component.nodeId,
+    docTree_title:  state.dnd_doc_tree_component.title,
+    docTree_treeData:  state.dnd_doc_tree_component.treeData
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  // Sum(){
-  //     dispatch(sum());
-  // },
-  // sendCreateBranch(elem, parentID){
-  //   dispatch(createBranch(elem, parentID));
-  // }
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    sendCreatedNode: (data) => {
+      dispatch(sendCreatedNode(data))
+    },
+    sendNodeDataToTree: (id) => {
+      dispatch(sendNodeDataToTree(id))
+    },
+    // sendFileToCreate: (id) => {
+    //   dispatch(createFile(id))
+    // }
+  }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

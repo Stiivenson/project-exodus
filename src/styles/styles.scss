@@ -2,10 +2,12 @@
 @import 'variables';
 @import 'global';
 
-@import './components/map-wiki/navbar';
-@import './components/map-wiki/navbar-response-box';
+@import './components/navbar';
+@import './components/navbar-response-box';
 
-@import './components/map-wiki/map-ui-selection-bar';
-@import './components/map-wiki/map-edit-form';
+@import './components/map-ui-selection-bar';
+@import './components/map-edit-form';
+
+@import './components/dnd-doc-tree';
 
 @import 'overrides';

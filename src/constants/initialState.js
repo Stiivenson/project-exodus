@@ -32,20 +32,13 @@ export default {
                 }             
             }
         ],
-        edges:[{}],
+        edges:[],
         options:{
             layout: {
               randomSeed: undefined,
               improvedLayout:true,
               hierarchical:{
                 enabled: false,            
-                levelSeparation: 100,
-                nodeSpacing: 80,
-                blockShifting: true,
-                edgeMinimization: true,
-                parentCentralization: true,
-                direction: 'UD',
-                sortMethod: 'directed'
               }
             },
             nodes:{
@@ -82,5 +75,166 @@ export default {
               enabled: false
             }
         }
-    }    
+    },
+    dnd_doc_tree_component:{
+      nodeId: null,
+      title: '',
+      treeData: [],
+      doc_tree_structure:[
+        {
+          id:2,
+          title:'Web Project',
+          treeData: [
+            { title: '.gitignore' },
+            { title: 'package.json' },
+            {
+            title: 'src',
+            isDirectory: true,
+            expanded: true,
+            children: [
+                { title: 'styles.css' },
+                { title: 'index.js' },
+                { title: 'reducers.js' },
+                { title: 'actions.js' },
+                { title: 'utils.js' },
+            ],
+            },
+            {
+            title: 'tmp',
+            isDirectory: true,
+            children: [
+                { title: '12214124-log' },
+                { title: 'drag-disabled-file', dragDisabled: true },
+            ],
+            },
+            {
+            title: 'build',
+            isDirectory: true,
+            children: [{ title: 'react-sortable-tree.js' }],
+            },
+            {
+            title: 'public',
+            isDirectory: true,
+            },
+            {
+            title: 'node_modules',
+            isDirectory: true,
+            },
+            { title: '.gitignore' },
+            { title: 'package.json' },
+            {
+            title: 'src',
+            isDirectory: true,
+            expanded: true,
+            children: [
+                { title: 'styles.css' },
+                { title: 'index.js' },
+                { title: 'reducers.js' },
+                { title: 'actions.js' },
+                { title: 'utils.js' },
+            ],
+            },
+            {
+            title: 'tmp',
+            isDirectory: true,
+            children: [
+                { title: '12214124-log' },
+                { title: 'drag-disabled-file', dragDisabled: true },
+            ],
+            },
+            {
+            title: 'build',
+            isDirectory: true,
+            children: [{ title: 'react-sortable-tree.js' }],
+            },
+            {
+            title: 'public',
+            isDirectory: true,
+            },
+            {
+            title: 'node_modules',
+            isDirectory: true,
+            },
+            { title: '.gitignore' },
+            { title: 'package.json' },
+            {
+            title: 'src',
+            isDirectory: true,
+            expanded: true,
+            children: [
+                { title: 'styles.css' },
+                { title: 'index.js' },
+                { title: 'reducers.js' },
+                { title: 'actions.js' },
+                { title: 'utils.js' },
+            ],
+            },
+            {
+            title: 'tmp',
+            isDirectory: true,
+            children: [
+                { title: '12214124-log' },
+                { title: 'drag-disabled-file', dragDisabled: true },
+            ],
+            },
+            {
+            title: 'build',
+            isDirectory: true,
+            children: [{ title: 'react-sortable-tree.js' }],
+            },
+            {
+            title: 'public',
+            isDirectory: true,
+            },
+            {
+            title: 'node_modules',
+            isDirectory: true,
+            },
+            { title: '.gitignore' },
+            { title: 'package.json' },
+            {
+            title: 'src',
+            isDirectory: true,
+            expanded: true,
+            children: [
+                { title: 'styles.css' },
+                { title: 'index.js' },
+                { title: 'reducers.js' },
+                { title: 'actions.js' },
+                { title: 'utils.js' },
+            ],
+            },
+            {
+            title: 'tmp',
+            isDirectory: true,
+            children: [
+                { title: '12214124-log' },
+                { title: 'drag-disabled-file', dragDisabled: true },
+            ],
+            },
+            {
+            title: 'build',
+            isDirectory: true,
+            children: [{ title: 'react-sortable-tree.js' }],
+            },
+            {
+            title: 'public',
+            isDirectory: true,
+            },
+            {
+            title: 'node_modules',
+            isDirectory: true,
+            }
+          ]
+        },
+        {
+          id:3,
+          title:'Films',
+          treeData: [
+            { title: 'Anime' },
+            { title: 'XXX' }
+          ]
+        }
+      ]
+    }
 }

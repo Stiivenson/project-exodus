@@ -12,8 +12,6 @@ class Navbar extends Component{
     }
 
     onNavButtonClick = (e) => {
-        console.log(e.target);
-        console.log(e.target.classList[1]);
         let cl = e.target.classList[1];
         if(cl){
             this.setState({

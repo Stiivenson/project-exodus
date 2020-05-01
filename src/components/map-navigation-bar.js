@@ -1,8 +1,8 @@
 import React, { Component} from 'react';
 
-export const MapSelectionBar = (props) => {  
+export const MapNavigationBar = (props) => {  
 
-    const onSelectionBarClick = (e) => {
+    const onNavigationBarClick = (e) => {
         let child = e.target,
             childrens = Array.from(e.target.parentNode.childNodes);
             
@@ -14,11 +14,11 @@ export const MapSelectionBar = (props) => {
             child.classList.add('--selected');
 
         let attribute = e.target.getAttribute('data');
-        return props.getSelectionBar(attribute);
+        return props.listenNavigationBar(attribute);
     }
 
     return(
-        <div className='map-selection-bar' onClick={onSelectionBarClick}>
+        <div className='map-selection-bar' onClick={onNavigationBarClick}>
             <div className='map-selection-bar__item --cursor --selected' data='cursor'></div>
             <div className='map-selection-bar__item --node'              data='node'></div>
             <div className='map-selection-bar__item --edge'              data='edge'></div>

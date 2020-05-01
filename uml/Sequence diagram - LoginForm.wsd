@@ -1,0 +1,70 @@
+@startuml LoginForm
+actor User 
+control Server
+entity DataBase
+
+activate User
+
+User -[#blue]> Server ++ : req to get access to App
+Server -[#black]> Server: check cookies \nfor authorization
+
+alt user authorized
+    Server -[#black]> DataBase ++ : find user maps
+    DataBase --[#green]> Server -- : send user maps
+
+    create boundary MainMenu
+    participant User order 1
+    participant MainMenu order 2
+    participant Server order 3
+    participant DataBaseorder 4
+
+    Server --[#green]> MainMenu -- : go to '/home' \nsend data
+    activate MainMenu
+    MainMenu --[#green]>o User -- : access to App
+
+else user not authorized
+
+    create boundary LoginForm
+    participant User order 1
+    participant MainMenu order 2
+    participant LoginForm order 3
+    participant Server order 4
+    participant DataBaseorder 5
+
+    activate Server
+    Server --[#green]> LoginForm ++ : go to '/login'
+    deactivate Server
+    LoginForm --[#blue]> User : req to login \nor sign up 
+    User -[#green]> LoginForm : send login and password
+    LoginForm -[#green]> Server ++ : send login and password \nto server
+    Server -[#black]> DataBase ++ : find login \nand password
+
+    alt user data (login/password) found
+        DataBase --[#green]> Server -- : send user maps
+        Server --> LoginForm !!
+        Server --[#green]> MainMenu -- : go to '/home' \nsend data
+        activate MainMenu
+        MainMenu --[#green]>o User -- : access to App
+    else user data not found
+        activate DataBase
+        DataBase --> Server ++ : user data not found
+        deactivate DataBase
+        Server --> LoginForm ++ : error
+        deactivate Server
+        LoginForm --[#blue]> User : req for valid user data
+    end
+
+    User -[#green]> LoginForm : send data to sign up
+    LoginForm -[#green]> Server ++ : send data \nto create new user
+    Server -[#black]> DataBase ++ : create new user
+    DataBase --[#green]> Server : new user created
+    deactivate DataBase
+    Server --> LoginForm !!
+    Server --[#green]> MainMenu -- : go to '/home' \nsend data
+    activate MainMenu
+    MainMenu --[#green]>o User -- : access to App
+
+end
+
+deactivate User
+@enduml

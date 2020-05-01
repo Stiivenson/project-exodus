@@ -1,0 +1,90 @@
+@startuml Use Case
+
+' (Аутентификация/регистрация \nв приложении) as (LoginForm)
+' usecase UserData as "
+' Данные пользователя
+' --
+' R,С,E,D"
+
+' (Получение списка карт) as (UserMaps)
+' usecase UserMap as "
+' Карта
+' --
+' R,С,E,D"
+
+' (Чтение карты) as (MapEditor)
+' usecase MapNodes as "
+' Узлы
+' --
+' R,С,E,D"
+' usecase MapEdges as "
+' Связи
+' --
+' R,С,E,D"
+
+' (Получение списка статей узла) as (DocTree)
+' usecase TreeDoc as "
+' Статья
+' --
+' R,С,E,D"
+' usecase TreeFolder as "
+' Папка
+' --
+' R,С,E,D"
+
+' (Работа со статьей) as (Document)
+' usecase DocumentData as "
+' Данные статьи
+' --
+' R,С,E,D"
+
+actor Пользователь
+    rectangle Navbar{
+        Пользователь -up- (Перейти в \nменю пользователя)
+        Пользователь -up- (Найти необходимую запись \nпо названию / по содержимому)
+        Пользователь -up- (Открыть список \nдиаграмм пользователя)
+        Пользователь -up- (Перейти в главное меню)
+    }
+    rectangle MainMenu{
+        Пользователь -- (Переход в главное меню)
+        (Переход в главное меню) .left-> (Разрешить совместный доступ \nк диаграмме) : include
+        (Переход в главное меню) .-> (Создать/изменить/удалить \nдиаграмму) : include
+        (Переход в главное меню) .-> (Открыть список диаграмм связей) : include
+        (Переход в главное меню) .-> (Открыть диаграмму) : include
+        
+    }
+    rectangle Diagram{
+        (Открыть диаграмму) .down-> (Открыть список записей раздела) : include   
+        (Открыть диаграмму) .down-> (Переместиться по \nрабочему полю редактора) : include 
+        (Открыть диаграмму) .down-> (Добавить/изменить/удалить \nразделы/связи) : include             
+    }
+    rectangle DocsList{
+        (Открыть список записей раздела) .down-> (Создать/изменить/удалить \nназвание записи) : include
+        (Открыть список записей раздела) .down-> (Открыть запись) : include
+    }
+    rectangle TextEditor{
+        (Открыть запись) .-> (Изменить/читать запись)
+    }
+    
+
+
+' left to right direction
+'     User --> (LoginForm)
+'     (LoginForm) .-> (UserData)
+    
+'     User --> (UserMaps)
+'     (UserMaps) .-> UserMap
+
+'     ' UserMap <-- User2
+
+'     User --> (MapEditor)
+'     (MapEditor) .-> MapNodes
+'     (MapEditor) .-> MapEdges
+
+'     User --> (DocTree)
+'     (DocTree) .-> TreeDoc
+'     (DocTree) .-> TreeFolder
+
+'     User --> (Document)
+'     (Document) .-> DocumentData
+@enduml
