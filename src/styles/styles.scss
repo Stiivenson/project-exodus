@@ -2,6 +2,10 @@
 @import 'variables';
 @import 'global';
 
+@import './components/form';
+
+@import './components/Home/home-component';
+
 @import './components/navbar';
 @import './components/navbar-response-box';
 

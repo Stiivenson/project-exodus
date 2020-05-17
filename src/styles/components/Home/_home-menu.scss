@@ -1,0 +1,58 @@
+/*------------------------------------*\
+    #HOME--MENU
+\*------------------------------------*/
+
+.home-container__menu{
+    display: flex;
+    flex-flow: column;
+
+    font-family: 'Roboto-Bold';
+}
+
+.menu-side{
+    cursor: pointer;
+    max-width: 200px;
+    width: 100%;
+
+    padding: 10px 15px;
+    margin-bottom: 20px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    border-radius: 8px;
+
+    transition-property: color, background-color;
+    transition-duration: .1s;
+    transition-timing-function: ease-in;
+    
+    &:hover{
+        color: #0094FF;
+        background-color: #f1f1f1;
+    }
+    &:hover > .menu-side__icon path{
+        fill: #0094FF;
+    }
+    &.--active{
+        color: #0094FF;
+        background-color: #DFE5E8;
+    }
+    &.--active > .menu-side__icon path{
+        fill: #0094FF;
+    }
+}
+
+.menu-side__icon{
+    width: 25px;
+    height: 25px;
+
+    margin-right: 15px;
+
+    path{
+        transition-property: fill;
+        transition-duration: .1s;
+        transition-timing-function: ease-in;
+    }    
+}

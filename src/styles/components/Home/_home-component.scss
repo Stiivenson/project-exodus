@@ -1,0 +1,17 @@
+/*------------------------------------*\
+    #HOME--COMPONENT
+\*------------------------------------*/
+
+.home-container{
+    height: 100%;
+
+    padding: 100px 300px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+@import './home-menu.scss';
+@import './home-mapsList.scss';

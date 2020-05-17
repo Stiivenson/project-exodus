@@ -1,10 +1,10 @@
 import React, { Component} from 'react';
 import { connect } from "react-redux";
 import Graph from "react-graph-vis";
-import { MapNavigationBar } from './map-navigation-bar';
+import { MapNavigationBar } from './MapNavigationBar';
 
 /**
- * @class MindMap
+ * @class MapEditor
  * @description Component to draw MindMap using vis.js
  * @initial_properties nodes / edges / options
  * 
@@ -19,7 +19,7 @@ import { MapNavigationBar } from './map-navigation-bar';
  *    @section ... 
  */
 
-class MindMap extends Component {  
+class MapEditor extends Component {  
   constructor(props) {
     super(props);
     
@@ -140,6 +140,8 @@ class MindMap extends Component {
   }
 
   onHold= (coords) => {
+    console.log(coords);
+    
     let id = this.state.network.getNodeAt(coords);
     this.props.recieveNodeForTree(id)
   }
@@ -415,6 +417,4 @@ class MindMap extends Component {
   }
 }
 
-
-
-export default MindMap;
+export default MapEditor;

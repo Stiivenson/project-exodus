@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import { Link } from "react-router-dom";
 
 class Navbar extends Component{
     constructor(props) {
@@ -8,12 +9,11 @@ class Navbar extends Component{
             title: '',
             opened: false
         }
-
     }
 
     onNavButtonClick = (e) => {
         let cl = e.target.classList[1];
-        if(cl){
+        if(cl && cl !== "--main-menu"){
             this.setState({
                 title: cl,
                 opened: true
@@ -32,7 +32,7 @@ class Navbar extends Component{
             <>
             <div className='main-navbar' onClick={this.onNavButtonClick}>
                 <div className='main-navbar__buttons --left'>
-                    <div className='main-navbar__button --main-menu' ></div>
+                    <Link to="/" className='main-navbar__button --main-menu' ></Link>
                     <div className='main-navbar__button --maps-list' ></div>
                 </div>
                 <div className='main-navbar__buttons --center'>

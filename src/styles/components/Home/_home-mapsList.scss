@@ -1,0 +1,83 @@
+/*------------------------------------*\
+    #HOME--MAPS-LIST
+\*------------------------------------*/
+
+.home-container__maps-grid{
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-basis: 80%;
+}
+
+.maps-grid__title{
+    margin-bottom: 25px;
+
+    font-family: 'Roboto-Regular';
+    text-decoration: underline;
+    font-size: 18px;
+}
+
+.maps-grid__container{
+    width: 100%;
+    margin-bottom: 50px;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.map-card, .map-card__button-create{
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    flex-basis: 20%;
+    height: 100px;
+
+    margin: 0 2% 2% 0;
+    padding: 15px;
+
+    color: white;
+    font-family: 'Roboto-Bold';
+    word-break: break-all;
+
+    background-color: #2288E5;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.25);
+
+    &:nth-child(4n){
+        margin-right: 0;
+    }    
+
+    &:hover > .map-card__delete{
+        left: 15px;
+    }
+}
+
+.map-card__delete{
+    position: absolute;
+    left: -20px;
+    bottom: 10px;
+
+    transition: left .1s ease-in-out;
+
+    &:hover path{
+        fill: black;
+    }
+}
+
+.map-card__button-create{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #8B8B8B;
+
+    &:hover > .map-card__button-create__icon{
+        transform: rotate(180deg);
+    }
+}
+
+.map-card__button-create__icon{
+    transition: transform .2s ease-in-out;
+}

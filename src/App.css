@@ -1,3 +1,7 @@
+.App{
+  padding-top: 50px;
+}
+
 .vis-react {
   position: relative;
   width: 100vw;

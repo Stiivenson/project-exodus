@@ -8,6 +8,9 @@ export const auth = {
     LOGIN_SUCCESS: 'auth/login/success',
     LOGOUT_SUCCESS: 'auth/logout/success'
 };
+export const home = {
+    GET_MAPS: 'home/maps/get'
+};
 export const map_nodes = {
     CREATE: 'map/node/create',
     UPDATE: 'map/node/update',
