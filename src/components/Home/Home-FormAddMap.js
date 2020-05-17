@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 
 export const Home_FormAddMap = (props) => {
 
-    const [openModal, setOpenModal] = useState(false);
     const [storeInput, setStoreInput] = useState('');
 
     const saveForm = (e) => {
-        
+        e.preventDefault();
+
+        props.createNewMap(storeInput);
+        setStoreInput('');
+        closeFormAddMap();
     }
 
     const closeFormAddMap = () => {
@@ -21,7 +24,7 @@ export const Home_FormAddMap = (props) => {
 
     return(
         <div className={class_FormAddMap.join(' ')}>
-          <form className='form' onSubmit={saveForm()}>
+          <form className='form' onSubmit={saveForm}>
 
             <div className='form__label-container'>
               <div className='form__label'>Create Map</div>

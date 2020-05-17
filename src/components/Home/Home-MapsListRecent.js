@@ -1,20 +1,16 @@
 import React from 'react';
 
-export const Home_MapsList = (props) => {
+export const Home_MapsListRecent = (props) => {
 
     const { PublicMaps, PrivateMaps } = props;
 
     const OpenFormAddMap = () => {
         props.openFormAddMap();    
-    }
-
-    const DeleteMap = (id) => {
-        props.deleteMap(id);
-    }
+    } 
 
     return(       
         <div className='home-container__maps-grid'>
-            <h3 className='maps-grid__title'>Персональные карты</h3>
+            <h3 className='maps-grid__title'>Недавние карты</h3>
 
             <div className='maps-grid__container'>
                 {   PrivateMaps.length > 0 ?
@@ -22,7 +18,7 @@ export const Home_MapsList = (props) => {
                     PrivateMaps.map(({id, title}) => (
                         <div className='map-card' key={id}>
                             <div className='map-card__title'>{title}</div>
-                            <svg className='map-card__delete' onClick={() => DeleteMap(id)} width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg className='map-card__delete' width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0)">
                                 <path d="M15.9483 9.05756C15.6249 9.05756 15.3628 9.31965 15.3628 9.64304V20.7086C15.3628 21.0318 15.6249 21.2941 15.9483 21.2941C16.2717 21.2941 16.5338 21.0318 16.5338 20.7086V9.64304C16.5338 9.31965 16.2717 9.05756 15.9483 9.05756Z" fill="white"/>
                                 <path d="M9.0397 9.05756C8.71632 9.05756 8.45422 9.31965 8.45422 9.64304V20.7086C8.45422 21.0318 8.71632 21.2941 9.0397 21.2941C9.36309 21.2941 9.62519 21.0318 9.62519 20.7086V9.64304C9.62519 9.31965 9.36309 9.05756 9.0397 9.05756Z" fill="white"/>

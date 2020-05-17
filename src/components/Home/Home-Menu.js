@@ -3,20 +3,26 @@ import React from 'react';
 
 export const Home_Menu = (props) => {
     const onHomeMenuClick = (e) => {
-        let child = e.target.closest('.menu-side'),
-            childrens = Array.from(child.parentNode.childNodes);
-            
+        let child = e.target.closest('.menu-side');
+
+        if(child) {
+            let childrens = Array.from(child.parentNode.childNodes);
+
             childrens.map( (child) => {
                 if (child.classList.contains('--active')){
                     child.classList.remove('--active');
                 }
             });
             child.classList.add('--active');
+
+            let menu = child.getAttribute('data');
+            return props.selectMenuSection(menu);
+        }  
     }
 
     return(
         <div className='home-container__menu' onClick={onHomeMenuClick}>
-            <div className='menu-side --active'>
+            <div className='menu-side --active' data='maps'>
                 <div className='menu-side__icon'>
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
@@ -31,8 +37,8 @@ export const Home_Menu = (props) => {
                 </div>
                 <div className='menu-side__title'>Карты</div>                
             </div>
-            <div className='menu-side'>
-                <div className='menu-side__icon'>
+            <div className='menu-side' data='recent'>
+                <div className='menu-side__icon' >
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
                         <path d="M12.4984 7.8125L12.4961 13.2782C12.4961 13.4858 12.5785 13.6841 12.725 13.8306L16.635 17.7399L17.7398 16.6351L14.0586 12.9547L14.0608 7.8125H12.4984Z" fill="black"/>
@@ -47,8 +53,8 @@ export const Home_Menu = (props) => {
                 </div>
                 <div className='menu-side__title'>Недавние</div>
             </div>
-            <div className='menu-side'>
-                <div className='menu-side__icon'>
+            <div className='menu-side' data='trash'>
+                <div className='menu-side__icon' >
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
                         <path d="M15.9483 9.05756C15.6249 9.05756 15.3628 9.31965 15.3628 9.64304V20.7086C15.3628 21.0318 15.6249 21.2941 15.9483 21.2941C16.2717 21.2941 16.5338 21.0318 16.5338 20.7086V9.64304C16.5338 9.31965 16.2717 9.05756 15.9483 9.05756Z" fill="black"/>

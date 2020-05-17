@@ -1,8 +1,10 @@
 import * as types from '../constants/types';
 
 const initialState = {
+    PrivateMaps: [],
     PublicMaps: [],
-    PrivateMaps: []
+    RecentMaps: [],
+    TrashMaps: []    
 }
 
 export default function(state = initialState, action) {
@@ -13,6 +15,18 @@ export default function(state = initialState, action) {
                 ...state,
                 PublicMaps: action.payload.publicMaps,
                 PrivateMaps: action.payload.privateMaps
+            };
+
+        case types.home.CREATE_MAP:
+            return {
+                ...state,
+                PrivateMaps: [action.payload, ...state.PrivateMaps]
+            };
+
+        case types.home.DELETE_MAP:
+            return {
+                ...state,
+                PrivateMaps: state.PrivateMaps.filter(map => map.id !== action.payload)
             };
 
         default: 

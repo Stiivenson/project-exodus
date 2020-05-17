@@ -1,5 +1,8 @@
 export default {
     PublicMaps: [
+        
+    ],
+    PrivateMaps: [
         {
             "id": 1,
             "title": "React"
@@ -11,16 +14,6 @@ export default {
         {
             "id": 3,
             "title": "Web development"
-        }
-    ],
-    PrivateMaps: [
-        {
-            "id": 1,
-            "title": "C++"
-        },
-        {
-            "id": 2,
-            "title": "Photoshop"
         }
     ]
 }

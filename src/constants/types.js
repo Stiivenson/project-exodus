@@ -9,7 +9,9 @@ export const auth = {
     LOGOUT_SUCCESS: 'auth/logout/success'
 };
 export const home = {
-    GET_MAPS: 'home/maps/get'
+    GET_MAPS: 'home/maps/get',
+    CREATE_MAP: 'home/map/create',
+    DELETE_MAP: 'home/map/delete'
 };
 export const map_nodes = {
     CREATE: 'map/node/create',
