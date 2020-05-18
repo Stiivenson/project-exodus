@@ -1,4 +1,3 @@
-import initialState from "../constants/initialState";
 import * as types from '../constants/types';
 
 function map_component(state = initialState.map_component, action){ 
