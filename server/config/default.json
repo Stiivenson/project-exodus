@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb://localhost/Project_Exodus",
+    "jwtSecret": "sl_SecretJWTCode"
+}
