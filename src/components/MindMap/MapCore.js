@@ -1,11 +1,11 @@
 import React, {ReactDOM, Component } from 'react';
-import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 
 import MapEditor from './MapEditor';
 import DndDocTree from '../DndDocTree';
 
-import { sendCreatedNode } from '../../actions/map-component';
+import { connect } from "react-redux";
+import { sendCreatedNode } from '../../actions/mapAction';
 import { sendNodeDataToTree } from "../../actions/dnd-doc-tree-component";
 
 
@@ -37,9 +37,9 @@ class MapCore extends Component{
                     recieveNodeForTree={this.recieveNodeForTree}
           />
         </div>
-        <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
+        {/* <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
                     handleTreeFileCreation={this.handleTreeFileCreation}
-        />
+        /> */}
       </div>
     );
   }
@@ -50,9 +50,9 @@ const mapStateToProps = state => {
 
   return {
     mapComponent: state.map_component,
-    docTree_NodeId:  state.dnd_doc_tree_component.nodeId,
-    docTree_title:  state.dnd_doc_tree_component.title,
-    docTree_treeData:  state.dnd_doc_tree_component.treeData
+    // docTree_NodeId:  state.dnd_doc_tree_component.nodeId,
+    // docTree_title:  state.dnd_doc_tree_component.title,
+    // docTree_treeData:  state.dnd_doc_tree_component.treeData
   };
 };
 

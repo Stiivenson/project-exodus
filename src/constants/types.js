@@ -8,21 +8,28 @@ export const auth = {
     LOGIN_SUCCESS: 'auth/login/success',
     LOGOUT_SUCCESS: 'auth/logout/success'
 };
+
+
 export const home = {
     GET_MAPS: 'home/maps/get',
     CREATE_MAP: 'home/map/create',
     DELETE_MAP: 'home/map/delete'
 };
-export const map_nodes = {
-    CREATE: 'map/node/create',
-    UPDATE: 'map/node/update',
-    DELETE: 'map/node/delete'
-};
-export const map_edges = {
-    CREATE: 'map/edge/create',
-    UPDATE: 'map/edge/update',
-    DELETE: 'map/edge/delete'
-};
+
+
+export const map = {
+    LOAD_MAP: 'map/load',
+
+    ADD_NODE: 'map/node/add',
+    UPDATE_NODE: 'map/node/update',
+    DELETE_NODE: 'map/node/delete',
+
+    ADD_EDGE: 'map/edge/add',
+    UPDATE_EDGE: 'map/edge/update',
+    DELETE_EDGE: 'map/edge/delete'
+}
+
+
 export const doc_tree = {
     CREATE_NODE: 'doc_tree/node/create',
     UPDATE_NODE: 'doc_tree/node/update',

@@ -61,6 +61,8 @@ class Home extends Component{
                     switch (this.state.selectedMenuSection) {
                         case 'maps':
                             return <Home_MapsList 
+                                History={this.props.history}
+
                                 PublicMaps={this.props.PublicMaps}
                                 PrivateMaps={this.props.PrivateMaps}
 

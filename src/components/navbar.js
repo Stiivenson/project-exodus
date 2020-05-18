@@ -18,8 +18,7 @@ class Navbar extends Component{
                 title: cl,
                 opened: true
             });  
-        }
-                  
+        }                  
     }
 
     render(){

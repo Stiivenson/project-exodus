@@ -1,5 +1,7 @@
 import * as types from '../constants/types';
 
+
+
 export function sendCreatedNode (data) {
     return (dispatch) => {
         const nodeId = data.id,
