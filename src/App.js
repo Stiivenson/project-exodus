@@ -14,8 +14,7 @@ import './App.css';
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      isAuthenticated: false      
+    this.state = {     
     }
   }    
 
@@ -27,7 +26,7 @@ class App extends Component {
     return (
         <div className="page-wrapper">
 
-            {this.state.isAuthenticated ?
+            {this.props.isAuthenticated ?
 
               <Switch>
                 <Route exact path='/' component={Home} />
@@ -52,7 +51,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, null)(App);

@@ -24,7 +24,7 @@ export const Home_MapsList = (props) => {
                 {   PrivateMaps.length > 0 ?
                 
                     PrivateMaps.map(({id, title}) => (
-                        <div className='map-card' key={id} onClick={OpenMapEditor}>
+                        <div className='map-card' key={id}>
                             <div className='map-card__title'>{title}</div>
                             <svg className='map-card__delete' onClick={() => DeleteMap(id)} width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0)">

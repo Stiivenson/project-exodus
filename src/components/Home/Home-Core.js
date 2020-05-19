@@ -50,11 +50,11 @@ class Home extends Component{
     render() {
         return (
             <div className='home-container'>
-                <Home_FormAddMap 
+                {/* <Home_FormAddMap 
                     showFormAddMap={this.state.showFormAddMap}
                     closeFormAddMap={this.closeFormAddMap}
                     
-                    createNewMap={this.createNewMap}/>
+                    createNewMap={this.createNewMap}/> */}
                 <Home_Menu selectMenuSection={this.selectMenuSection} />
 
                 {(() => {

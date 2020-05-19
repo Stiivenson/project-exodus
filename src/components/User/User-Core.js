@@ -1,6 +1,7 @@
 import React, { Component, Fragment} from 'react';
 
 import { connect } from 'react-redux';
+import { register, login } from "../../actions/authAction";
 
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
@@ -37,7 +38,7 @@ class User extends Component{
 }
 
 const mapStateToProps = (state) => ({
-    
+    isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, null)(User);
+export default connect(mapStateToProps, {register, login})(User);

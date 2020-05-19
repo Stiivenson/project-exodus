@@ -1,10 +1,11 @@
 import {combineReducers} from 'redux';
 
-import {dnd_doc_tree_component} from "./dnd_doc_tree_component";
+import authReducer from './authReducer';
 import homeReducer from './homeReducer';
 import mapReducer from './mapReducer';
 
 const rootReducer = combineReducers({
+    auth: authReducer,
     userMaps: homeReducer,
     mapData: mapReducer
 });

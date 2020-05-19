@@ -5,7 +5,11 @@ export const app = {
     LOADING: 'app/loading'
 };
 export const auth = {
+    REGISTER_SUCCESS: 'auth/register/success',
+    REGISTER_FAIL: 'auth/register/fail',
+
     LOGIN_SUCCESS: 'auth/login/success',
+    LOGIN_FAIL: 'auth/login/fail',
     LOGOUT_SUCCESS: 'auth/logout/success'
 };
 
