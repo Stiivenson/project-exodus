@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Redirect, Link, Route, Switch} from "react-router-dom";
 import { history } from './history';
 
-import { LoginForm } from './components/User/LoginForm';
+import User from './components/User/User-Core';
 import Navbar from './components/Navbar';
 import Home from "./components/Home/Home-Core";
 import MapCore from "./components/MindMap/MapCore";
@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: false      
     }
   }    
 
@@ -23,12 +23,9 @@ class App extends Component {
 
   }
   
-
-
   render() {
     return (
         <div className="page-wrapper">
-
 
             {this.state.isAuthenticated ?
 
@@ -40,11 +37,11 @@ class App extends Component {
               </Switch>
             
             :
-            
+          
                <Switch>
-                <Route path='/auth' component={LoginForm} />
+                <Route path='/auth' component={User} />
                 <Route path='/'>
-                    <Redirect to="/auth" component={LoginForm} /> 
+                    <Redirect to="/auth" component={User} /> 
                 </Route>
               </Switch>
               
