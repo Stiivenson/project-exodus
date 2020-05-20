@@ -5,6 +5,7 @@
 .modal-container{
     position: absolute;
     z-index: 50;
+    padding-top: 20vh;
 
     top: 0;
     bottom: 0;
@@ -13,7 +14,7 @@
 
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 
     background-color: transparentize($map-edit-form, 0.5);
 
@@ -28,38 +29,60 @@
 }
 
 
+/*------------------------------------*\
+    #AUTHENTICATION-FORM
+\*------------------------------------*/
+
+.form-container{
+    position: absolute;
+    z-index: 50;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .form{
-    width: 600px;
+    position: relative;
     height: auto;
-    padding: 15px 20px;
+    padding: 50px 80px 30px 80px;
 
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
 
-    border-radius: 10px;
+    border-radius: 2px;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, .20);
     background-color: $white;
 }
 
-
 .form__label-container{
-    width: 100%;
+    position: absolute;
+    width: 300px;
+    height: 60px;
+    top: -30px;
 
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-}
-.form__label{
-    font-size: 20px;
-}
 
+    color: #ffffff;
+    font-family: 'Roboto-Bold';
+    font-size: 24px;
+    background-color: $blue;
+}
 
 .form__body-container{
-    width: 85%;
+    width: 300px;
+    max-width: 300px;
     height: auto;
-    padding: 30px 45px 0px 45px;
 
     display: flex;
     flex-flow: column nowrap;
@@ -67,17 +90,19 @@
     align-items: flex-start;
     flex-grow: 1;
 }
+
 .form__input-wrapper{
     position: relative;
     width: 100%;
     height: 60px;
+    margin-bottom: 40px;
 
     label {
         position: absolute;
         padding-top: 20px;
 
         font-family: 'Roboto-Light';
-        color: $blue;
+        color: #000000;
         pointer-events: none;
         transition: all 0.2s ease;
     }
@@ -107,29 +132,66 @@
     &:not(:placeholder-shown)~label {
         font-size: 12px;
         padding-top: 0px;
+        color: $blue;
     }
 }
-
 
 .form__buttons-container{
     width: 100%;
-    margin-top: 50px;
 
     display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-end;
+    justify-content: space-around;
     align-items: center;
-
-    & :nth-child(1){
-        margin-right: 20px;
-    }
 }
 .form__button{
     cursor: pointer;
-    color: $blue;
-    transition: .2s color ease-in-out;
+    height: 50px;
+    min-width: 100px;
+    padding: 5px 20px;
+
+    background-color: #ffffff;
+    border: 1px solid $blue;
+    border-radius: 5px;
+
+    color: #000000;
+    font-family: 'Roboto-Regular';
+    font-size: 18px;
+
+    transition: .2s all ease-in-out;
+
     &:hover{
-        color: $dark-blue;
+        color: #ffffff;
+        background-color: $blue;
+    }
+
+    &.--exit{        
+        &:hover{
+            color: #ffffff;
+            border: 1px solid #c62828;
+            background-color: #c62828;
+        }
     }
 }
 
+.form__info{
+    margin-top: 50px;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    font-size: 18px;
+}
+
+.form__info-link{
+    cursor: pointer;
+    color: $blue;
+    margin-top: 10px;
+
+    transition: color .1s ease-in, text-decoration .1s ease-in;
+    &:hover{
+        color: $dark-blue;
+        text-decoration: underline;
+    }
+}

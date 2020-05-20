@@ -7,7 +7,7 @@ import {Home_MapsListTrash} from './Home-MapsListTrash';
 import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
-import {  } from '../../actions/homeAction';
+import { createMap } from '../../actions/homeAction';
 
 class Home extends Component{
     state = {
@@ -45,11 +45,11 @@ class Home extends Component{
     render() {
         return (
             <div className='home-container'>
-                {/* <Home_FormAddMap 
+                <Home_FormAddMap 
                     showFormAddMap={this.state.showFormAddMap}
                     closeFormAddMap={this.closeFormAddMap}
                     
-                    createNewMap={this.createNewMap}/> */}
+                    createNewMap={this.createNewMap}/>
                 <Home_Menu selectMenuSection={this.selectMenuSection} />
 
                 {(() => {
@@ -92,4 +92,4 @@ const mapStateToProps = (state) => ({
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{  })(Home);
+export default connect(mapStateToProps,{ createMap })(Home);

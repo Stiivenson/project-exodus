@@ -1,10 +1,17 @@
-import axios from 'axios';
-
 import * as types from '../constants/types';
 import DB from '../constants/ImitationDB';
 
 import { v1 as uuid } from 'uuid';
 
+export const getMaps = () => (dispatch, getState) => {
+    dispatch({
+        type: types.home.GET_MAPS,
+        payload: {
+            publicMaps: getState().auth.user.PublicMaps,
+            privateMaps: getState().auth.user.PrivateMaps
+        }
+    });
+};
 
 export const createMap = (title) => {
     let newId = uuid();
