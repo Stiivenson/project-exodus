@@ -23,8 +23,8 @@ export const Home_MapsList = (props) => {
             <div className='maps-grid__container'>
                 {   PrivateMaps.length > 0 ?
                 
-                    PrivateMaps.map(({id, title}) => (
-                        <div className='map-card' key={id}>
+                    PrivateMaps.map(({_id, title}) => (
+                        <div className='map-card' key={_id}>
                             <div className='map-card__title'>{title}</div>
                             <svg className='map-card__delete' onClick={() => DeleteMap(id)} width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0)">
@@ -56,7 +56,7 @@ export const Home_MapsList = (props) => {
 
            
             
-            {   PublicMaps.length > 0 ?
+            {/* {   PublicMaps.length > 0 ?
                 
                     <>
                     <h3 className='maps-grid__title'>Публичные карты</h3>
@@ -83,7 +83,7 @@ export const Home_MapsList = (props) => {
                     </>                
 
                 : null
-            }
+            } */}
         </div>
         
     );

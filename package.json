@@ -5,7 +5,7 @@
   "scripts": {
     "dist": "webpack --mode production",
     "client": "webpack-dev-server --config ./build/webpack.config.js --open",
-    "server": "npm server --prefix server",
+    "server": "npm start --prefix server",
     "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "eslintConfig": {
@@ -27,6 +27,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "concurrently": "^5.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

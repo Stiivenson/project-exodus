@@ -7,18 +7,13 @@ import {Home_MapsListTrash} from './Home-MapsListTrash';
 import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
-import { getMaps, createMap, deleteMap } from '../../actions/homeAction';
+import {  } from '../../actions/homeAction';
 
 class Home extends Component{
     state = {
         showFormAddMap: false,
 
         selectedMenuSection: 'maps'
-    }
-
-    // Get User Maps from DB
-    componentDidMount(){
-        this.props.getMaps();
     }
 
     // Select Menu section
@@ -63,8 +58,8 @@ class Home extends Component{
                             return <Home_MapsList 
                                 History={this.props.history}
 
-                                PublicMaps={this.props.PublicMaps}
-                                PrivateMaps={this.props.PrivateMaps}
+                                PublicMaps={this.props.publicMaps}
+                                PrivateMaps={this.props.privateMaps}
 
                                 deleteMap={this.deleteMap}
 
@@ -72,15 +67,11 @@ class Home extends Component{
 
                         case 'recent':
                             return <Home_MapsListRecent 
-                                PublicMaps={this.props.PublicMaps}
-                                PrivateMaps={this.props.PrivateMaps}
-
-                                openFormAddMap={this.openFormAddMap} />;
+                                RecentMaps={this.props.recentMaps} />;
 
                         case 'trash':
                             return <Home_MapsListTrash 
-                                PublicMaps={this.props.PublicMaps}
-                                PrivateMaps={this.props.PrivateMaps}
+                                TrashMaps={this.props.trashMaps}
 
                                 openFormAddMap={this.openFormAddMap} />;
 
@@ -95,8 +86,10 @@ class Home extends Component{
 }
 
 const mapStateToProps = (state) => ({
-    PublicMaps: state.userMaps.PublicMaps,
-    PrivateMaps: state.userMaps.PrivateMaps
+    privateMaps: state.user_data.privateMaps,
+    publicMaps: state.user_data.publicMaps,
+    recentMaps: state.user_data.recentMaps,
+    trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ getMaps, createMap, deleteMap })(Home);
+export default connect(mapStateToProps,{  })(Home);

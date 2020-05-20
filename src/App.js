@@ -9,6 +9,7 @@ import Home from "./components/Home/Home-Core";
 import MapCore from "./components/MindMap/MapCore";
 
 import { connect } from 'react-redux';
+import { loadUser } from "./actions/authAction";
 
 import './App.css';
 class App extends Component {
@@ -19,22 +20,26 @@ class App extends Component {
   }    
 
   componentDidMount() {
-
+    this.props.loadUser();
   }
   
   render() {
     return (
         <div className="page-wrapper">
-
-            {this.props.isAuthenticated ?
-
-              <Switch>
-                <Route exact path='/' component={Home} />
-                <Route path='/auth'>
-                    <Redirect to="/" component={Home} /> 
-                </Route>
-              </Switch>
             
+            {this.props.isAuthenticated ?
+              
+              <Fragment>
+                <Navbar/>
+
+                <Switch>
+                  <Route exact path='/' component={Home} />
+                  <Route path='/auth'>
+                      <Redirect to="/" component={Home} /> 
+                  </Route>
+                </Switch>
+              </Fragment>
+              
             :
           
                <Switch>
@@ -54,4 +59,4 @@ const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, { loadUser })(App);

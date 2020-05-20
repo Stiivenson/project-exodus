@@ -20,7 +20,19 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    
+
+    PrivateMaps: {
+        type: Array
+    },
+    PublicMaps: {
+        type: Array
+    },
+    RecentMaps: {
+        type: Array
+    },
+    TrashMaps: {
+        type: Array
+    }    
 });
 
 module.exports = User = mongoose.model('user', UserSchema);

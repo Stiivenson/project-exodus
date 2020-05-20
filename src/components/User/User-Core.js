@@ -6,6 +6,7 @@ import { register, login } from "../../actions/authAction";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
+
 class User extends Component{
     state = {
         selectedAuthForm: 'login'
@@ -15,6 +16,10 @@ class User extends Component{
         this.setState({ selectedAuthForm: form });
     }
 
+    sendLoginForm = (mail, password) => {
+        this.props.login(mail, password);
+    }
+
     render() {
         return (
             <Fragment>
@@ -22,7 +27,8 @@ class User extends Component{
                     switch (this.state.selectedAuthForm) {
                         case 'login':
                             return <LoginForm 
-                                        selectAuthForm={this.selectAuthForm} />;
+                                        selectAuthForm={this.selectAuthForm}
+                                        sendLoginForm={this.sendLoginForm} />;
 
                         case 'register':
                             return <RegisterForm 

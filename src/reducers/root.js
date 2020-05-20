@@ -1,13 +1,13 @@
 import {combineReducers} from 'redux';
 
 import authReducer from './authReducer';
-import homeReducer from './homeReducer';
+import userReducer from './userReducer';
 import mapReducer from './mapReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    userMaps: homeReducer,
-    mapData: mapReducer
+    user_data: userReducer
+    //mapData: mapReducer
 });
 
 export default rootReducer;

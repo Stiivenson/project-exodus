@@ -5,13 +5,93 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const auth = require('../../middleware/auth');
 
-// User Model
-const User = require('../../models/User');
+const Promise = require('bluebird');
 
-// @route   POST api/auth
+// Models
+const User = require('../../models/User');
+const Maps = require('../../models/Maps');
+
+// Find User by provided id
+const findUser = (id) => {
+    return new Promise(function (resolve, reject) {
+        User.findById(id).exec((err, user) => {
+            if(err) reject('Error:', err);
+            else {                     
+                resolve(user);               
+            }
+        });
+    });
+}
+
+// Find all Maps by provided ids array
+function findMaps (arr) {
+    return new Promise(function (resolve, reject) {
+        let maps = new Array();
+        if (arr.length > 0) {
+            Maps.find().select('_id').select('title').where('_id').in(arr).exec((err, map) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(map);               
+                }
+            });       
+        }
+        else resolve(maps);               
+    });
+}
+
+
+// @route   POST api/auth/register
+// @desc    Register new users
+// @access  Public
+router.post('/register', (req, res) => {
+    const { name, email, password } = req.body;
+    
+    // Simple validation
+    if(!name || !email || !password) {
+        return res.status(400).json({ msg: 'Please enter all fields!' });
+    }
+
+    //Check for existing user
+    User.findOne({ email })
+        .then(user => {
+            if(user) return res.status(400).json({ msg: 'User already exists!' });
+
+            const newUser = new User({
+                name,
+                email,
+                password
+            });
+
+            // Create salt & hash
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    if(err) throw err;
+                    newUser.password = hash;
+                    newUser.save()
+                        .then(user => {
+                            jwt.sign(
+                                { id: user.id },
+                                config.get('jwtSecret'),
+                                { expiresIn: 3600 },
+                                (err, token) => {
+                                    if(err) throw err;
+                                    res.json({ 
+                                        token
+                                     });
+                                }
+                            );
+                            
+                        });
+                });
+            });
+        });
+});
+
+
+// @route   POST api/auth/login
 // @desc    Authenticate user
 // @access  Private
-router.post('/', (req, res) => {
+router.post('/login', (req, res) => {
     const { email, password } = req.body;
     
     // Simple validation
@@ -32,16 +112,11 @@ router.post('/', (req, res) => {
                     jwt.sign(
                         { id: user.id },
                         config.get('jwtSecret'),
-                        { expiresIn: 3600 },
+                        { expiresIn: '1d' },
                         (err, token) => {
                             if(err) throw err;
                             res.json({ 
-                                token,
-                                user: {
-                                    id: user.id,
-                                    name: user.name,
-                                    email: user.email
-                                }
+                                token
                              });
                         }
                     );
@@ -54,9 +129,44 @@ router.post('/', (req, res) => {
 // @desc    Get user data
 // @access  Private
 router.get('/user', auth, (req, res) => {
-    User.findById(req.user.id)
-        .select('-password') // remove password from res
-        .then(user => res.json(user));
+    // Get User data & Maps ids, titles
+    async function getAllUserData (id) {
+        let user = findUser(id);
+
+        let PrivateMaps = user.then(function (user) {
+            return findMaps(user.PrivateMaps);  
+        });
+
+        let PublicMaps = user.then(function (user) {
+            return findMaps(user.PublicMaps);  
+        });
+
+        let RecentMaps = user.then(function (user) {
+            return findMaps(user.RecentMaps);  
+        });
+
+        let TrashMaps = user.then(function (user) {
+            return findMaps(user.TrashMaps);  
+        });
+
+        await PrivateMaps;
+
+        res.json({
+            user: {
+                id: user.value()._id,
+                name: user.value().name,
+                email: user.value().email
+            },
+            maps: {
+                privateMaps: PrivateMaps.value(),
+                publicMaps: PublicMaps.value(),
+                recentMaps: RecentMaps.value(),
+                trashMaps: TrashMaps.value()
+            }
+        });
+    }
+
+    getAllUserData(req.user.id);
 });
 
 module.exports = router;

@@ -1,10 +1,8 @@
 //Определение типов действий
-export const app = {
-    ERROR: 'app/error',
-    LOADED: 'app/loaded',
-    LOADING: 'app/loading'
-};
 export const auth = {
+    USER_LOADING: 'auth/user/loading',
+    USER_LOADED: 'auth/user/loaded',
+
     REGISTER_SUCCESS: 'auth/register/success',
     REGISTER_FAIL: 'auth/register/fail',
 
@@ -13,11 +11,16 @@ export const auth = {
     LOGOUT_SUCCESS: 'auth/logout/success'
 };
 
+export const user = {
+    GET_USER: 'user/get',
+    GET_MAPS: 'user/maps/get',
+    CREATE_MAP: 'user/map/create',
+    DELETE_MAP: 'user/map/delete'
+};
 
-export const home = {
-    GET_MAPS: 'home/maps/get',
-    CREATE_MAP: 'home/map/create',
-    DELETE_MAP: 'home/map/delete'
+export const error = {
+    GET_ERROS: 'error/get',
+    CLEAR_ERRORS: 'error/clear'
 };
 
 

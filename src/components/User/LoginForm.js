@@ -14,8 +14,9 @@ export const LoginForm = (props) => {
         props.selectAuthForm('register');
     }
 
-    const SubmitForm = () => {
-        console.log('s');        
+    const SubmitForm = (e) => {
+        e.preventDefault();
+        props.sendLoginForm(storeInput.mail, storeInput.password);    
     }
 
     return(
@@ -33,7 +34,7 @@ export const LoginForm = (props) => {
                         <label>Пароль</label>
                     </div>
                 </div>
-                <button className='form__button' onSubmit={SubmitForm}>Вход</button>
+                <button className='form__button' onClick={SubmitForm}>Вход</button>
                 <div className='form__info'>
                         Не зарегистрированы?
                         <span className='form__info-link' onClick={onSwitchForm}>Создать аккаунт</span>
