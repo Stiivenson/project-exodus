@@ -13,7 +13,6 @@ export const auth = {
 
 export const user = {
     GET_USER: 'user/get',
-    GET_MAPS: 'user/maps/get',
     CREATE_MAP: 'user/map/create',
     DELETE_MAP: 'user/map/delete'
 };

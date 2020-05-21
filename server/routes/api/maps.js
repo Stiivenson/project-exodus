@@ -26,11 +26,8 @@ router.post('/create', auth, (req, res) => {
         .then(async function (map) {
             await User.updateOne({ _id: map.owner_id }, { $push: { PrivateMaps: map.id } });
             res.json({
-                map: {
-                    id: map.id,
-                    owner: map.owner_id,
-                    title: map.title
-                }
+                _id: map.id,
+                title: map.title
             });            
         })
         .catch(err => res.status(404).json({success: false}));
@@ -49,9 +46,9 @@ router.post('/update', auth, (req, res) => {
 // @route   Post api/map/delete
 // @desc    Delete map
 // @access  Private
-router.delete('/delete:id', auth, (req, res) => {
-   Item.findById(req.params.id)
-    .then(item => item.remove().then(() => res.json({success: true})))
+router.delete('/:id', auth, (req, res) => {  
+   Maps.findById(req.params.id)
+    .then(map => map.remove().then(() => res.json({success: true})))
     .catch(err => res.status(404).json({success: false}));
 });
 

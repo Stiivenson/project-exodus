@@ -17,7 +17,9 @@ export const Home_MapsListTrash = (props) => {
                    
                 TrashMaps.map(({id, title}) => (
                         <div className='map-card' key={id}>
-                            <div className='map-card__title'>{title}</div>
+                             <div className='map-card__body'>
+                                <div className='map-card__title'>{title}</div>
+                            </div> 
                             <svg className='map-card__delete' width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clipPath="url(#clip0)">
                                 <path d="M15.9483 9.05756C15.6249 9.05756 15.3628 9.31965 15.3628 9.64304V20.7086C15.3628 21.0318 15.6249 21.2941 15.9483 21.2941C16.2717 21.2941 16.5338 21.0318 16.5338 20.7086V9.64304C16.5338 9.31965 16.2717 9.05756 15.9483 9.05756Z" fill="white"/>

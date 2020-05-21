@@ -7,7 +7,7 @@ import {Home_MapsListTrash} from './Home-MapsListTrash';
 import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
-import { createMap } from '../../actions/homeAction';
+import { createMap, deleteMap } from '../../actions/homeAction';
 
 class Home extends Component{
     state = {
@@ -33,7 +33,7 @@ class Home extends Component{
 
     // Create new Map
     createNewMap = (title) => {
-        this.props.createMap(title);
+        this.props.createMap(this.props.user.id, title);
     }
 
     // Delete Map
@@ -86,10 +86,11 @@ class Home extends Component{
 }
 
 const mapStateToProps = (state) => ({
+    user: state.user_data.user,
     privateMaps: state.user_data.privateMaps,
     publicMaps: state.user_data.publicMaps,
     recentMaps: state.user_data.recentMaps,
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ createMap })(Home);
+export default connect(mapStateToProps,{ createMap, deleteMap })(Home);

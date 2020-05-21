@@ -32,11 +32,12 @@
     position: relative;
     cursor: pointer;
     overflow: hidden;
+
+    display: flex;
     flex-basis: 20%;
     height: 100px;
 
-    margin: 0 2% 2% 0;
-    padding: 15px;
+    margin: 0 2% 2% 0;    
 
     color: white;
     font-family: 'Roboto-Bold';
@@ -52,6 +53,11 @@
     &:hover > .map-card__delete{
         left: 15px;
     }
+}
+
+.map-card__body{
+    flex-grow: 1;
+    padding: 15px 10px;
 }
 
 .map-card__delete{

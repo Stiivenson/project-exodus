@@ -56,8 +56,6 @@ export const logout = () => {
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
-    console.log('loadUser');
-    
 
     // User loading
     dispatch({ type: types.auth.USER_LOADING });

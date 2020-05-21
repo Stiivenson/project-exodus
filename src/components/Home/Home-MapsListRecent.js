@@ -17,7 +17,9 @@ export const Home_MapsListRecent = (props) => {
                 
                     RecentMaps.map(({id, title}) => (
                         <div className='map-card' key={id}>
-                            <div className='map-card__title'>{title}</div>
+                            <div className='map-card__body'>
+                                <div className='map-card__title'>{title}</div>
+                            </div>                            
                         </div>
                     ))
 

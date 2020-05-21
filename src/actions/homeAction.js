@@ -1,32 +1,43 @@
+import axios from 'axios';
+
 import * as types from '../constants/types';
-import DB from '../constants/ImitationDB';
+import { tokenConfig } from './authAction';
 
-import { v1 as uuid } from 'uuid';
 
-export const getMaps = () => (dispatch, getState) => {
-    dispatch({
-        type: types.home.GET_MAPS,
-        payload: {
-            publicMaps: getState().auth.user.PublicMaps,
-            privateMaps: getState().auth.user.PrivateMaps
-        }
-    });
+export const createMap = (owner, title) => (dispatch, getState) => {
+    // Request body
+    const body = JSON.stringify({ owner, title });
+
+    axios.post('/api/map/create', body, tokenConfig(getState))
+        .then(res => { 
+            dispatch({ 
+                type:  types.user.CREATE_MAP,
+                payload: res.data
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            
+            // dispatch(returnErrors(err.response.data, err.response.status));
+            // dispatch({
+            //     type: AUTH_ERROR
+            // })
+        })
+
 };
 
-export const createMap = (title) => {
-    let newId = uuid();
-    return {
-        type: types.home.CREATE_MAP,
-        payload: {
-            id: newId,
-            title: title
-        }
-    };
-};
-
-export const deleteMap = (id) => {
-    return {
-        type: types.home.DELETE_MAP,
-        payload: id
-    };
+export const deleteMap = (id) => (dispatch, getState) => {
+    axios.delete(`/api/map/${id}`, tokenConfig(getState))
+        .then(res => dispatch({
+            type: types.user.DELETE_MAP,
+            payload: id
+        }))
+        .catch(err => {
+            console.log(err);
+            
+            // dispatch(returnErrors(err.response.data, err.response.status));
+            // dispatch({
+            //     type: AUTH_ERROR
+            // })
+        })
 };

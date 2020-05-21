@@ -12,8 +12,6 @@ export default function(state = initialState, action) {
     switch(action.type) {
         
         case types.user.GET_USER:    
-        console.log(action.payload.maps.PublicMaps);
-        
             return { 
                 ...state, 
                 user: action.payload.user,
@@ -22,6 +20,20 @@ export default function(state = initialState, action) {
                 recentMaps: action.payload.maps.recentMaps,
                 trashMaps: action.payload.maps.trashMaps
             };
+
+        case types.user.CREATE_MAP:
+            return { 
+                ...state,                 
+                privateMaps: [action.payload, ...state.privateMaps]                
+            }
+
+        case types.user.DELETE_MAP:
+            return { 
+                ...state,
+                privateMaps: state.privateMaps.filter(map => map._id !== action.payload)                
+            }
+
+
 
         default: 
             return state;
