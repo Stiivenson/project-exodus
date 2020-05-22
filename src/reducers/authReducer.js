@@ -23,10 +23,11 @@ export default function(state = initialState, action) {
             };
 
         case types.auth.REGISTER_SUCCESS:
-        case types.auth.LOGIN_SUCCESS:   
+        case types.auth.LOGIN_SUCCESS:            
             localStorage.setItem('token', action.payload.token)
             return { 
                 ...state,
+                token: action.payload.token,
                 isAuthenticated: true
             };
 

@@ -21,7 +21,7 @@ export const register = ({ name, email, password }) => {
         }))  
 };
 
-export const login = (email, password) => dispatch => {
+export const login = (email, password) => (dispatch, getState) => {
     // Headers
     const config = {
         headers: {
@@ -33,11 +33,12 @@ export const login = (email, password) => dispatch => {
     const body = JSON.stringify({ email, password });
 
     axios.post('/api/auth/login', body, config)
-        .then(res => dispatch({
-            type: types.auth.LOGIN_SUCCESS,
-            payload: res.data
-        }))
-        .then(() => loadUser())
+        .then(res => {
+            dispatch({
+                type: types.auth.LOGIN_SUCCESS,
+                payload: res.data
+            });                        
+        })
         .catch(err => {
             console.log(err);
             
@@ -45,8 +46,13 @@ export const login = (email, password) => dispatch => {
             // dispatch({
             //     type: AUTH_ERROR
             // })
-        })
+        });
 };
+
+const check = (getState) => {
+    console.log('token in LS: ', localStorage.getItem('token'));
+    console.log('token in State: ', getState);
+}
 
 export const logout = () => {
     return {
@@ -56,7 +62,7 @@ export const logout = () => {
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
-
+    
     // User loading
     dispatch({ type: types.auth.USER_LOADING });
     
@@ -75,7 +81,7 @@ export const loadUser = () => (dispatch, getState) => {
             // dispatch({
             //     type: AUTH_ERROR
             // })
-        })
+        });
 };
 
 // Setup config/headers and token

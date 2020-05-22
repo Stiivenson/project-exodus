@@ -3,13 +3,14 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const auth = require('../../middleware/auth');
+const { auth } = require('../../middleware/auth');
 
 const Promise = require('bluebird');
 
 // Models
 const User = require('../../models/User');
 const Maps = require('../../models/Maps');
+
 
 // Find User by provided id
 const findUser = (id) => {
@@ -40,10 +41,13 @@ function findMaps (arr) {
 }
 
 
-// @route   POST api/auth/register
-// @desc    Register new users
-// @access  Public
+/**
+   * @route POST api/auth/register
+   * @desc  Register new users
+   * @acces Public
+   */ 
 router.post('/register', (req, res) => {
+
     const { name, email, password } = req.body;
     
     // Simple validation
@@ -88,10 +92,13 @@ router.post('/register', (req, res) => {
 });
 
 
-// @route   POST api/auth/login
-// @desc    Authenticate user
-// @access  Private
+/**
+   * @route POST api/auth/login
+   * @desc  Authenticate user
+   * @acces Private
+   */ 
 router.post('/login', (req, res) => {
+
     const { email, password } = req.body;
     
     // Simple validation
@@ -125,10 +132,14 @@ router.post('/login', (req, res) => {
         })
 });
 
-// @route   GET api/auth/user
-// @desc    Get user data
-// @access  Private
+
+/**
+   * @route GET api/auth/user
+   * @desc  Get user data
+   * @acces Private
+   */ 
 router.get('/user', auth, (req, res) => {
+    
     // Get User data & Maps ids, titles
     async function getAllUserData (id) {
         let user = findUser(id);

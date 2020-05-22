@@ -2,6 +2,7 @@ import React from 'react';
 
 
 export const Home_Menu = (props) => {
+    
     const onHomeMenuClick = (e) => {
         let child = e.target.closest('.menu-side');
 

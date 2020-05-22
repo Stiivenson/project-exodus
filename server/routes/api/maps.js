@@ -1,15 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../../middleware/auth');
+const {auth} = require('../../middleware/auth');
 
-// Item Model
 const Maps = require('../../models/Maps');
 const User = require('../../models/User');
 
-// @route   Post api/map/create
-// @desc    Create new map
-// @access  Private
+
+/**
+   * @route POST api/map/create
+   * @desc  Create new map
+   * @acces Private
+   */
 router.post('/create', auth, (req, res) => {
+
+    // Create Map with root Node
     const newMap = new Maps({
         owner_id: req.body.owner,
         title: req.body.title,
@@ -24,6 +28,7 @@ router.post('/create', auth, (req, res) => {
 
     newMap.save()
         .then(async function (map) {
+            // Add Map id to User, then send res
             await User.updateOne({ _id: map.owner_id }, { $push: { PrivateMaps: map.id } });
             res.json({
                 _id: map.id,
@@ -31,25 +36,31 @@ router.post('/create', auth, (req, res) => {
             });            
         })
         .catch(err => res.status(404).json({success: false}));
-});  
+}); 
+
     
-// @route   Post api/map/update
-// @desc    Update map
-// @access  Private
+/**
+   * @route POST api/map/update
+   * @desc  Update map
+   * @acces Private
+   */
 router.post('/update', auth, (req, res) => {
-    const newItem = new Item({
-        name: req.body.name
-    });
-    newItem.save().then(item => res.json(item));
+   
 });
 
-// @route   Post api/map/delete
-// @desc    Delete map
-// @access  Private
+
+/**
+   * @route DELETE api/map/:id
+   * @desc  Delete map
+   * @acces Private
+   */
 router.delete('/:id', auth, (req, res) => {  
+
    Maps.findById(req.params.id)
     .then(map => map.remove().then(() => res.json({success: true})))
     .catch(err => res.status(404).json({success: false}));
+    
 });
+
 
 module.exports = router;

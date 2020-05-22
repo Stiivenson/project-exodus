@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
-import { Redirect, Link, Route, Switch} from "react-router-dom";
-import { history } from './history';
+import { Redirect, Route, Switch} from "react-router-dom";
 
 import User from './components/User/User-Core';
 import Navbar from './components/Navbar';
@@ -15,11 +14,11 @@ import './App.css';
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = {     
-    }
+    this.state = {}
   }    
 
   componentDidMount() {
+    // Try to load User data
     this.props.loadUser();
   }
   
@@ -34,6 +33,7 @@ class App extends Component {
 
                 <Switch>
                   <Route exact path='/' component={Home} />
+                  <Route path='/map-editor' component={MapCore} />
                   <Route path='/auth'>
                       <Redirect to="/" component={Home} /> 
                   </Route>

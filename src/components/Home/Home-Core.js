@@ -1,5 +1,7 @@
 import React, { Component} from 'react';
 
+import io from "socket.io-client";
+
 import {Home_Menu} from './Home-Menu';
 import {Home_MapsList} from './Home-MapsList';
 import {Home_MapsListRecent} from './Home-MapsListRecent';
@@ -7,14 +9,37 @@ import {Home_MapsListTrash} from './Home-MapsListTrash';
 import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
+import { loadUser } from "../../actions/authAction";
 import { createMap, deleteMap } from '../../actions/homeAction';
 
-class Home extends Component{
-    state = {
-        showFormAddMap: false,
 
-        selectedMenuSection: 'maps'
+let socket;
+class Home extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            showFormAddMap: false,
+    
+            selectedMenuSection: 'maps'
+        }
+    }  
+   
+    componentDidMount() {
+        if(this.props.token){
+            this.props.loadUser();
+            
+            socket = io.connect("http://localhost:5000", {query: {token: this.props.token}});
+            console.log(socket); 
+
+            socket.on('SERVER:SEND_MAP_DATA', (data) => {
+                console.log(data);
+                
+            });
+
+            //socket.emit('CLIENT:GET_MAP_DATA', id);
+        }        
     }
+    
 
     // Select Menu section
     selectMenuSection = (menu) => {
@@ -23,12 +48,10 @@ class Home extends Component{
 
     // Open & close Form to create new Map
     openFormAddMap = () => {
-        this.setState({
-            showFormAddMap: true
-        });
+        this.setState({ showFormAddMap: true });
     }   
     closeFormAddMap = () => {
-        this.setState({showFormAddMap: false});
+        this.setState({ showFormAddMap: false });
     } 
 
     // Create new Map
@@ -40,7 +63,6 @@ class Home extends Component{
     deleteMap = (id) => {
         this.props.deleteMap(id);
     }
-
 
     render() {
         return (
@@ -55,15 +77,13 @@ class Home extends Component{
                 {(() => {
                     switch (this.state.selectedMenuSection) {
                         case 'maps':
-                            return <Home_MapsList 
-                                History={this.props.history}
+                            return <Home_MapsList
 
                                 PublicMaps={this.props.publicMaps}
                                 PrivateMaps={this.props.privateMaps}
 
-                                deleteMap={this.deleteMap}
-
-                                openFormAddMap={this.openFormAddMap} />;
+                                openFormAddMap={this.openFormAddMap}
+                                deleteMap={this.deleteMap}  />;
 
                         case 'recent':
                             return <Home_MapsListRecent 
@@ -71,9 +91,7 @@ class Home extends Component{
 
                         case 'trash':
                             return <Home_MapsListTrash 
-                                TrashMaps={this.props.trashMaps}
-
-                                openFormAddMap={this.openFormAddMap} />;
+                                TrashMaps={this.props.trashMaps} />;
 
                     default:
                         return null;
@@ -86,11 +104,14 @@ class Home extends Component{
 }
 
 const mapStateToProps = (state) => ({
+    token: state.auth.token,
+
     user: state.user_data.user,
+
     privateMaps: state.user_data.privateMaps,
     publicMaps: state.user_data.publicMaps,
     recentMaps: state.user_data.recentMaps,
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ createMap, deleteMap })(Home);
+export default connect(mapStateToProps,{ loadUser, createMap, deleteMap })(Home);

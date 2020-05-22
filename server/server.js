@@ -2,10 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
 
+
+const app = express();
+const server = require('http').createServer(app);
+
+// Routes
 const auth = require('./routes/api/auth');
 const maps = require('./routes/api/maps');
 
-const app = express();
 
 // Bodyparser middleware
 app.use(express.json());
@@ -23,6 +27,9 @@ mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true, useCreate
 app.use('/api/auth', auth);
 app.use('/api/map', maps);
 
+// Add sockets to server
+require('./socket/socket')(server);
+
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server started on port ${port}`));
+server.listen(port, () => console.log(`Server started on port ${port}`));

@@ -4,10 +4,6 @@ export const Home_MapsListTrash = (props) => {
 
     const { TrashMaps } = props;
 
-    const OpenFormAddMap = () => {
-        props.openFormAddMap();    
-    } 
-
     return(       
         <div className='home-container__maps-grid'>
             <h3 className='maps-grid__title'>Удаленные карты</h3>
@@ -15,8 +11,8 @@ export const Home_MapsListTrash = (props) => {
             <div className='maps-grid__container'>
                 {   TrashMaps.length > 0 ?
                    
-                TrashMaps.map(({id, title}) => (
-                        <div className='map-card' key={id}>
+                TrashMaps.map(({_id, title}) => (
+                        <div className='map-card' key={_id}>
                              <div className='map-card__body'>
                                 <div className='map-card__title'>{title}</div>
                             </div> 
