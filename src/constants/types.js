@@ -2,6 +2,7 @@
 export const auth = {
     USER_LOADING: 'auth/user/loading',
     USER_LOADED: 'auth/user/loaded',
+    USER_LOADING_FAIL: 'auth/loading/fail',
 
     REGISTER_SUCCESS: 'auth/register/success',
     REGISTER_FAIL: 'auth/register/fail',
@@ -22,8 +23,8 @@ export const error = {
     CLEAR_ERRORS: 'error/clear'
 };
 
-
 export const map = {
+    LOAD_MAP_ID: 'map/load/id',
     LOAD_MAP: 'map/load',
 
     ADD_NODE: 'map/node/add',

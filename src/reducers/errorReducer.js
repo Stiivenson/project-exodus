@@ -1,4 +1,4 @@
-import { GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import * as types from '../constants/types';
 
 const initialState = {
     msg: {},
@@ -9,7 +9,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
 
-    case GET_ERRORS:
+    case types.error.GET_ERROS:
         return { 
             ...state,
             msg: action.payload.msg,
@@ -17,7 +17,7 @@ export default (state = initialState, action) => {
             id: action.payload.id
         };
 
-    case CLEAR_ERRORS:
+    case types.error.GET_ERROS:
         return { 
             ...state,
             msg: {},

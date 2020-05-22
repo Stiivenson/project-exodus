@@ -1,7 +1,5 @@
 import React, { Component} from 'react';
 
-import io from "socket.io-client";
-
 import {Home_Menu} from './Home-Menu';
 import {Home_MapsList} from './Home-MapsList';
 import {Home_MapsListRecent} from './Home-MapsListRecent';
@@ -11,9 +9,9 @@ import {Home_FormAddMap} from './Home-FormAddMap';
 import { connect } from 'react-redux';
 import { loadUser } from "../../actions/authAction";
 import { createMap, deleteMap } from '../../actions/homeAction';
+import { loadMapId } from '../../actions/mapAction';
 
 
-let socket;
 class Home extends Component{
     constructor(props){
         super(props);
@@ -27,16 +25,6 @@ class Home extends Component{
     componentDidMount() {
         if(this.props.token){
             this.props.loadUser();
-            
-            socket = io.connect("http://localhost:5000", {query: {token: this.props.token}});
-            console.log(socket); 
-
-            socket.on('SERVER:SEND_MAP_DATA', (data) => {
-                console.log(data);
-                
-            });
-
-            //socket.emit('CLIENT:GET_MAP_DATA', id);
         }        
     }
     
@@ -54,6 +42,7 @@ class Home extends Component{
         this.setState({ showFormAddMap: false });
     } 
 
+
     // Create new Map
     createNewMap = (title) => {
         this.props.createMap(this.props.user.id, title);
@@ -64,10 +53,15 @@ class Home extends Component{
         this.props.deleteMap(id);
     }
 
+    getMapId = (id) => {
+        this.props.loadMapId(id)
+    }
+
     render() {
         return (
             <div className='home-container'>
                 <Home_FormAddMap 
+
                     showFormAddMap={this.state.showFormAddMap}
                     closeFormAddMap={this.closeFormAddMap}
                     
@@ -78,12 +72,14 @@ class Home extends Component{
                     switch (this.state.selectedMenuSection) {
                         case 'maps':
                             return <Home_MapsList
-
+                                
+                                history={this.props.history}
                                 PublicMaps={this.props.publicMaps}
                                 PrivateMaps={this.props.privateMaps}
 
                                 openFormAddMap={this.openFormAddMap}
-                                deleteMap={this.deleteMap}  />;
+                                deleteMap={this.deleteMap}
+                                getMapId={this.getMapId}  />;
 
                         case 'recent':
                             return <Home_MapsListRecent 
@@ -114,4 +110,4 @@ const mapStateToProps = (state) => ({
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ loadUser, createMap, deleteMap })(Home);
+export default connect(mapStateToProps,{ loadUser, createMap, deleteMap, loadMapId })(Home);

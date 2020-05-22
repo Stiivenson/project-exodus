@@ -6,8 +6,8 @@ import mapReducer from './mapReducer';
 
 const rootReducer = combineReducers({
     auth: authReducer,
-    user_data: userReducer
-    //mapData: mapReducer
+    user_data: userReducer,
+    map_data: mapReducer
 });
 
 export default rootReducer;

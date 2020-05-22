@@ -4,8 +4,9 @@ export const Home_MapsList = (props) => {
 
     const { PublicMaps, PrivateMaps } = props;
 
-    const OpenMapEditor = () => {
-        //props.History.push('/map-editor');    
+    const OpenMapEditor = (id) => {
+        props.getMapId(id);
+        props.history.push('/map-editor');    
     }
 
     const OpenFormAddMap = () => {
@@ -25,7 +26,7 @@ export const Home_MapsList = (props) => {
                 
                     PrivateMaps.map(({_id, title}) => (
                         <div className='map-card' key={_id}>
-                            <div className='map-card__body' onClick={OpenMapEditor}>
+                            <div className='map-card__body' onClick={() => OpenMapEditor(_id)}>
                                 <div className='map-card__title'>{title}</div>
                             </div>                            
                             <svg className='map-card__delete' onClick={() => DeleteMap(_id)} width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">

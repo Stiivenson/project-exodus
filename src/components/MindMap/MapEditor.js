@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Graph from "react-graph-vis";
 import { MapNavigationBar } from './MapNavigationBar';
 
+
 /**
  * @class MapEditor
  * @description Component to draw MindMap using vis.js
@@ -22,10 +23,85 @@ import { MapNavigationBar } from './MapNavigationBar';
 class MapEditor extends Component {  
   constructor(props) {
     super(props);
+
+    const map_options = {
+      layout: {
+        randomSeed: undefined,
+        improvedLayout:true,
+        hierarchical:{
+          enabled: false,            
+        }
+      },
+      nodes:{
+        shape:'box'
+      },
+      edges: {
+        arrows: {
+          to: {
+            enabled: false,
+            type: "arrow"
+          },
+          middle: {
+            enabled: false
+          },
+          from: {
+            enabled: false,
+            type: "arrow"
+          }
+        },
+        smooth: {
+          type: "cubicBezier",
+          forceDirection: "vertical",
+          roundness: 0.5
+        }
+      },
+      interaction:{
+        dragNodes:true,
+        dragView: true,
+        hover: true,
+        navigationButtons: true,
+        multiselect: true
+      },
+      physics:{
+        enabled: false
+      },
+      manipulation: {}
+    };
+
+    const root_node_options = {
+      color:{
+        //background: '#319CFF',
+         background: '#ffffff',
+         border: '#000000'
+      },
+      fixed:{
+          x: true,
+          y: true
+      },
+      font:{
+          align: 'center',
+          bold: true,
+          color: '#000000',
+          face: 'Roboto-Regular',    
+          multi: true,  
+          size: 26
+      },
+      margin: { 
+          top: 20, 
+          bottom: 15, 
+          right: 20,       
+          left: 20 
+      },
+      shapeProperties:{
+        borderRadius: 20
+      }             
+    }
+
+    this.props.map.nodes[0] = Object.assign(this.props.map.nodes[0], root_node_options);
     
     let initialGraph = {};
-    initialGraph.nodes = this.props.map_component.nodes;
-    initialGraph.edges = this.props.map_component.edges;
+    initialGraph.nodes = this.props.map.nodes;
+    initialGraph.edges = this.props.map.edges;
 
     let manipulationOptions = {
         enabled: false,
@@ -56,8 +132,8 @@ class MapEditor extends Component {
           
           this.setState({counter: newId})
           callback(data);
-          this.sendCreatedNode(data);
-          // this.setState({editNodeMode: true});
+          //this.sendCreatedNode(data);
+          //this.setState({editNodeMode: true});
           //this.state.network.addNodeMode();
         },
         addEdge: (data, callback) => {
@@ -72,11 +148,12 @@ class MapEditor extends Component {
           this.state.network.addEdgeMode();
         }
     };
-    this.props.map_component.options.manipulation = manipulationOptions;
+    
+    map_options.manipulation = manipulationOptions;
 
     this.state = {
       graph: initialGraph,
-      options: this.props.map_component.options,
+      options: map_options,
       style: { width: "100%", height: "100%" },
       network: null,
       
@@ -141,9 +218,8 @@ class MapEditor extends Component {
 
   onHold= (coords) => {
     console.log(coords);
-    
     let id = this.state.network.getNodeAt(coords);
-    this.props.recieveNodeForTree(id)
+    //this.props.recieveNodeForTree(id)
   }
 
   onDragStart = (coords) => {
@@ -315,7 +391,7 @@ class MapEditor extends Component {
    */
 
   sendCreatedNode = (data) => {
-    this.props.recieveCreatedNode(data);
+    //this.props.recieveCreatedNode(data);
   }
 
 

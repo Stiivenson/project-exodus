@@ -1,7 +1,8 @@
+import * as types from '../constants/types';
 import axios from 'axios';
 
-import * as types from '../constants/types';
-import DB from '../constants/ImitationDB';
+import { returnErrors } from "./errorAction";
+
 
 export const register = ({ name, email, password }) => {
     // Headers
@@ -18,7 +19,11 @@ export const register = ({ name, email, password }) => {
         .then(res => dispatch({
             type: types.auth.REGISTER_SUCCESS,
             payload: res.data
-        }))  
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL'));
+            dispatch({type: types.auth.REGISTER_FAIL});
+        });  
 };
 
 export const login = (email, password) => (dispatch, getState) => {
@@ -40,19 +45,10 @@ export const login = (email, password) => (dispatch, getState) => {
             });                        
         })
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
+            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch({ type: types.auth.AUTH_ERROR });
         });
 };
-
-const check = (getState) => {
-    console.log('token in LS: ', localStorage.getItem('token'));
-    console.log('token in State: ', getState);
-}
 
 export const logout = () => {
     return {
@@ -75,12 +71,8 @@ export const loadUser = () => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
+            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch({ type: types.auth.USER_LOADING_FAIL });
         });
 };
 

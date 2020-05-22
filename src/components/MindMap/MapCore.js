@@ -5,69 +5,82 @@ import MapEditor from './MapEditor';
 import DndDocTree from '../DndDocTree';
 
 import { connect } from "react-redux";
-import { sendCreatedNode } from '../../actions/mapAction';
+import { loadMapData } from '../../actions/mapAction';
 import { sendNodeDataToTree } from "../../actions/dnd-doc-tree-component";
 
+import io from "socket.io-client";
+let socket;
 
 class MapCore extends Component{
   constructor(props){
     super(props);
-    this.state={   
-    }
+    this.state = {}
   }
 
-  recieveCreatedNode = (data) => {
-    this.props.sendCreatedNode(data);
+  componentDidMount() {
+    socket = io.connect("http://localhost:5000", {query: {token: this.props.token}});
+    console.log(socket); 
+    console.log('componentDidMount');
+    
+    if(this.props.mapIsEmpty){
+      socket.emit('CLIENT:GET_MAP_DATA', this.props.map.id);
+      socket.on('SERVER:SEND_MAP_DATA', data => {
+        this.props.loadMapData(data);  
+      });
+    }    
   }
 
-  recieveNodeForTree = (id) => {
-    this.props.sendNodeDataToTree(id);
+  componentWillUnmount() {
+    socket.disconnect();
   }
 
-  handleTreeFileCreation = (id) => {
-    // this.props.sendFileToCreate(id);
-  }
+
+  // recieveCreatedNode = (data) => {
+  //   this.props.sendCreatedNode(data);
+  // }
+
+  // recieveNodeForTree = (id) => {
+  //   this.props.sendNodeDataToTree(id);
+  // }
+
+  // handleTreeFileCreation = (id) => {
+  //   this.props.sendFileToCreate(id);
+  // }
 
   render(){
     return(      
       <div className="map-container">
-        <div className='vis-react'>
-          <MapEditor map_component={this.props.mapComponent} 
-                    recieveCreatedNode={this.recieveCreatedNode}
-                    recieveNodeForTree={this.recieveNodeForTree}
-          />
-        </div>
-        {/* <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
-                    handleTreeFileCreation={this.handleTreeFileCreation}
-        /> */}
+        { this.props.mapisLoading ? 
+
+          <h1>LOADING...</h1>
+
+          : 
+
+          <div className='vis-react'>
+            <MapEditor map={this.props.map} socket={socket}
+              // recieveCreatedNode={this.recieveCreatedNode}
+              // recieveNodeForTree={this.recieveNodeForTree}
+            />
+          </div>
+          
+        }
       </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  console.log('mapStateToProps - ', state);
+{/* <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
+                    handleTreeFileCreation={this.handleTreeFileCreation}
+        /> */}
 
+const mapStateToProps = state => {
   return {
-    mapComponent: state.map_component,
-    // docTree_NodeId:  state.dnd_doc_tree_component.nodeId,
-    // docTree_title:  state.dnd_doc_tree_component.title,
-    // docTree_treeData:  state.dnd_doc_tree_component.treeData
+    token: state.auth.token,
+    map: state.map_data.map,
+
+    mapIsEmpty: state.map_data.mapIsEmpty,
+    mapisLoading: state.map_data.mapisLoading
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    sendCreatedNode: (data) => {
-      dispatch(sendCreatedNode(data))
-    },
-    sendNodeDataToTree: (id) => {
-      dispatch(sendNodeDataToTree(id))
-    },
-    // sendFileToCreate: (id) => {
-    //   dispatch(createFile(id))
-    // }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MapCore);
+export default connect(mapStateToProps, { loadMapData })(MapCore);

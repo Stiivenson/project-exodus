@@ -18,7 +18,7 @@ function getMapData (id) {
                 }
             });       
         }
-        else reject('No id provided!');               
+        else throw('No id provided!');               
     });
 }
 
@@ -39,7 +39,13 @@ module.exports = function(server) {
         console.log("User id:", socket.user);
         
         socket.on('CLIENT:GET_MAP_DATA', (id) => {
-            getMapData(id).then(res => socket.emit('SERVER:SEND_MAP_DATA', res));          
+            getMapData(id)
+            .then(res => socket.emit('SERVER:SEND_MAP_DATA', res))
+            .catch(err => console.log(err));          
+        });
+
+        socket.on('disconnect', function(){
+            console.log('Disconnected - '+ socket.id);
         });
 
         if(socket.error) {

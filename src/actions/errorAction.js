@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-import { GET_ERRORS, CLEAR_ERRORS } from '../actions/types';
+import * as types from '../constants/types';
 
 // Return Errors
 export const returnErrors = (msg, status, id = null) => {
     return {
-        type: GET_ERRORS,
+        type: types.error.GET_ERROS,
         payload: { msg, status, id }
     }    
 };
@@ -13,6 +13,6 @@ export const returnErrors = (msg, status, id = null) => {
 // Clear Errors
 export const clearErrors = () => {
     return {
-        type: CLEAR_ERRORS
+        type:  types.error.CLEAR_ERRORS
     }    
 };
