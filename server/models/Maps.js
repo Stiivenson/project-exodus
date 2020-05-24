@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Node = require('./Map-Nodes');
-
 // Create Schema
 const MapSchema = new Schema({
     owner_id: {
@@ -13,8 +11,13 @@ const MapSchema = new Schema({
         type: String,
         required: true
     },
-    nodes: [Node.schema],
+    nodes: {
+        type: Array
+    },
     edges: {
+        type: Array
+    },
+    DocTreeStructure: {
         type: Array
     },
     date: {

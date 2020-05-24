@@ -49,6 +49,9 @@ function findMaps (arr) {
 router.post('/register', (req, res) => {
 
     const { name, email, password } = req.body;
+
+    console.log(req.body);
+    
     
     // Simple validation
     if(!name || !email || !password) {

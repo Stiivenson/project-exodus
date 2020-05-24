@@ -19,11 +19,11 @@ class Home extends Component{
             showFormAddMap: false,
     
             selectedMenuSection: 'maps'
-        }
+        }  
     }  
    
     componentDidMount() {
-        if(this.props.token){
+        if(!this.props.dataLoaded){
             this.props.loadUser();
         }        
     }
@@ -101,6 +101,7 @@ class Home extends Component{
 
 const mapStateToProps = (state) => ({
     token: state.auth.token,
+    dataLoaded: state.auth.dataLoaded,
 
     user: state.user_data.user,
 

@@ -48,14 +48,52 @@ export default function(state = initialState, action) {
         case types.map.LOAD_MAP_ID:
             return {
                 ...state,             
-                map: {
-                    id: action.payload,
-                    title: '',
-                    nodes: [],
-                    edges: []
+                map: { ...state.map,
+                    id: action.payload
+                }
+            };
+        
+        case types.map.ADD_NODE:
+            return {
+                ...state,
+                map: {...state.map,
+                    nodes: [...state.map.nodes, action.payload]
                 }
             };
 
+        case types.map.UPDATE_NODE:
+            return {
+                ...state,
+                map: {...state.map,
+                    nodes: state.map.nodes.map(node => node.id === action.payload.id ?
+                            { ...node, label: action.payload.label } :
+                            node)
+                }
+            };
+
+        case types.map.DELETE_NODE:
+            return {
+                ...state,
+                map: {...state.map,
+                    nodes: state.map.nodes.filter(node => node.id !== action.payload)
+                }
+            };
+
+        case types.map.ADD_EDGE:
+            return {
+                ...state,
+                map: {...state.map,
+                    edges: [...state.map.edges, action.payload]
+                }
+            };
+
+        case types.map.DELETE_EDGE:
+            return {
+                ...state,
+                map: {...state.map,
+                    edges: state.map.edges.filter(edge => edge.id !== action.payload)
+                }
+            };
 
         default: 
             return state;

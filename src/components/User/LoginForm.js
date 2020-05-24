@@ -5,7 +5,7 @@ export const LoginForm = (props) => {
 
     const [storeInput, setStoreInput] = useState(
         {
-            mail: '',
+            email: '',
             password: ''
         }
     );
@@ -16,7 +16,7 @@ export const LoginForm = (props) => {
 
     const SubmitForm = (e) => {
         e.preventDefault();
-        props.sendLoginForm(storeInput.mail, storeInput.password);    
+        props.sendLoginForm(storeInput);    
     }
 
     return(
@@ -24,7 +24,7 @@ export const LoginForm = (props) => {
             <form className='form'>
                 <div className='form__body-container'>
                     <div className='form__input-wrapper'>
-                        <input className='form__input' type="email" required value={storeInput.mail} onChange={(e) => setStoreInput({...storeInput, mail: e.target.value})}
+                        <input className='form__input' type="email" required value={storeInput.email} onChange={(e) => setStoreInput({...storeInput, email: e.target.value})}
                             placeholder=' ' required/>
                         <label>Почта</label>
                     </div>

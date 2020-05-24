@@ -7,8 +7,7 @@ export const loadMapId = (id) => {
     return {
         type: types.map.LOAD_MAP_ID,
         payload: id
-    }
-    
+    }    
 }
 
 export const loadMapData = (data) => {
@@ -18,25 +17,46 @@ export const loadMapData = (data) => {
     }
 }
 
-
-export const register = ({ name, email, password }) => {
-    // Headers
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
+export const addNode = (data) => {
+    return {
+        type: types.map.ADD_NODE,
+        payload: data
     }
+}
 
-    // Request body
-    const body = JSON.stringify({ name, email, password });
+export const updateNode = (data) => {
+    return {
+        type: types.map.UPDATE_NODE,
+        payload: data
+    }
+}
 
-    axios.post('/api/auth/register', body, config)
-        .then(res => dispatch({
-            type: types.auth.REGISTER_SUCCESS,
-            payload: res.data
-        }))
-        .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL'));
-            dispatch({type: types.auth.REGISTER_FAIL});
-        });  
-};
+export const deleteNode = (data) => {
+    return dispatch => {
+        data.map(id => {           
+            dispatch({
+                type: types.map.DELETE_NODE,
+                payload: id
+            });
+        });        
+    }
+}
+
+export const addEdge = (data) => {
+    return {
+        type: types.map.ADD_EDGE,
+        payload: data
+    }
+}
+
+export const deleteEdge = (data) => {
+    return dispatch => {
+        console.log('deleteEdge', data);
+        data.map(id => {           
+            dispatch({
+                type: types.map.DELETE_EDGE,
+                payload: id
+            });
+        });        
+    }
+}

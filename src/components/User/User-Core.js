@@ -16,8 +16,12 @@ class User extends Component{
         this.setState({ selectedAuthForm: form });
     }
 
-    sendLoginForm = (mail, password) => {
-        this.props.login(mail, password);
+    sendLoginForm = (data) => {
+        this.props.login(data);
+    }
+    
+    sendRegisterForm = (data) => {
+        this.props.register(data);
     }
 
     render() {
@@ -32,7 +36,8 @@ class User extends Component{
 
                         case 'register':
                             return <RegisterForm 
-                                        selectAuthForm={this.selectAuthForm} />;
+                                        selectAuthForm={this.selectAuthForm}
+                                        sendRegisterForm={this.sendRegisterForm} />;
 
                     default:
                         return null;

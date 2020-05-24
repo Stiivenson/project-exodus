@@ -19,11 +19,12 @@ router.post('/create', auth, (req, res) => {
         title: req.body.title,
         nodes: [
             {
-                label: req.body.title,
-                root: 'root'
+                id: 'root',
+                label: req.body.title
             }
         ],
-        edges: []
+        edges: [],
+        DocTreeStructure: []
     });
 
     newMap.save()
@@ -54,13 +55,15 @@ router.post('/update', auth, (req, res) => {
    * @desc  Delete map
    * @acces Private
    */
-router.delete('/:id', auth, (req, res) => {  
-
+router.delete('/:id', auth, (req, res) => {
    Maps.findById(req.params.id)
-    .then(map => map.remove().then(() => res.json({success: true})))
+    .then(map => map.remove())
+    .then(async function () {
+        await User.updateOne({ _id: req.user.id }, { $pull: { PrivateMaps: req.params.id } });
+        res.json({success: true});           
+    })
     .catch(err => res.status(404).json({success: false}));
     
 });
-
 
 module.exports = router;

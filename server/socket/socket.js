@@ -22,6 +22,96 @@ function getMapData (id) {
     });
 }
 
+/**
+   * @function addNode / Add new Node & treeDataItem to Map
+   */
+  function addNode (id, data) {
+    let treeDataItem = { id: data.id, label: data.label, treeData: [] }
+    return new Promise(function (resolve, reject) {
+        if (data && id) {
+            Maps.update({ _id: id }, { $push: { nodes: data, DocTreeStructure: treeDataItem } }, {new: true}).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(res);               
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function updateNode / Update Node & treeDataItem in Map
+   */
+  function updateNode (id, data) {
+    return new Promise(function (resolve, reject) {
+        if (data && id) {
+            Maps.update({ "_id": id, "nodes.id": data.id}, { $set: { "nodes.$.label": data.label } }).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    Maps.update({ "_id": id, "DocTreeStructure.id": data.id}, { $set: { "DocTreeStructure.$.label": data.label }}).exec((err, res) => {
+                        if(err) reject('Error:', err);
+                        else { 
+                            resolve(res);  
+                        }
+                    });                                 
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function deleteNode / Delete Nodes & treeDataItems from Map
+   */
+  function deleteNode (id, data) {
+    return new Promise(function (resolve, reject) {
+        if (id) {
+            Maps.updateOne({ _id: id }, { $pull: { nodes: { id: { $in: data } }, DocTreeStructure:  { id: { $in: data } } } }).exec((err, res) => {
+                if(err) throw(err); 
+                else {                     
+                    resolve(res);               
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function addEdge / Add new Edge to Map
+   */
+  function addEdge (id, data) {
+    return new Promise(function (resolve, reject) {
+        if (data && id) {
+            Maps.updateOne({ _id: id }, { $push: { edges: data} }, {new: true}).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(res);               
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function deleteEdge / Delete Edges from Map
+   */
+  function deleteEdge (id, data) {
+    return new Promise(function (resolve, reject) {
+        if (id) {
+            Maps.updateOne({ _id: id }, { $pull: { edges: { id: { $in: data }  } } }).exec((err, res) => {
+                if(err) throw(err); 
+                else {                     
+                    resolve(res);               
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
 
 module.exports = function(server) {
 
@@ -36,13 +126,54 @@ module.exports = function(server) {
     })
     .on('connection', function(socket) {
         console.log("Connected to Socket: "+ socket.id);
-        console.log("User id:", socket.user);
         
+        socket.on('JOIN_ROOM', (id) => {
+            const room = id;
+            console.log('Joined room ', room);
+            socket.join(room);
+            socket.emit('Connected', room);
+        });
+
+        /**
+         * @Section Handle Map-Editor actions
+         */     
         socket.on('CLIENT:GET_MAP_DATA', (id) => {
+            console.log('GET_MAP_DATA', id);
+            
             getMapData(id)
             .then(res => socket.emit('SERVER:SEND_MAP_DATA', res))
             .catch(err => console.log(err));          
         });
+
+        socket.on('CLIENT--MapEditor:CREATE_NODE', function(data){
+            addNode(data.id, data.node)
+            .then(() => socket.emit('SERVER--MapEditor:CREATE_NODE_SUCCESS', data.node ))
+            .catch(() => socket.emit('SERVER:ERROR'));  
+        });
+        socket.on('CLIENT--MapEditor:UPDATE_NODE', function(data){
+            console.log(data);
+            updateNode(data.id, data.node)
+            .then(() => socket.emit('SERVER--MapEditor:UPDATE_NODE_SUCCESS', data.node ))
+            .catch(() => socket.emit('SERVER:ERROR'));  
+        });
+        socket.on('CLIENT--MapEditor:DELETE_NODE', function(data){
+            deleteNode(data.id, data.nodes)
+            .then(() => socket.emit('SERVER--MapEditor:DELETE_NODE_SUCCESS', data.nodes))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+
+        socket.on('CLIENT--MapEditor:CREATE_EDGE', function(data){
+            addEdge(data.id, data.edge)
+            .then(() => socket.emit('SERVER--MapEditor:CREATE_EDGE_SUCCESS', data.edge ))
+            .catch(() => socket.emit('SERVER:ERROR'));  
+        });
+        socket.on('CLIENT--MapEditor:DELETE_EDGE', function(data){
+            deleteEdge(data.id, data.edges)
+            .then(() => socket.emit('SERVER--MapEditor:DELETE_EDGE_SUCCESS', data.edges))
+            .catch(err => socket.emit('SERVER:ERROR'));  
+        });
+
+
 
         socket.on('disconnect', function(){
             console.log('Disconnected - '+ socket.id);

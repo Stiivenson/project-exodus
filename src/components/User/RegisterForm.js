@@ -6,7 +6,7 @@ export const RegisterForm = (props) => {
     const [storeInput, setStoreInput] = useState(
         {
             name: '',
-            mail: '',
+            email: '',
             password: ''
         }
     );
@@ -15,9 +15,9 @@ export const RegisterForm = (props) => {
         props.selectAuthForm('login');
     }
 
-    const SubmitForm = () => {
-        console.log('s');
-        
+    const SubmitForm = (e) => {
+        e.preventDefault();
+        props.sendRegisterForm(storeInput);        
     }
 
     return(
@@ -30,7 +30,7 @@ export const RegisterForm = (props) => {
                         <label>Имя</label>
                     </div>
                     <div className='form__input-wrapper'>
-                        <input className='form__input' type="email" required value={storeInput.mail} onChange={(e) => setStoreInput({...storeInput, mail: e.target.value})}
+                        <input className='form__input' type="email" required value={storeInput.email} onChange={(e) => setStoreInput({...storeInput, email: e.target.value})}
                             placeholder=' ' required/>
                         <label>Почта</label>
                     </div>
@@ -40,7 +40,7 @@ export const RegisterForm = (props) => {
                         <label>Пароль</label>
                     </div>
                 </div>
-                <button className='form__button' onSubmit={SubmitForm}>Зарегистрироваться</button>
+                <button className='form__button' onClick={SubmitForm}>Зарегистрироваться</button>
                 <div className='form__info'>
                         Уже есть аккаунт?
                         <span className='form__info-link' onClick={onSwitchForm}>Войти</span>

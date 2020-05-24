@@ -3,7 +3,8 @@ import * as types from '../constants/types';
 const initialState = {
     token: localStorage.getItem('token'),
     isAuthenticated: false,
-    isLoading: false
+    isLoading: false,
+    dataLoaded: false
 };
 
 export default function(state = initialState, action) {
@@ -19,7 +20,8 @@ export default function(state = initialState, action) {
             return { 
                 ...state, 
                 isLoading: false,
-                isAuthenticated: true
+                isAuthenticated: true,
+                dataLoaded: true
             };
 
         case types.auth.REGISTER_SUCCESS:
@@ -41,7 +43,8 @@ export default function(state = initialState, action) {
                 token: null,
                 user: null,
                 isAuthenticated: false,
-                isLoading: false            
+                isLoading: false,
+                dataLoaded: false            
             };
 
         default: 

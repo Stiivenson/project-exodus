@@ -3,6 +3,100 @@ import { connect } from "react-redux";
 import Graph from "react-graph-vis";
 import { MapNavigationBar } from './MapNavigationBar';
 
+const map_options = {
+  layout: {
+    randomSeed: undefined,
+    improvedLayout:true,
+    hierarchical:{
+      enabled: false,            
+    }
+  },
+  nodes:{
+    shape:'box'
+  },
+  edges: {
+    arrows: {
+      to: {
+        enabled: false,
+        type: "arrow"
+      },
+      middle: {
+        enabled: false
+      },
+      from: {
+        enabled: false,
+        type: "arrow"
+      }
+    },
+    smooth: {
+      type: "cubicBezier",
+      forceDirection: "vertical",
+      roundness: 0.5
+    }
+  },
+  interaction:{
+    dragNodes:true,
+    dragView: true,
+    hover: true,
+    navigationButtons: true,
+    multiselect: true
+  },
+  physics:{
+    enabled: false
+  },
+  manipulation: {}
+};
+
+const root_node_options = {
+  color:{
+     background: '#ffffff',
+     border: '#000000'
+  },      
+  font:{
+      align: 'center',
+      bold: true,
+      color: '#000000',
+      face: 'Roboto-Bold',    
+      multi: true,  
+      size: 26
+  },
+  margin: { 
+      top: 20, 
+      bottom: 15, 
+      right: 20,       
+      left: 20 
+  },
+  shapeProperties:{
+    borderRadius: 20
+  },
+  fixed:{
+    x: true,
+    y: true
+  },
+  x: 0,
+  y: 0            
+}
+
+const node_options = {
+  color: {
+    background: '#ffffff',
+    border: '#000000'
+  },
+  font: {
+    align: 'center',
+    bold: true,
+    color: '#000000',
+    face: 'Roboto-Light',  
+    multi: true,
+    size: 20
+  },
+  margin: { 
+    top: 10, 
+    bottom: 10, 
+    right: 15,       
+    left: 15 
+  }
+}
 
 /**
  * @class MapEditor
@@ -14,7 +108,6 @@ import { MapNavigationBar } from './MapNavigationBar';
  *    @section Listen-NavigationBar
  *    @section Map-EditForms 
  *    @section Assist-Funcs 
- *    @section External-Funcs 
  *    @section Iinitial-Funcs 
  *    @section Render 
  *    @section ... 
@@ -24,117 +117,32 @@ class MapEditor extends Component {
   constructor(props) {
     super(props);
 
-    const map_options = {
-      layout: {
-        randomSeed: undefined,
-        improvedLayout:true,
-        hierarchical:{
-          enabled: false,            
-        }
-      },
-      nodes:{
-        shape:'box'
-      },
-      edges: {
-        arrows: {
-          to: {
-            enabled: false,
-            type: "arrow"
-          },
-          middle: {
-            enabled: false
-          },
-          from: {
-            enabled: false,
-            type: "arrow"
-          }
-        },
-        smooth: {
-          type: "cubicBezier",
-          forceDirection: "vertical",
-          roundness: 0.5
-        }
-      },
-      interaction:{
-        dragNodes:true,
-        dragView: true,
-        hover: true,
-        navigationButtons: true,
-        multiselect: true
-      },
-      physics:{
-        enabled: false
-      },
-      manipulation: {}
-    };
-
-    const root_node_options = {
-      color:{
-        //background: '#319CFF',
-         background: '#ffffff',
-         border: '#000000'
-      },
-      fixed:{
-          x: true,
-          y: true
-      },
-      font:{
-          align: 'center',
-          bold: true,
-          color: '#000000',
-          face: 'Roboto-Regular',    
-          multi: true,  
-          size: 26
-      },
-      margin: { 
-          top: 20, 
-          bottom: 15, 
-          right: 20,       
-          left: 20 
-      },
-      shapeProperties:{
-        borderRadius: 20
-      }             
-    }
-
-    this.props.map.nodes[0] = Object.assign(this.props.map.nodes[0], root_node_options);
-    
     let initialGraph = {};
     initialGraph.nodes = this.props.map.nodes;
     initialGraph.edges = this.props.map.edges;
+    
+    initialGraph.nodes.map(node => {
+      if(node.id === 'root') node = Object.assign(node, root_node_options);
+      else node = Object.assign(node, node_options);
+    });
 
     let manipulationOptions = {
         enabled: false,
         initiallyActive: false,
         addNode: (data, callback) => {
-          let newId = this.state.counter + 1
+          data.label = 'Новый раздел';
 
-          data.id = newId;  
-          data.label = 'New Node'
-          data.color = {
-            background: '#ffffff',
-            border: '#000000'
-          };
-          data.font = {
-            align: 'center',
-            bold: true,
-            color: '#000000',
-            face: 'Roboto-Light',  
-            multi: true,
-            size: 20
-          };
-          data.margin = { 
-            top: 10, 
-            bottom: 10, 
-            right: 15,       
-            left: 15 
-          };
+          let serverData = {
+            id: data.id,
+            label: data.label,
+            x: data.x,
+            y: data.y
+          }
           
-          this.setState({counter: newId})
-          callback(data);
-          //this.sendCreatedNode(data);
+          this.props.socket.emit('CLIENT--MapEditor:CREATE_NODE', { id: this.state.id, node: serverData });
+          this.props.addNode(data);
           //this.setState({editNodeMode: true});
-          //this.state.network.addNodeMode();
+          this.state.network.addNodeMode();
         },
         addEdge: (data, callback) => {
           data.arrows = {
@@ -143,7 +151,7 @@ class MapEditor extends Component {
           if (data.from === data.to || data.to === 1) {
             return;
           } else {
-            callback(data);
+            this.props.addEdge(data);
           }
           this.state.network.addEdgeMode();
         }
@@ -152,12 +160,12 @@ class MapEditor extends Component {
     map_options.manipulation = manipulationOptions;
 
     this.state = {
+      id: props.map.id,
       graph: initialGraph,
       options: map_options,
       style: { width: "100%", height: "100%" },
       network: null,
       
-      counter: 1,             //generate new node's ids
       selectedNode: 1,        //remember id of selected node
 
       editNodeMode: false,    //show/hide EditNodeForm
@@ -204,7 +212,7 @@ class MapEditor extends Component {
    */
 
   onClick = (coords) => {
-    //let id = this.state.network.getNodeAt(coords); 
+    //let node = this.state.network.getNodeAt(coords);
   }
 
   onDoubleClick = (e) => {
@@ -217,7 +225,7 @@ class MapEditor extends Component {
   }
 
   onHold= (coords) => {
-    console.log(coords);
+    //console.log(coords);
     let id = this.state.network.getNodeAt(coords);
     //this.props.recieveNodeForTree(id)
   }
@@ -283,10 +291,12 @@ class MapEditor extends Component {
     }
   }
 
+
   deleteNodeMode = (id) => {
-    if(id !== 1){
+    if(id !== 'root'){
       this.selectAllInternalNodes(id);
-      this.state.network.deleteSelected();
+      let dataToDelete = this.state.network.getSelection(); // Get all selected nodes & edges
+      this.props.deleteDataFromMap(dataToDelete);
     }    
   }
 
@@ -306,9 +316,13 @@ class MapEditor extends Component {
   
   saveNodeEditForm = (e) => {
     e.preventDefault();
-
-    let id = this.state.selectedNode;
-    this.state.network.body.nodes[id].options.label = this.state.editNodeLabel; 
+    
+    let updatedNode = {
+      id: this.state.selectedNode,
+      label: this.state.editNodeLabel
+    }
+    this.props.editNode(updatedNode);
+    this.props.socket.emit('CLIENT--MapEditor:UPDATE_NODE', { id: this.state.id, node: updatedNode }); 
     this.setState({editNodeMode: false});
   }
 
@@ -383,17 +397,6 @@ class MapEditor extends Component {
     move();
   }
 
-  /**
-   * @section External-Funcs
-   * @description Funcs send data to ParentComponent
-   * 
-   * @function sendNodeData / send node id and label
-   */
-
-  sendCreatedNode = (data) => {
-    //this.props.recieveCreatedNode(data);
-  }
-
 
   /**
    * @section Iinitial-Funcs
@@ -420,7 +423,7 @@ class MapEditor extends Component {
   getEdges = data => {
   };
 
-  getNodes = data => {
+  getNodes = data => {    
   };
 
   componentWillMount() {
@@ -430,6 +433,70 @@ class MapEditor extends Component {
   componentDidMount() {
     this.mounted = true;
     window.addEventListener("resize", this.measure);
+  }
+
+  componentDidUpdate(){
+    let network =  this.state.network.body.data;
+    let value =  this.props.handlerValue, data = this.props.handlerData;
+
+    // console.log('value ', this.props.handlerValue);
+    // console.log('data ', this.props.handlerData);
+    // console.log('network ', this.state.network);    
+
+    switch(value) {
+      case 'add-node': {
+        let newNode = data;        
+        newNode = Object.assign(newNode, node_options);  
+        network.nodes.add(newNode);
+        return this.props.handlerClear();
+      }
+
+      case 'add-edge': {
+        let newEdge = data;
+        let node = network.nodes._data[data.from];
+        let oldEdges = this.state.network.getConnectedEdges(node.id);
+
+        network.edges.add(newEdge);
+
+        let newEdges = this.state.network.getConnectedEdges(node.id);
+        newEdges.map(edge => {
+          if(!oldEdges.includes(edge)) {
+            let edgeData = network.edges._data[edge];
+            let serverData = {
+              id: edgeData.id,
+              from: edgeData.from,
+              to: edgeData.to
+            }
+            this.props.socket.emit('CLIENT--MapEditor:CREATE_EDGE', { id: this.state.id, edge: serverData });  
+          }     
+        });        
+        
+        return this.props.handlerClear();
+      }
+
+      case 'edit-node': {;
+        network.nodes.update({id: data.id, label: data.label})
+        return this.props.handlerClear();
+      }
+
+      case 'delete': {
+        let nodes = data.nodes, edges = data.edges;
+
+        if(edges.length > 0) {
+          edges.map(edge => {
+            network.edges.remove(edge);
+          });  
+        }
+        if(nodes.length > 0) {
+          nodes.map(node => {
+            network.nodes.remove(node);
+          });  
+        }
+        return this.props.handlerClear(); 
+      }
+      default:
+        return;
+    }
   }
 
   componentWillUnmount() {
@@ -446,7 +513,7 @@ class MapEditor extends Component {
    */
 
   render() {
-    let classEditForm = ["map-edit-form-container"];
+    let classEditForm = ["modal-container"];
     if (this.state.editNodeMode){
       classEditForm.push('--show');
     }
@@ -466,25 +533,25 @@ class MapEditor extends Component {
         <MapNavigationBar listenNavigationBar={this.listenNavigationBar}/>     
 
         <div className={classEditForm.join(' ')}>
-          <form className='map-edit-form' onSubmit={this.saveNodeEditForm}>
+          <form className='form' onSubmit={this.saveNodeEditForm}>
 
-            <div className='map-edit-form__label-container'>
-              <div className='map-edit-form__icon'></div>
-              <div className='map-edit-form__title'>Edit Node</div>
+            <div className='form__label-container'>
+              <div className='form__label'>Изменение раздела</div>
             </div>
 
-            <div className='map-edit-form__body-container'>
-              <div className='map-edit-form__input-wrapper'>
-                <input className='map-edit-form__input' type="text" value={this.state.editNodeLabel} onChange={this.handleNodeEditFormChange}
-                       placeholder=' ' required/>
-                <label>Label</label>
+            <div className='form__body-container'>
+              <div className='form__input-wrapper'>
+                <input className='form__input' type="text" value={this.state.editNodeLabel} onChange={this.handleNodeEditFormChange}
+                        placeholder=' ' required/>
+                <label>Заголовок</label>
               </div>
             </div>
 
-            <div className='map-edit-form__buttons-container'>
-              <button className='map-edit-form__button' type='submit'>save</button>
-              <button className='map-edit-form__button' type='reset' onClick={this.closeNodeEditForm}>cancel</button>
+            <div className='form__buttons-container'>
+              <button className='form__button' type='submit'>Сохранить</button>
+              <button className='form__button --exit' type='reset' onClick={this.closeNodeEditForm}>Выход</button>
             </div>
+
           </form>
         </div>
 

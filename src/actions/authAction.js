@@ -4,7 +4,7 @@ import axios from 'axios';
 import { returnErrors } from "./errorAction";
 
 
-export const register = ({ name, email, password }) => {
+export const register = (name, email, password) =>  (dispatch) => {
     // Headers
     const config = {
         headers: {
@@ -13,7 +13,7 @@ export const register = ({ name, email, password }) => {
     }
 
     // Request body
-    const body = JSON.stringify({ name, email, password });
+    const body = JSON.stringify(name, email, password);    
 
     axios.post('/api/auth/register', body, config)
         .then(res => dispatch({
@@ -35,7 +35,9 @@ export const login = (email, password) => (dispatch, getState) => {
     }
 
     // Request body
-    const body = JSON.stringify({ email, password });
+    const body = JSON.stringify(email, password);
+    console.log(body);
+    
 
     axios.post('/api/auth/login', body, config)
         .then(res => {
