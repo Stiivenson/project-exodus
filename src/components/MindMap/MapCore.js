@@ -6,7 +6,7 @@ import DndDocTree from '../DndDocTree';
 
 import { connect } from "react-redux";
 import { loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
-import { sendNodeDataToTree } from "../../actions/dnd-doc-tree-component";
+import { loadTreeData } from "../../actions/docTreeAction";
 
 import io from "socket.io-client";
 let socket;
@@ -51,6 +51,17 @@ class MapCore extends Component{
     socket.on('SERVER--MapEditor:CREATE_EDGE_SUCCESS', (edge) => {
       console.log('CREATE_EDGE_SUCCESS', edge);      
       this.props.addEdge(edge);   
+    });
+
+    socket.on('SERVER--MapEditor:GET_DOCTREE_DATA_SUCCESS', (data) => {
+      console.log('GET_DOCTREE_DATA_SUCCESS', data);      
+      this.props.loadTreeData(data);   
+    });
+
+
+    socket.on('SERVER--DocTree:CREATE_FOLDER_SUCCESS', (data) => {
+      console.log('CREATE_FOLDER_SUCCESS', data);      
+      //this.props.updateNode(node);   
     });
 
 
@@ -113,7 +124,10 @@ class MapCore extends Component{
           <h1>LOADING...</h1>
 
           : 
-
+          <>
+          <DndDocTree socket={socket} 
+              isEmpty={this.props.treeIsEmpty} treeData={this.props.docTree} mapId={this.props.map.id}
+          />
           <div className='vis-react'>
             <MapEditor map={this.props.map} socket={socket}
             
@@ -121,11 +135,9 @@ class MapCore extends Component{
               
               addNode={this.addNode} editNode={this.editNode} addEdge={this.addEdge}
               deleteDataFromMap={this.deleteDataFromMap}
-            />
-            {/* <DndDocTree nodeId={this.props.docTree_NodeId} title={this.props.docTree_title} treeData={this.props.docTree_treeData}
-                    handleTreeFileCreation={this.handleTreeFileCreation}
-            /> */}
-          </div>
+            />           
+          </div>          
+          </>
           
         }
       </div>
@@ -140,11 +152,17 @@ const mapStateToProps = state => {
   
   return {
     token: state.auth.token,
-    map: state.map_data.map,
 
+    map: state.map_data.map,
     mapIsEmpty: state.map_data.mapIsEmpty,
-    mapisLoading: state.map_data.mapisLoading
+    mapisLoading: state.map_data.mapisLoading,
+
+    treeIsEmpty: state.doc_tree.treeIsEmpty,
+    docTree:  state.doc_tree.tree
   };
 };
 
-export default connect(mapStateToProps, { loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge })(MapCore);
+export default connect(mapStateToProps, { 
+  loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge,
+  loadTreeData 
+})(MapCore);

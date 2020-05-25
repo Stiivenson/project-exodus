@@ -37,14 +37,17 @@ export const map = {
 }
 
 
-export const doc_tree = {
-    CREATE_NODE: 'doc_tree/node/create',
+export const docTree = {
+    LOAD_DATA: 'doc_tree/load',
+
     UPDATE_NODE: 'doc_tree/node/update',
     DELETE_NODE: 'doc_tree/node/delete',
     
-    ADD_DATA: 'doc_tree/data/add',
-    UPDATE_DATA: 'doc_tree/data/update',
-    DELETE_DATA: 'doc_tree/data/delete',
+    ADD_NOTE: 'doc_tree/note/add',
+    UPDATE_NOTE: 'doc_tree/note/update',
+    DELETE_NOTE: 'doc_tree/note/delete',
 
-    UPDATE_COMPONENT: 'doc_tree/update_component'
+    ADD_FOLDER: 'doc_tree/folder/add',
+    UPDATE_FOLDER: 'doc_tree/folder/update',
+    DELETE_FOLDER: 'doc_tree/folder/delete',
 };

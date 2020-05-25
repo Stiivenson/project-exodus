@@ -9,9 +9,9 @@
 @import './components/navbar';
 @import './components/navbar-response-box';
 
-@import './components/map-ui-selection-bar';
-@import './components/map-edit-form';
+@import './components/MapEditor/map-edit-form';
+@import './components/MapEditor/map-ui-selection-bar';
 
-@import './components/dnd-doc-tree';
+@import './components/DocTree/doc-tree-component';
 
 @import 'overrides';

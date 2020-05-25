@@ -13,12 +13,12 @@ import store from './store/configureStore';
 import './styles/styles.scss';
 
 render(
-    <React.StrictMode>
+    <React.Fragment>
         <BrowserRouter history={history}>
             <Provider store={store}>
                 <App />
             </Provider>            
         </BrowserRouter>
-    </React.StrictMode>,
+    </React.Fragment>,
     document.getElementById('root')
 );

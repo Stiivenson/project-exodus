@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 
+import { v4 as uuid } from 'uuid';
 import SortableTree, { toggleExpandedForAll } from 'react-sortable-tree';
 import FileExplorerTheme from 'react-sortable-tree-theme-file-explorer';
 
@@ -8,15 +9,11 @@ class DndDocTree extends Component{
       super(props);
       
       this.state = {
-          nodeId: null,
-          title:'',
-          treeData: [],
-          enabled: false,
+        isEmpty: false,
 
-          searchString: '',
-          searchFocusIndex: 0,
-          searchFoundCount: null
-          
+        searchString: '',
+        searchFocusIndex: 0,
+        searchFoundCount: null
       };
   
       this.updateTreeData = this.updateTreeData.bind(this);
@@ -24,17 +21,17 @@ class DndDocTree extends Component{
       this.collapseAll = this.collapseAll.bind(this);
   }
 
-  static getDerivedStateFromProps(props, state) {
-      if (state.nodeId !== props.nodeId ) {
-          return { 
-            nodeId: props.nodeId,
-            title: props.title,
-            treeData: props.treeData,
-            enabled: true
-          }
-      }
-      return null;
-  }
+  // static getDerivedStateFromProps(props, state) {
+  //     if (state.nodeId !== props.nodeId ) {
+  //         return { 
+  //           Id: props.nodeId,
+  //           title: props.title,
+  //           treeData: props.treeData,
+  //           isEmpty: true
+  //         }
+  //     }
+  //     return null;
+  // }
     
   updateTreeData(treeData) {
     this.setState({ treeData });
@@ -58,8 +55,19 @@ class DndDocTree extends Component{
   }
 
   createNewFile = () => {
-    let id = this.state.selected_node;
-    this.props.handleTreeFileCreation(id);
+    let id = this.props.treeData.id;
+
+  }
+
+  createNewFolder = () => {
+    let nodeId = this.props.treeData.id, mapId = this.props.mapId;
+    let folder = {
+      id: uuid(),
+      title: 'Новая папка',
+      isDirectory: true,
+      children: []
+    }
+    this.props.socket.emit('CLIENT--DocTree:CREATE_FOLDER', { mapId: mapId, nodeId: nodeId, folder: folder});
   }
 
   render() {
@@ -68,6 +76,9 @@ class DndDocTree extends Component{
       searchFocusIndex,
       searchFoundCount,
     } = this.state;
+
+    const { id, label, treeData } = this.props.treeData;
+    const { isEmpty } = this.props.isEmpty;
 
     const alertNodeInfo = ({ node, path, treeIndex }) => {
       const objectString = Object.keys(node)
@@ -99,7 +110,7 @@ class DndDocTree extends Component{
       });
 
     let SortableTreeClass = ["dnd-doc-tree"];
-    if (this.state.nodeId && this.state.enabled){
+    if (id && !isEmpty){
       SortableTreeClass.push('--opened');
     }
     let SortableTreeContainerClass = {
@@ -118,10 +129,10 @@ class DndDocTree extends Component{
 
     return (
       <div className={SortableTreeClass.join(' ')}>
-          <h3>{this.state.title}</h3>
+          <h3>{label}</h3>
           <SortableTree
             theme={FileExplorerTheme}
-            treeData={this.state.treeData}
+            treeData={treeData}
             onChange={this.updateTreeData}
 
             style={SortableTreeContainerClass}
@@ -193,7 +204,7 @@ class DndDocTree extends Component{
           />
           <div className='dnd-doc-tree__buttons-container'>
           <button onClick={this.createNewFile}>add file</button>
-          <button onClick={this.createNewFile}>add folder</button>
+          <button onClick={this.createNewFolder}>add folder</button>
           </div>    
       </div>
     );

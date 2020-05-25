@@ -225,9 +225,10 @@ class MapEditor extends Component {
   }
 
   onHold= (coords) => {
-    //console.log(coords);
     let id = this.state.network.getNodeAt(coords);
-    //this.props.recieveNodeForTree(id)
+    console.log(id);
+    
+    this.props.socket.emit('CLIENT--MapEditor:GET_DOCTREE_DATA', { id: this.state.id, nodeId: id });
   }
 
   onDragStart = (coords) => {
