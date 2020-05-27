@@ -1,8 +1,10 @@
 import React, {ReactDOM, Component } from 'react';
+import { Redirect, Route, Switch} from "react-router-dom";
 import PropTypes from 'prop-types';
 
-import MapEditor from './MapEditor';
-import DndDocTree from '../DndDocTree';
+import MapEditor from './MindMap/MapEditor';
+import TextEditor from './TextEditor/TextEditor';
+import DndDocTree from './DndDocTree';
 
 import { connect } from "react-redux";
 import { loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
@@ -11,7 +13,7 @@ import { loadTreeData } from "../../actions/docTreeAction";
 import io from "socket.io-client";
 let socket;
 
-class MapCore extends Component{
+class EditorCore extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -118,25 +120,32 @@ class MapCore extends Component{
 
   render(){
     return(      
-      <div className="map-container">
+      <div className="editor-container">
         { this.props.mapisLoading ? 
 
           <h1>LOADING...</h1>
 
           : 
           <>
-          <DndDocTree socket={socket} 
+          <DndDocTree socket={socket} history={this.props.history}
               isEmpty={this.props.treeIsEmpty} treeData={this.props.docTree} mapId={this.props.map.id}
           />
-          <div className='vis-react'>
-            <MapEditor map={this.props.map} socket={socket}
-            
-              handlerValue={this.state.handlerValue} handlerData={this.state.handlerData} handlerClear={this.handlerClear}
+
+          <Route path='/map-editor'>
+            <div className='map-editor-container'>
+              <MapEditor map={this.props.map} socket={socket}
               
-              addNode={this.addNode} editNode={this.editNode} addEdge={this.addEdge}
-              deleteDataFromMap={this.deleteDataFromMap}
-            />           
-          </div>          
+                handlerValue={this.state.handlerValue} handlerData={this.state.handlerData} handlerClear={this.handlerClear}
+                
+                addNode={this.addNode} editNode={this.editNode} addEdge={this.addEdge}
+                deleteDataFromMap={this.deleteDataFromMap}
+              />           
+            </div>     
+          </Route>
+
+          <Route path='/text-editor'>
+            <TextEditor/>
+          </Route>  
           </>
           
         }
@@ -165,4 +174,4 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { 
   loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge,
   loadTreeData 
-})(MapCore);
+})(EditorCore);

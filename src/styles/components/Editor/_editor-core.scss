@@ -1,0 +1,28 @@
+/*------------------------------------*\
+    #EDITOR-CORE
+\*------------------------------------*/
+
+.editor-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0 auto;
+    border: none;    
+}
+
+.map-editor-container {
+    position: relative;
+    z-index: 10; 
+
+    height: 100%;
+    width: 100%;    
+
+    background-color: $dark-white;
+}
+
+
+@import './MapEditor/map-edit-form';
+@import './MapEditor/map-ui-selection-bar';
+
+@import './DocTree/doc-tree-component';
+
+@import './TextEditor/text-editor-component';

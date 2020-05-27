@@ -55,8 +55,8 @@ class DndDocTree extends Component{
   }
 
   createNewFile = () => {
-    let id = this.props.treeData.id;
-
+    //let id = this.props.treeData.id;
+    this.props.history.push('/text-editor')
   }
 
   createNewFolder = () => {
@@ -109,7 +109,7 @@ class DndDocTree extends Component{
             : 0,
       });
 
-    let SortableTreeClass = ["dnd-doc-tree"];
+    let SortableTreeClass = ["doc-tree-body"];
     if (id && !isEmpty){
       SortableTreeClass.push('--opened');
     }
@@ -117,8 +117,8 @@ class DndDocTree extends Component{
       display: 'flex',
       flexFlow: 'column nowrap',
       flexBasis: '100%',
-      overflow: 'scroll',
-      padding: '20px'
+      overflow: 'hidden',
+      padding: '20px 0 0 0'
     }
     let SortableTreeInnerContainerClass = {
       display: 'flex',
@@ -202,9 +202,14 @@ class DndDocTree extends Component{
               ],
             })}
           />
-          <div className='dnd-doc-tree__buttons-container'>
-          <button onClick={this.createNewFile}>add file</button>
-          <button onClick={this.createNewFolder}>add folder</button>
+          <div className='doc-tree__buttons-wrapper'>
+            <div className='doc-tree__buttons-container'>
+              <button onClick={this.createNewFolder}>
+                <div className='logo --folder'></div>
+                Папка
+              </button>
+              <button onClick={this.createNewFile}>Запись</button>
+            </div>          
           </div>    
       </div>
     );
@@ -261,5 +266,3 @@ onSubmit={event => {
 </div> */}
 
 export default DndDocTree;
-
-

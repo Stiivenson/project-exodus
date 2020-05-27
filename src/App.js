@@ -5,7 +5,7 @@ import { Redirect, Route, Switch} from "react-router-dom";
 import User from './components/User/User-Core';
 import Navbar from './components/Navbar';
 import Home from "./components/Home/Home-Core";
-import MapCore from "./components/MindMap/MapCore";
+import EditorCore from "./components/Editor/Editor-Core";
 import NotFound from "./components/404";
 
 import { connect } from 'react-redux';
@@ -58,7 +58,8 @@ class App extends Component {
                 <Switch>
 
                   <ProtectedRoute exact path='/' isAuthenticated={this.props.isAuthenticated} component={Home} />
-                  <ProtectedRoute path='/map-editor' isAuthenticated={this.props.isAuthenticated} component={MapCore} />
+                  <ProtectedRoute path='/map-editor' isAuthenticated={this.props.isAuthenticated} component={EditorCore} />
+                  <ProtectedRoute path='/text-editor' isAuthenticated={this.props.isAuthenticated} component={EditorCore} />
                   <Route exact path='/auth' component={User} >
                     {this.props.isAuthenticated ? <Redirect to='/' /> : null }
                   </Route>      

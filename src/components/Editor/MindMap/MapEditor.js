@@ -229,6 +229,7 @@ class MapEditor extends Component {
     console.log(id);
     
     this.props.socket.emit('CLIENT--MapEditor:GET_DOCTREE_DATA', { id: this.state.id, nodeId: id });
+    
   }
 
   onDragStart = (coords) => {

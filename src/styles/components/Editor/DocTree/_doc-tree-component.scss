@@ -1,0 +1,130 @@
+/*------------------------------------*\
+    #DOCUMENT-TREE
+\*------------------------------------*/
+
+.doc-tree-body{
+    position: fixed;
+    z-index: 100;
+
+    width: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    margin-top: 40px;
+
+    display: flex;
+    flex: 0 1 auto;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-content: center;
+
+    background-color: $white;
+    border-right: 1px solid #d0d0d0;
+
+    transition: .3s width ease-out;
+    opacity: 0;
+    pointer-events: none;
+    &.--opened{
+        width: 450px;
+
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+.doc-tree__title{
+    padding-top: 20px;
+    padding-left: 30px;
+
+    font-size: 20px;
+}
+
+.doc-tree__sortable_tree{
+    display: flex;
+    flex-flow: column nowrap;
+    flex-basis: 100%;
+}
+
+.sortable_tree__container{
+    overflow: scroll;
+}
+
+
+.doc-tree__buttons-wrapper{
+    position: relative;
+    height: 150px;
+
+    display: flex;
+    flex-flow: column nowrap;  
+    justify-content: center;
+    align-items: center;
+
+    .top-border{
+        position: absolute;
+        top: 0;
+        height: 1px;
+        width: 80%;
+
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+}
+
+.doc-tree__buttons-container{
+    display: flex;
+    flex-flow: row nowrap;
+    & > button {
+        cursor: pointer;
+        // width: 150px;
+        // height: 50px;
+        padding: 15px 30px;
+
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        border-radius: 8px 0 0 8px;
+        border: none;
+        background-color: $btn-white;
+
+        font-family: 'Roboto-Regular';
+        font-size: 16px;
+
+        &:nth-child(3) {
+            border-radius: 0 8px 8px 0;
+        }
+
+        transition-property: color, background-color;
+        transition-duration: .1s;
+        transition-timing-function: ease-in;
+
+        &:hover{
+            background-color: $blue;
+            color: #ffffff;
+        }
+    }
+    
+    .logo{
+        width: 25px;
+        height: 30px;
+
+        margin-right: 10px;
+
+        background-repeat: no-repeat;
+        background-position: center;
+
+        &.--folder{
+            background-image: url('#{$icons-path}doc-tree/icon-create-folder.svg');
+        }
+        &.--note{
+            background-image: url('#{$icons-path}doc-tree/icon-create-note.svg');
+        }
+    }
+
+    .buttons-separator{
+        width: 1px;
+        height: 100%;
+        background-color: #000000;
+    }
+}
+
