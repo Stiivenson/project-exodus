@@ -28,6 +28,7 @@ export const map = {
     LOAD_MAP: 'map/load',
 
     ADD_NODE: 'map/node/add',
+    MOVE_NODE: 'map/node/move',
     UPDATE_NODE: 'map/node/update',
     DELETE_NODE: 'map/node/delete',
 

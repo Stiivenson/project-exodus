@@ -98,6 +98,14 @@ const node_options = {
   }
 }
 
+const edge_options = {
+  arrows: {
+    to: {
+      enabled: true
+    }
+  }
+}
+
 /**
  * @class MapEditor
  * @description Component to draw MindMap using vis.js
@@ -124,6 +132,12 @@ class MapEditor extends Component {
     initialGraph.nodes.map(node => {
       if(node.id === 'root') node = Object.assign(node, root_node_options);
       else node = Object.assign(node, node_options);
+    });
+
+    initialGraph.edges.map(edge => {
+      console.log(edge);
+      
+      edge = Object.assign(edge, edge_options);
     });
 
     let manipulationOptions = {
@@ -183,6 +197,7 @@ class MapEditor extends Component {
       doubleClick:  (event) => this.onDoubleClick(event),
       hold:         (event) => this.onHold(event.pointer.DOM),
       dragStart:    (event) => this.onDragStart(event.pointer.DOM),
+      dragEnd:      (event) => this.onDragEnd(event.pointer.DOM),
       dragging:     (event) => this.onDragging(event.pointer.DOM),
       blurNode:     (event) => this.onBlurNode(event),
       hoverNode:    (event) => this.onHoverNode(event),
@@ -238,6 +253,26 @@ class MapEditor extends Component {
   }
 
   onDragging = (e) => {
+  }
+
+  onDragEnd = (coords) => {
+    let selectedNodes = this.state.network.getSelectedNodes();
+    let positions = this.state.network.getPositions(selectedNodes);
+    let idArr = Object.keys(positions);
+    let coordArr = Object.values(positions);
+    let positionArr = []
+    idArr.map((id, i) => {
+      let node = {
+        id: id,
+        coords: {
+          x: coordArr[i].x,
+          y: coordArr[i].y
+        }
+      };
+      positionArr.push(node);
+    })
+    console.log(positionArr);
+    this.props.socket.emit('CLIENT--MapEditor:MOVE_NODE', { id: this.state.id, positions: positionArr });
   }
 
   onHoverNode = (e) => {
@@ -464,6 +499,8 @@ class MapEditor extends Component {
         newEdges.map(edge => {
           if(!oldEdges.includes(edge)) {
             let edgeData = network.edges._data[edge];
+            console.log(edgeData);
+            
             let serverData = {
               id: edgeData.id,
               from: edgeData.from,

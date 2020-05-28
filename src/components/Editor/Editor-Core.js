@@ -7,7 +7,7 @@ import TextEditor from './TextEditor/TextEditor';
 import DndDocTree from './DndDocTree';
 
 import { connect } from "react-redux";
-import { loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
+import { loadMapData, addNode, moveNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
 import { loadTreeData } from "../../actions/docTreeAction";
 
 import io from "socket.io-client";
@@ -34,12 +34,21 @@ class EditorCore extends Component{
 
     socket.on('Connected', (room) => {
       console.log('Connected to room', room);
-    })
+      socket.emit('CLIENT:GET_MAP_DATA', this.props.map.id);
+      socket.on('SERVER:SEND_MAP_DATA', data => {
+        this.props.loadMapData(data);  
+      });
+    });
 
+    console.log(socket); 
 
     socket.on('SERVER--MapEditor:CREATE_NODE_SUCCESS', (node) => {
       console.log('CREATE_NODE_SUCCESS', node);      
       this.props.addNode(node);   
+    });
+    socket.on('SERVER--MapEditor:MOVE_NODE_SUCCESS', (positions) => {
+      console.log('MOVE_NODE_SUCCESS', positions);      
+      this.props.moveNode(positions);   
     });
     socket.on('SERVER--MapEditor:UPDATE_NODE_SUCCESS', (node) => {
       console.log('UPDATE_NODE_SUCCESS', node);      
@@ -70,16 +79,7 @@ class EditorCore extends Component{
     socket.on('SERVER:ERROR', () => {
       console.log('SERVER:ERROR');      
     });
-
-
-    console.log(socket); 
-    
-    if(this.props.mapIsEmpty){
-      socket.emit('CLIENT:GET_MAP_DATA', this.props.map.id);
-      socket.on('SERVER:SEND_MAP_DATA', data => {
-        this.props.loadMapData(data);  
-      });
-    }    
+   
   }
 
   componentWillUnmount() {
@@ -172,6 +172,7 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { 
-  loadMapData, addNode, updateNode, deleteNode, addEdge, deleteEdge,
+  loadMapData, addNode, moveNode, updateNode, deleteNode, 
+  addEdge, deleteEdge,
   loadTreeData 
 })(EditorCore);

@@ -1,5 +1,7 @@
 const { socketAuth } = require('../middleware/auth');
 
+const async = require('async');
+
 // Models
 const User = require('../models/User');
 const Maps = require('../models/Maps');
@@ -35,6 +37,27 @@ function getMapData (id) {
                     resolve(res);               
                 }
             });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function moveNode / Save need coords in DB after Node moved
+   */
+  function moveNode (id, positions) {
+    return new Promise(function (resolve, reject) {
+        if (positions && id) {
+            async.eachSeries(positions, function updateObject (obj, done) {
+                // Model.update(condition, doc, callback)
+                Maps.updateMany({ "_id": id, "nodes.id": obj.id }, { $set : { "nodes.$.x": obj.coords.x, "nodes.$.y": obj.coords.y }}, done);
+            }, function allDone (err) {
+                // this will be called when all the updates are done or an error occurred during the iteration
+                if (err) reject('Error:', err);
+                else {
+                    resolve('Success');
+                }
+            });      
         }
         else throw('No data provided!');               
     });
@@ -189,8 +212,12 @@ module.exports = function(server) {
             .then(() => socket.emit('SERVER--MapEditor:CREATE_NODE_SUCCESS', data.node ))
             .catch(() => socket.emit('SERVER:ERROR'));  
         });
+        socket.on('CLIENT--MapEditor:MOVE_NODE', function(data){
+            moveNode(data.id, data.positions)
+            .then(() => socket.emit('SERVER--MapEditor:MOVE_NODE_SUCCESS', data.positions ))
+            .catch(() => socket.emit('SERVER:ERROR'));  
+        });
         socket.on('CLIENT--MapEditor:UPDATE_NODE', function(data){
-            console.log(data);
             updateNode(data.id, data.node)
             .then(() => socket.emit('SERVER--MapEditor:UPDATE_NODE_SUCCESS', data.node ))
             .catch(() => socket.emit('SERVER:ERROR'));  

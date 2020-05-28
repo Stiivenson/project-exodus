@@ -43,14 +43,24 @@ export default function(state = initialState, action) {
                     nodes: [...state.map.nodes, action.payload]
                 }
             };
+        
+        case types.map.MOVE_NODE:
+            return {
+                ...state,
+                map: {...state.map,
+                    nodes: state.map.nodes.map(node => node.id === action.payload.id ?
+                            { ...node, x: action.payload.x, y: action.payload.y } 
+                            : node)
+                }
+            };
 
         case types.map.UPDATE_NODE:
             return {
                 ...state,
                 map: {...state.map,
                     nodes: state.map.nodes.map(node => node.id === action.payload.id ?
-                            { ...node, label: action.payload.label } :
-                            node)
+                            { ...node, label: action.payload.label } 
+                            : node)
                 }
             };
 

@@ -24,6 +24,21 @@ export const addNode = (data) => {
     }
 }
 
+export const moveNode = (data) => {
+    return dispatch => {
+        data.map(node => {
+            dispatch({
+                type: types.map.MOVE_NODE,
+                payload: {
+                    id: node.id,
+                    x: node.coords.x,
+                    y: node.coords.y
+                }
+            })
+        })
+    }
+}
+
 export const updateNode = (data) => {
     return {
         type: types.map.UPDATE_NODE,
