@@ -135,8 +135,6 @@ class MapEditor extends Component {
     });
 
     initialGraph.edges.map(edge => {
-      console.log(edge);
-      
       edge = Object.assign(edge, edge_options);
     });
 

@@ -159,6 +159,24 @@ function getMapData (id) {
 }
 
 /**
+   * @function updateTreeData / Update treeData of Node
+   */
+  function updateTreeData (mapId, nodeId,  data) {
+    return new Promise(function (resolve, reject) {
+        if (mapId && data) {
+            Maps.updateOne({ "_id": mapId, "DocTreeStructure.id": nodeId }, { $set: { "DocTreeStructure.$.treeData": data }}).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(res);                                 
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
+
+
+/**
    * @function addFolder / Add new Folder to DocTree
    */
   function addFolder (mapId, nodeId, data) {
@@ -250,9 +268,15 @@ module.exports = function(server) {
          */ 
         socket.on('CLIENT--DocTree:CREATE_FOLDER', function(data){
             addFolder(data.mapId, data.nodeId, data.folder)
-            .then((data) => socket.emit('SERVER--DocTree:CREATE_FOLDER_SUCCESS', data))
+            .then(() => socket.emit('SERVER--DocTree:CREATE_FOLDER_SUCCESS', data.folder))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
+        socket.on('CLIENT--DocTree:UPDATE_TREE_DATA', function(data){
+            updateTreeData(data.mapId, data.nodeId, data.flatData)
+            .then(() => socket.emit('SERVER--DocTree:UPDATE_TREE_DATA_SUCCESS', data.flatData))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+
 
 
         socket.on('disconnect', function(){

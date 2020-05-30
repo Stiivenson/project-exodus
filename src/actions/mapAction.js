@@ -26,16 +26,10 @@ export const addNode = (data) => {
 
 export const moveNode = (data) => {
     return dispatch => {
-        data.map(node => {
-            dispatch({
-                type: types.map.MOVE_NODE,
-                payload: {
-                    id: node.id,
-                    x: node.coords.x,
-                    y: node.coords.y
-                }
-            })
-        })
+        dispatch({
+            type: types.map.MOVE_NODE,
+            payload: data
+        });
     }
 }
 

@@ -8,7 +8,7 @@ import DndDocTree from './DndDocTree';
 
 import { connect } from "react-redux";
 import { loadMapData, addNode, moveNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
-import { loadTreeData } from "../../actions/docTreeAction";
+import { loadTreeData, updateTreeData, openningDocTree, addTreeItem } from "../../actions/docTreeAction";
 
 import io from "socket.io-client";
 let socket;
@@ -70,9 +70,14 @@ class EditorCore extends Component{
     });
 
 
+    
+    socket.on('SERVER--DocTree:UPDATE_TREE_DATA_SUCCESS', (data) => {
+      console.log('UPDATE_TREE_DATA_SUCCESS', data);      
+      this.props.updateTreeData(data);   
+    });
     socket.on('SERVER--DocTree:CREATE_FOLDER_SUCCESS', (data) => {
       console.log('CREATE_FOLDER_SUCCESS', data);      
-      //this.props.updateNode(node);   
+      this.props.addTreeItem(data);   
     });
 
 
@@ -118,6 +123,10 @@ class EditorCore extends Component{
     }   
   }
 
+  openningDocTree = () => {
+    this.props.openningDocTree();
+  }
+
   render(){
     return(      
       <div className="editor-container">
@@ -128,7 +137,8 @@ class EditorCore extends Component{
           : 
           <>
           <DndDocTree socket={socket} history={this.props.history}
-              isEmpty={this.props.treeIsEmpty} treeData={this.props.docTree} mapId={this.props.map.id}
+              isEmpty={this.props.treeIsEmpty} isOpened={this.props.treeIsOpened} docTree={this.props.docTree} mapId={this.props.map.id}
+              openningDocTree={this.openningDocTree}
           />
 
           <Route path='/map-editor'>
@@ -167,6 +177,7 @@ const mapStateToProps = state => {
     mapisLoading: state.map_data.mapisLoading,
 
     treeIsEmpty: state.doc_tree.treeIsEmpty,
+    treeIsOpened: state.doc_tree.treeIsOpened,
     docTree:  state.doc_tree.tree
   };
 };
@@ -174,5 +185,5 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { 
   loadMapData, addNode, moveNode, updateNode, deleteNode, 
   addEdge, deleteEdge,
-  loadTreeData 
+  loadTreeData, updateTreeData, openningDocTree, addTreeItem
 })(EditorCore);

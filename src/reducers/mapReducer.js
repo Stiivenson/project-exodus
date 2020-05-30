@@ -45,13 +45,19 @@ export default function(state = initialState, action) {
             };
         
         case types.map.MOVE_NODE:
-            return {
-                ...state,
-                map: {...state.map,
-                    nodes: state.map.nodes.map(node => node.id === action.payload.id ?
-                            { ...node, x: action.payload.x, y: action.payload.y } 
-                            : node)
+            
+            let nodesArray =  Array.from(state.map.nodes);
+            nodesArray.map(node => {
+                let nodeToMove = action.payload.find(el => el.id === node.id)
+                if(nodeToMove) {
+                    node.x = nodeToMove.coords.x;
+                    node.y = nodeToMove.coords.y;
                 }
+                
+            });
+
+            return {
+                ...state
             };
 
         case types.map.UPDATE_NODE:

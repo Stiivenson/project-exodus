@@ -40,10 +40,14 @@ export const map = {
 
 export const docTree = {
     LOAD_DATA: 'doc_tree/load',
+    UPDATE_DATA: 'doc_tree/update',
+    OPENNING: 'doc_tree/openning',
+
+    ADD_ITEM: 'doc_tree/item/add',
 
     UPDATE_NODE: 'doc_tree/node/update',
     DELETE_NODE: 'doc_tree/node/delete',
-    
+
     ADD_NOTE: 'doc_tree/note/add',
     UPDATE_NOTE: 'doc_tree/note/update',
     DELETE_NOTE: 'doc_tree/note/delete',

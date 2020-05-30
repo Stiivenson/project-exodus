@@ -19,6 +19,10 @@
     background-color: $dark-white;
 }
 
+.vis-network {
+    outline: none;
+}
+
 
 @import './MapEditor/map-edit-form';
 @import './MapEditor/map-ui-selection-bar';
