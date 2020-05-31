@@ -15,7 +15,8 @@ class DndDocTree extends Component{
         rawData: [],
 
         contextIsOpened: false,
-        menu: null
+        menu: null,
+        titleChanged: false
       };
 
       this.textInput = React.createRef();
@@ -62,16 +63,15 @@ class DndDocTree extends Component{
     this.props.socket.emit('CLIENT--DocTree:UPDATE_TREE_DATA', { mapId: mapId, nodeId: nodeId, flatData: flatData});
   }
 
-  createNewFile = () => {
+  createNewDoc = () => {
     //this.props.history.push('/text-editor')
     let nodeId = this.props.docTree.id, mapId = this.props.mapId;
-    let folder = {
-      id: uuid(),
-      title: 'Новый файл',
+    let document = {
+      title: 'Новая запись',
       isDirectory: false,
       parent: null
     }
-    this.props.socket.emit('CLIENT--DocTree:CREATE_FOLDER', { mapId: mapId, nodeId: nodeId, folder: folder});
+    this.props.socket.emit('CLIENT--DocTree:CREATE_DOC', { mapId: mapId, nodeId: nodeId, document: document});
   }
 
   createNewFolder = () => {
@@ -131,9 +131,7 @@ class DndDocTree extends Component{
 
 
   componentDidUpdate(prevProps, prevState) {
-    if(this.textInput.current)
-    console.log(this.textInput.current.focus());
-    
+    if(this.textInput.current) this.textInput.current.focus()
   }
   
 
@@ -172,6 +170,7 @@ class DndDocTree extends Component{
 
     return (
       <div className={SortableTreeClass.join(' ')}>
+      <div className='doc-tree__bckg-filler'></div>
       <div className='doc-tree-body'>
           <div className='doc-tree__title'>
             <h3>{label}</h3>
@@ -188,6 +187,7 @@ class DndDocTree extends Component{
             canDrag={({ node }) => !node.dragDisabled}
             canDrop={({ nextParent }) => !nextParent || nextParent.isDirectory}
             generateNodeProps={ ({ node, path }) => ({
+                            
               // icons: node.isDirectory
               //   ? [
               //       // <div
@@ -223,6 +223,7 @@ class DndDocTree extends Component{
               //         F
               //       </div>,
               //     ],
+              className: node.isInput ?  node.className : null,
               buttons: [
                   (node.isDirectory && !node.isInput) ? [
                   <div className='doc-tree__tools --folder' key={node.id}
@@ -266,7 +267,7 @@ class DndDocTree extends Component{
                                   treeData: state.treeData,
                                   path,
                                   getNodeKey,
-                                  newNode: { ...node, isInput: true }
+                                  newNode: { ...node, isInput: true, className:'edit-node', dragDisabled: true }
                                 })
                               }));                              
                             }}
@@ -278,7 +279,8 @@ class DndDocTree extends Component{
                               path,
                               getNodeKey: ({ treeIndex }) => treeIndex,
                             });
-                            this.updateTreeData(newTree);                           
+                            this.updateTreeData(newTree); 
+                            if(!node.isDirectory) this.props.socket.emit('CLIENT--DocTree:DELETE_DOC',  node.id );
                           }}
                           >Удалить</li>
                         </ul>
@@ -296,19 +298,25 @@ class DndDocTree extends Component{
                     ref={this.textInput}
                     onBlur={() => {
                       this.setState(state => ({
+                        titleChanged: false,
                         treeData: changeNodeAtPath({
                           treeData: state.treeData,
                           path,
                           getNodeKey,
                           newNode: { ...node, isInput: false }
                         })
-                      }));
-                      this.updateTreeData(this.state.treeData);
+                      }));                      
+                        if(this.state.titleChanged){                        
+                        this.updateTreeData(this.state.treeData);                      
+                        if(!node.isDirectory) this.props.socket.emit('CLIENT--DocTree:UPDATE_DOC',  node.id,  node.title);
+                      } else return;
+                      
                     }} 
                     onChange={event => {
                       const title = event.target.value;
 
                       this.setState(state => ({
+                        titleChanged: true,
                         treeData: changeNodeAtPath({
                           treeData: state.treeData,
                           path,
@@ -330,7 +338,7 @@ class DndDocTree extends Component{
                 Папка
               </button>
               <div className='buttons-separator'/>
-              <button onClick={this.createNewFile}>
+              <button onClick={this.createNewDoc}>
               <div className='logo --note'></div>
                 Запись
               </button>

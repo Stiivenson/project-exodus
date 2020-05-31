@@ -5,6 +5,7 @@ const async = require('async');
 // Models
 const User = require('../models/User');
 const Maps = require('../models/Maps');
+const Docs = require('../models/Docs');
 
 
 /**
@@ -31,7 +32,7 @@ function getMapData (id) {
     let treeDataItem = { id: data.id, label: data.label, treeData: [] }
     return new Promise(function (resolve, reject) {
         if (data && id) {
-            Maps.update({ _id: id }, { $push: { nodes: data, DocTreeStructure: treeDataItem } }, {new: true}).exec((err, res) => {
+            Maps.updateOne({ _id: id }, { $push: { nodes: data, DocTreeStructure: treeDataItem } }, {new: true}).exec((err, res) => {
                 if(err) reject('Error:', err);
                 else { 
                     resolve(res);               
@@ -69,10 +70,10 @@ function getMapData (id) {
   function updateNode (id, data) {
     return new Promise(function (resolve, reject) {
         if (data && id) {
-            Maps.update({ "_id": id, "nodes.id": data.id}, { $set: { "nodes.$.label": data.label } }).exec((err, res) => {
+            Maps.updateOne({ "_id": id, "nodes.id": data.id}, { $set: { "nodes.$.label": data.label } }).exec((err, res) => {
                 if(err) reject('Error:', err);
                 else { 
-                    Maps.update({ "_id": id, "DocTreeStructure.id": data.id}, { $set: { "DocTreeStructure.$.label": data.label }}).exec((err, res) => {
+                    Maps.updateOne({ "_id": id, "DocTreeStructure.id": data.id}, { $set: { "DocTreeStructure.$.label": data.label }}).exec((err, res) => {
                         if(err) reject('Error:', err);
                         else { 
                             resolve(res);  
@@ -94,7 +95,10 @@ function getMapData (id) {
             Maps.updateOne({ _id: id }, { $pull: { nodes: { id: { $in: data } }, DocTreeStructure:  { id: { $in: data } } } }).exec((err, res) => {
                 if(err) throw(err); 
                 else {                     
-                    resolve(res);               
+                    Docs.deleteMany({ nodeReference: data }).exec((err, res) => {
+                        if(err) throw(err); 
+                        else resolve(res);
+                    });
                 }
             });       
         }
@@ -175,6 +179,61 @@ function getMapData (id) {
     });
 }
 
+/**
+   * @function addDocument / Add new Document to DB & DocTree
+   */
+  function addDocument (mapId, nodeId, data) {
+    return new Promise(function (resolve, reject) {
+        if (mapId) {
+            const newDoc = new Docs({
+                title: data.title,
+                nodeReference: nodeId
+            });
+            newDoc.save()
+            .then(async function (doc) {  
+                data.id = doc._id;            
+                await Maps.updateOne({ "_id": mapId, "DocTreeStructure.id": nodeId }, { $push: { 'DocTreeStructure.$.treeData': data } });
+                resolve(data);             
+            })
+            .catch(err => reject('Error:', err));   
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function updateDocument / Change Document title from DocTree
+   */
+  function updateDocument (id, title) {
+    return new Promise(function (resolve, reject) {
+        if (id) {
+            Docs.updateOne({ "_id": id }, { $set: { "title": title }}).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(res);                                 
+                }
+            });
+        }
+        else throw('No data provided!');               
+    });
+}
+
+/**
+   * @function deleteDocument / Delete Document from Docs
+   */
+  function deleteDocument (id) {
+    return new Promise(function (resolve, reject) {
+        if (id) {
+            Docs.deleteOne({ _id: id }).exec((err, res) => {
+                if(err) throw(err); 
+                else {                     
+                    resolve(res);               
+                }
+            });       
+        }
+        else throw('No data provided!');               
+    });
+}
 
 /**
    * @function addFolder / Add new Folder to DocTree
@@ -182,7 +241,7 @@ function getMapData (id) {
   function addFolder (mapId, nodeId, data) {
     return new Promise(function (resolve, reject) {
         if (data && nodeId) {
-            Maps.update({ "_id": mapId, "DocTreeStructure.id": nodeId }, { $push: { 'DocTreeStructure.$.treeData': data } }).exec((err, res) => {
+            Maps.updateOne({ "_id": mapId, "DocTreeStructure.id": nodeId }, { $push: { 'DocTreeStructure.$.treeData': data } }).exec((err, res) => {
                 if(err) reject('Error:', err);
                 else {
                     resolve(res);               
@@ -266,17 +325,32 @@ module.exports = function(server) {
         /**
          * @Section Handle Doc-Tree actions
          */ 
-        socket.on('CLIENT--DocTree:CREATE_FOLDER', function(data){
-            addFolder(data.mapId, data.nodeId, data.folder)
-            .then(() => socket.emit('SERVER--DocTree:CREATE_FOLDER_SUCCESS', data.folder))
-            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
-        });
+        
         socket.on('CLIENT--DocTree:UPDATE_TREE_DATA', function(data){
             updateTreeData(data.mapId, data.nodeId, data.flatData)
             .then(() => socket.emit('SERVER--DocTree:UPDATE_TREE_DATA_SUCCESS', data.flatData))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
-
+        socket.on('CLIENT--DocTree:CREATE_DOC', function(data){
+            addDocument(data.mapId, data.nodeId, data.document)
+            .then((data) => socket.emit('SERVER--DocTree:CREATE_DOC_SUCCESS', data))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+        socket.on('CLIENT--DocTree:UPDATE_DOC', function(id, title){
+            updateDocument(id, title)
+            .then(() => socket.emit('SERVER--DocTree:UPDATE_DOC_SUCCESS'))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+        socket.on('CLIENT--DocTree:DELETE_DOC', function(id){
+            deleteDocument(id)
+            .then(() => socket.emit('SERVER--DocTree:DELETE_DOC_SUCCESS'))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+        socket.on('CLIENT--DocTree:CREATE_FOLDER', function(data){
+            addFolder(data.mapId, data.nodeId, data.folder)
+            .then(() => socket.emit('SERVER--DocTree:CREATE_FOLDER_SUCCESS', data.folder))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
 
 
         socket.on('disconnect', function(){

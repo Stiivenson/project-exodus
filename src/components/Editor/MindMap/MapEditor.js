@@ -255,22 +255,23 @@ class MapEditor extends Component {
 
   onDragEnd = (coords) => {
     let selectedNodes = this.state.network.getSelectedNodes();
-    let positions = this.state.network.getPositions(selectedNodes);
-    let idArr = Object.keys(positions);
-    let coordArr = Object.values(positions);
-    let positionArr = []
-    idArr.map((id, i) => {
-      let node = {
-        id: id,
-        coords: {
-          x: coordArr[i].x,
-          y: coordArr[i].y
-        }
-      };
-      positionArr.push(node);
-    })
-    console.log(positionArr);
-    this.props.socket.emit('CLIENT--MapEditor:MOVE_NODE', { id: this.state.id, positions: positionArr });
+    if(selectedNodes.length >= 1) {
+      let positions = this.state.network.getPositions(selectedNodes);
+      let idArr = Object.keys(positions);
+      let coordArr = Object.values(positions);
+      let positionArr = []
+      idArr.map((id, i) => {
+        let node = {
+          id: id,
+          coords: {
+            x: coordArr[i].x,
+            y: coordArr[i].y
+          }
+        };
+        positionArr.push(node);
+      })
+      this.props.socket.emit('CLIENT--MapEditor:MOVE_NODE', { id: this.state.id, positions: positionArr });
+    } else return;    
   }
 
   onHoverNode = (e) => {

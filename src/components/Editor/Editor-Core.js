@@ -75,6 +75,16 @@ class EditorCore extends Component{
       console.log('UPDATE_TREE_DATA_SUCCESS', data);      
       this.props.updateTreeData(data);   
     });
+    socket.on('SERVER--DocTree:CREATE_DOC_SUCCESS', (data) => {
+      console.log('CREATE_DOC_SUCCESS', data);      
+      this.props.addTreeItem(data);   
+    });
+    socket.on('SERVER--DocTree:DELETE_DOC_SUCCESS', () => {
+      console.log('DELETE_DOC_SUCCESS'); 
+    });
+    socket.on('SERVER--DocTree:UPDATE_DOC_SUCCESS', () => {
+      console.log('UPDATE_DOC_SUCCESS'); 
+    });
     socket.on('SERVER--DocTree:CREATE_FOLDER_SUCCESS', (data) => {
       console.log('CREATE_FOLDER_SUCCESS', data);      
       this.props.addTreeItem(data);   

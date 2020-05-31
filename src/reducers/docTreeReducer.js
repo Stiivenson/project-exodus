@@ -49,6 +49,18 @@ export default function(state = initialState, action) {
                 }
             }
 
+        case types.docTree.REMOVE_DATA:           
+            return {
+                ...state,
+                treeIsEmpty: true,
+                treeIsOpened: false,
+                tree: {
+                    id: null,
+                    label: '',
+                    treeData: []
+                }
+            };
+
         default: 
             return state;
     }

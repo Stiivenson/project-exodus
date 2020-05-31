@@ -40,15 +40,17 @@ export const updateNode = (data) => {
     }
 }
 
-export const deleteNode = (data) => {
-    return dispatch => {
-        data.map(id => {           
-            dispatch({
-                type: types.map.DELETE_NODE,
-                payload: id
-            });
-        });        
-    }
+export const deleteNode = (data) => (dispatch, getState) => {
+    let treeId = getState().doc_tree.tree.id;
+    data.map(id => { 
+        if(treeId === id) {
+            dispatch({ type: types.docTree.REMOVE_DATA })
+        }          
+        dispatch({
+            type: types.map.DELETE_NODE,
+            payload: id
+        });
+    });
 }
 
 export const addEdge = (data) => {

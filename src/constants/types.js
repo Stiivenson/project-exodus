@@ -40,6 +40,7 @@ export const map = {
 
 export const docTree = {
     LOAD_DATA: 'doc_tree/load',
+    REMOVE_DATA: 'doc_tree/remove',
     UPDATE_DATA: 'doc_tree/update',
     OPENNING: 'doc_tree/openning',
 
