@@ -1,5 +1,6 @@
 import React, { Component} from 'react';
 
+import { Link } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import SortableTree, { toggleExpandedForAll, getFlatDataFromTree, getTreeFromFlatData, changeNodeAtPath, removeNodeAtPath } from 'react-sortable-tree';
 import FileExplorerTheme from 'react-sortable-tree-theme-file-explorer';
@@ -128,8 +129,6 @@ class DndDocTree extends Component{
   }
 
 
-
-
   componentDidUpdate(prevProps, prevState) {
     if(this.textInput.current) this.textInput.current.focus()
   }
@@ -139,10 +138,6 @@ class DndDocTree extends Component{
   render() {
     const { id, label } = this.props.docTree;
     const { isEmpty, isOpened } = this.props;
-  
-    //console.log('Get teeData from DB:', treeData);
-      
-
 
     let SortableTreeClass = ["doc-tree-wrapper"];
     if (id && !isEmpty){
@@ -166,7 +161,6 @@ class DndDocTree extends Component{
     }
 
     const getNodeKey = ({ treeIndex }) => treeIndex;
-
 
     return (
       <div className={SortableTreeClass.join(' ')}>
@@ -223,6 +217,7 @@ class DndDocTree extends Component{
               //         F
               //       </div>,
               //     ],
+              //onClick: !node.isDirectory ?  (e) => console.log(e.target) : null,
               className: node.isInput ?  node.className : null,
               buttons: [
                   (node.isDirectory && !node.isInput) ? [
@@ -326,8 +321,16 @@ class DndDocTree extends Component{
                       }));
                     }}
                   />
-                ] : [node.title]
-              ]        
+                ] : [null],                
+                (!node.isDirectory && !node.isInput) ? [
+                  <Link to='/text-editor' key={node.id} onClick={() => this.props.initialDocumentLoad(node.id)}>
+                   { node.title}
+                  </Link>
+                ] : [null],
+                (node.isDirectory && !node.isInput) ? [
+                  node.title
+                ] : [null]
+              ]      
             })}
           />
           <div className='doc-tree__buttons-wrapper'>

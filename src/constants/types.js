@@ -37,7 +37,6 @@ export const map = {
     DELETE_EDGE: 'map/edge/delete'
 }
 
-
 export const docTree = {
     LOAD_DATA: 'doc_tree/load',
     REMOVE_DATA: 'doc_tree/remove',
@@ -45,15 +44,10 @@ export const docTree = {
     OPENNING: 'doc_tree/openning',
 
     ADD_ITEM: 'doc_tree/item/add',
+};
 
-    UPDATE_NODE: 'doc_tree/node/update',
-    DELETE_NODE: 'doc_tree/node/delete',
-
-    ADD_NOTE: 'doc_tree/note/add',
-    UPDATE_NOTE: 'doc_tree/note/update',
-    DELETE_NOTE: 'doc_tree/note/delete',
-
-    ADD_FOLDER: 'doc_tree/folder/add',
-    UPDATE_FOLDER: 'doc_tree/folder/update',
-    DELETE_FOLDER: 'doc_tree/folder/delete',
+export const textEditor = {
+    LOAD_DATA: 'text_editor/load',
+    REMOVE_DATA: 'text_editor/remove',
+    UPDATE_DATA: 'text_editor/update'
 };

@@ -144,9 +144,7 @@ function getMapData (id) {
    * @function getDocTreeData / Get data for DocTree Component
    */
   function getDocTreeData (mapId, nodeId) {
-      console.log(mapId, nodeId);
-      let ID = []; ID.push(nodeId);
-      
+    let ID = []; ID.push(nodeId);
     return new Promise(function (resolve, reject) {
         if (mapId) {
             Maps.findOne({ _id: mapId}).select('-_id').select('DocTreeStructure').exec((err, res) => {
@@ -252,6 +250,23 @@ function getMapData (id) {
     });
 }
 
+/**
+   * @function getDocumentData / Get data for Text-Editor
+   */  function getDocumentData (id) {
+
+  return new Promise(function (resolve, reject) {
+      if (id) {
+          Docs.findOne({ _id: id}).select('-__v').exec((err, res) => {
+              if(err) reject(err);
+              else {
+                resolve(res)
+              }
+          });       
+      }
+      else throw('No id provided!');               
+  });
+}
+
 module.exports = function(server) {
 
     // Connect socket to server
@@ -352,6 +367,15 @@ module.exports = function(server) {
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
 
+        /**
+         * @Section Handle Text-Editor actions
+         */ 
+        socket.on('CLIENT--DocTree:GET_DOCUMENT_DATA', function(id){
+            getDocumentData(id)
+            .then((data) => socket.emit('SERVER--TextEditor:GET_DOCUMENT_DATA', data))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+        
 
         socket.on('disconnect', function(){
             console.log('Disconnected - '+ socket.id);

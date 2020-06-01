@@ -23,6 +23,10 @@
     outline: none;
 }
 
+.doc-tree-wrapper.--opened + .text-editor__wrapper{
+    padding-left: 450px;
+}
+
 
 @import './MapEditor/map-edit-form';
 @import './MapEditor/map-ui-selection-bar';

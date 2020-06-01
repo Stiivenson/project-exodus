@@ -9,6 +9,7 @@ import DndDocTree from './DndDocTree';
 import { connect } from "react-redux";
 import { loadMapData, addNode, moveNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
 import { loadTreeData, updateTreeData, openningDocTree, addTreeItem } from "../../actions/docTreeAction";
+import { loadDocumentData, removeDocumentData } from "../../actions/textEditorAction";
 
 import io from "socket.io-client";
 let socket;
@@ -91,6 +92,13 @@ class EditorCore extends Component{
     });
 
 
+    socket.on('SERVER--TextEditor:GET_DOCUMENT_DATA', (data) => {
+      console.log('GET_DOCUMENT_DATA', data);      
+      this.props.loadDocumentData(data);   
+    });
+
+
+
     socket.on('SERVER:ERROR', () => {
       console.log('SERVER:ERROR');      
     });
@@ -101,10 +109,14 @@ class EditorCore extends Component{
     socket.disconnect();
   }
 
-
   handlerClear = () => {
     this.setState({ handlerValue: null, handlerData: null });
   }
+
+
+  /**
+   * @Section MapEditor functions
+   */ 
 
   // Add Node to Editor
   addNode = (data) => {
@@ -133,9 +145,31 @@ class EditorCore extends Component{
     }   
   }
 
+
+  /**
+   * @Section DocTree functions
+   */ 
+
   openningDocTree = () => {
     this.props.openningDocTree();
   }
+
+
+  /**
+   * @Section TextEditor functions
+   */ 
+
+  initialDocumentLoad = (id) => {
+    if(this.props.textEditorIsEmpty) {      
+      socket.emit('CLIENT--DocTree:GET_DOCUMENT_DATA',  id);
+    } else if(id === this.props.textEditorDocument.id) {
+       return;
+    } else {
+      this.props.removeDocumentData();
+      socket.emit('CLIENT--DocTree:GET_DOCUMENT_DATA',  id);
+    }
+  }
+
 
   render(){
     return(      
@@ -146,26 +180,27 @@ class EditorCore extends Component{
 
           : 
           <>
-          <DndDocTree socket={socket} history={this.props.history}
-              isEmpty={this.props.treeIsEmpty} isOpened={this.props.treeIsOpened} docTree={this.props.docTree} mapId={this.props.map.id}
-              openningDocTree={this.openningDocTree}
-          />
+            <DndDocTree socket={socket} history={this.props.history}
+                isEmpty={this.props.treeIsEmpty} isOpened={this.props.treeIsOpened} docTree={this.props.docTree} mapId={this.props.map.id}
+                openningDocTree={this.openningDocTree} initialDocumentLoad={this.initialDocumentLoad}
+            />
 
-          <Route path='/map-editor'>
-            <div className='map-editor-container'>
-              <MapEditor map={this.props.map} socket={socket}
-              
-                handlerValue={this.state.handlerValue} handlerData={this.state.handlerData} handlerClear={this.handlerClear}
+            <Route path='/map-editor'>
+              <div className='map-editor-container'>
+                <MapEditor map={this.props.map} socket={socket}
                 
-                addNode={this.addNode} editNode={this.editNode} addEdge={this.addEdge}
-                deleteDataFromMap={this.deleteDataFromMap}
-              />           
-            </div>     
-          </Route>
+                  handlerValue={this.state.handlerValue} handlerData={this.state.handlerData} handlerClear={this.handlerClear}
+                  
+                  addNode={this.addNode} editNode={this.editNode} addEdge={this.addEdge}
+                  deleteDataFromMap={this.deleteDataFromMap}
+                />           
+              </div>     
+            </Route> 
 
-          <Route path='/text-editor'>
-            <TextEditor/>
-          </Route>  
+            <Route path='/text-editor'>
+              <TextEditor document={this.props.textEditorDocument} token={this.props.token}/>
+            </Route>
+
           </>
           
         }
@@ -175,10 +210,7 @@ class EditorCore extends Component{
 }
 
 
-
-const mapStateToProps = state => {
-  console.log('mapStateToProps: ', state.map_data);
-  
+const mapStateToProps = state => {  
   return {
     token: state.auth.token,
 
@@ -188,12 +220,16 @@ const mapStateToProps = state => {
 
     treeIsEmpty: state.doc_tree.treeIsEmpty,
     treeIsOpened: state.doc_tree.treeIsOpened,
-    docTree:  state.doc_tree.tree
+    docTree:  state.doc_tree.tree,
+
+    textEditorIsEmpty: state.text_editor.isEmpty,
+    textEditorDocument: state.text_editor.document
   };
 };
 
 export default connect(mapStateToProps, { 
   loadMapData, addNode, moveNode, updateNode, deleteNode, 
   addEdge, deleteEdge,
-  loadTreeData, updateTreeData, openningDocTree, addTreeItem
+  loadTreeData, updateTreeData, openningDocTree, addTreeItem,
+  loadDocumentData, removeDocumentData
 })(EditorCore);

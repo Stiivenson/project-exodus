@@ -7,6 +7,8 @@
 
     display: flex;
     justify-content: center;
+
+    transition: padding .5s ease-in-out;
 }
 
 .text-editor__body{
