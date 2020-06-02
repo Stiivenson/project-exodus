@@ -15,7 +15,12 @@ export const auth = {
 export const user = {
     GET_USER: 'user/get',
     CREATE_MAP: 'user/map/create',
-    DELETE_MAP: 'user/map/delete'
+    DELETE_MAP: 'user/map/delete',
+
+    GET_TRASH_MAPS: 'user/get/trash',
+
+    ADD_RECENT_MAP: 'user/map/recent/add', 
+    ADD_TRASH_MAP: 'user/map/trash/add'   
 };
 
 export const error = {
@@ -49,5 +54,5 @@ export const docTree = {
 export const textEditor = {
     LOAD_DATA: 'text_editor/load',
     REMOVE_DATA: 'text_editor/remove',
-    UPDATE_DATA: 'text_editor/update'
+    SAVE_DATA: 'text_editor/save'
 };

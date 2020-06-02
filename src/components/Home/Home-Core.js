@@ -8,7 +8,7 @@ import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
 import { loadUser } from "../../actions/authAction";
-import { createMap, deleteMap } from '../../actions/homeAction';
+import { createMap, deleteMap, updateRecentMap, loadTrashMaps, putToTrash } from '../../actions/homeAction';
 import { loadMapId } from '../../actions/mapAction';
 
 
@@ -48,13 +48,22 @@ class Home extends Component{
         this.props.createMap(this.props.user.id, title);
     }
 
+    loadTrashMaps = () => {
+        this.props.loadTrashMaps();
+    }
+
     // Delete Map
+    putToTrash = (id) => {
+        this.props.putToTrash(id);
+    }
+
     deleteMap = (id) => {
         this.props.deleteMap(id);
     }
 
     getMapId = (id) => {
         this.props.loadMapId(id)
+        this.props.updateRecentMap(id);
     }
 
     render() {
@@ -66,7 +75,11 @@ class Home extends Component{
                     closeFormAddMap={this.closeFormAddMap}
                     
                     createNewMap={this.createNewMap}/>
-                <Home_Menu selectMenuSection={this.selectMenuSection} />
+
+                <Home_Menu 
+                    selectMenuSection={this.selectMenuSection} 
+                    loadTrashMaps={this.loadTrashMaps}
+                />
 
                 {(() => {
                     switch (this.state.selectedMenuSection) {
@@ -78,16 +91,21 @@ class Home extends Component{
                                 PrivateMaps={this.props.privateMaps}
 
                                 openFormAddMap={this.openFormAddMap}
-                                deleteMap={this.deleteMap}
+                                putToTrash={this.putToTrash}
                                 getMapId={this.getMapId}  />;
 
                         case 'recent':
                             return <Home_MapsListRecent 
-                                RecentMaps={this.props.recentMaps} />;
+                                history={this.props.history}
+                                RecentMaps={this.props.recentMaps}
+
+                                getMapId={this.getMapId} />;
 
                         case 'trash':
                             return <Home_MapsListTrash 
-                                TrashMaps={this.props.trashMaps} />;
+                                TrashMaps={this.props.trashMaps}
+                                deleteMap={this.deleteMap}
+                                />;
 
                     default:
                         return null;
@@ -111,4 +129,4 @@ const mapStateToProps = (state) => ({
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ loadUser, createMap, deleteMap, loadMapId })(Home);
+export default connect(mapStateToProps,{ loadUser, createMap, deleteMap, updateRecentMap, loadTrashMaps, putToTrash, loadMapId })(Home);

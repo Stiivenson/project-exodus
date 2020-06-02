@@ -21,6 +21,10 @@ export const Home_Menu = (props) => {
         }  
     }
 
+    const LoadTrashMaps = () => {
+        props.loadTrashMaps();
+    }
+
     return(
         <div className='home-container__menu' onClick={onHomeMenuClick}>
             <div className='menu-side --active' data='maps'>
@@ -54,7 +58,7 @@ export const Home_Menu = (props) => {
                 </div>
                 <div className='menu-side__title'>Недавние</div>
             </div>
-            <div className='menu-side' data='trash'>
+            <div className='menu-side' data='trash' onClick={LoadTrashMaps}>
                 <div className='menu-side__icon' >
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">

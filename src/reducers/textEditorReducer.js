@@ -23,6 +23,14 @@ export default function(state = initialState, action) {
                 }                
             };
 
+        case types.textEditor.SAVE_DATA:
+
+            return{
+                ...state,
+                document: { ...state.document,
+                    docBody: action.payload
+                }
+            }
 
         case types.textEditor.REMOVE_DATA:           
             return {

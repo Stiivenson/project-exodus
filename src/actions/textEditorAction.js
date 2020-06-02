@@ -15,3 +15,10 @@ export const removeDocumentData = () => {
         type: types.textEditor.REMOVE_DATA
     }
 }
+
+export const saveNewData = (data) => {
+    return {
+        type: types.textEditor.SAVE_DATA,
+        payload: data
+    }
+}

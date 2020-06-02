@@ -9,7 +9,7 @@ import DndDocTree from './DndDocTree';
 import { connect } from "react-redux";
 import { loadMapData, addNode, moveNode, updateNode, deleteNode, addEdge, deleteEdge } from '../../actions/mapAction';
 import { loadTreeData, updateTreeData, openningDocTree, addTreeItem } from "../../actions/docTreeAction";
-import { loadDocumentData, removeDocumentData } from "../../actions/textEditorAction";
+import { loadDocumentData, removeDocumentData, saveNewData } from "../../actions/textEditorAction";
 
 import io from "socket.io-client";
 let socket;
@@ -97,8 +97,6 @@ class EditorCore extends Component{
       this.props.loadDocumentData(data);   
     });
 
-
-
     socket.on('SERVER:ERROR', () => {
       console.log('SERVER:ERROR');      
     });
@@ -171,6 +169,7 @@ class EditorCore extends Component{
   }
 
 
+
   render(){
     return(      
       <div className="editor-container">
@@ -198,7 +197,9 @@ class EditorCore extends Component{
             </Route> 
 
             <Route path='/text-editor'>
-              <TextEditor document={this.props.textEditorDocument} token={this.props.token}/>
+              <TextEditor document={this.props.textEditorDocument} token={this.props.token}
+                saveNewData={this.props.saveNewData}
+              />
             </Route>
 
           </>
@@ -231,5 +232,5 @@ export default connect(mapStateToProps, {
   loadMapData, addNode, moveNode, updateNode, deleteNode, 
   addEdge, deleteEdge,
   loadTreeData, updateTreeData, openningDocTree, addTreeItem,
-  loadDocumentData, removeDocumentData
+  loadDocumentData, removeDocumentData, saveNewData
 })(EditorCore);

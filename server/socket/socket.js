@@ -267,6 +267,24 @@ function getMapData (id) {
   });
 }
 
+/**
+   * @function updateDocument / 
+   */
+  function saveNewDocumentData (id, data) {
+    return new Promise(function (resolve, reject) {
+        if (id) {
+            Docs.updateOne({ "_id": id }, { $set: { "DocBody": data }}).exec((err, res) => {
+                if(err) reject('Error:', err);
+                else { 
+                    resolve(res);                                 
+                }
+            });
+        }
+        else throw('No data provided!');               
+    });
+}
+
+
 module.exports = function(server) {
 
     // Connect socket to server
@@ -373,6 +391,11 @@ module.exports = function(server) {
         socket.on('CLIENT--DocTree:GET_DOCUMENT_DATA', function(id){
             getDocumentData(id)
             .then((data) => socket.emit('SERVER--TextEditor:GET_DOCUMENT_DATA', data))
+            .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
+        });
+        socket.on('CLIENT--TextEditor:SAVE_NEW_DATA', function(data){
+            saveNewDocumentData(data.id, data.data)
+            .then(() => socket.emit('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', data.data))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
         

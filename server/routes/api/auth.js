@@ -136,6 +136,25 @@ router.post('/login', (req, res) => {
 });
 
 
+router.get('/get/trash', auth, (req, res) => {
+    
+    async function getTrashMaps (id) {
+        let user = findUser(id);
+
+        let TrashMaps = user.then(function (user) {
+            return findMaps(user.TrashMaps);  
+        });
+
+        await TrashMaps;
+
+        res.json({
+            trashMaps: TrashMaps.value()
+        });
+    }
+
+    getTrashMaps(req.user.id);
+});
+
 /**
    * @route GET api/auth/user
    * @desc  Get user data
@@ -164,6 +183,9 @@ router.get('/user', auth, (req, res) => {
         });
 
         await PrivateMaps;
+        await PublicMaps;
+        await RecentMaps;
+        await TrashMaps;
 
         res.json({
             user: {

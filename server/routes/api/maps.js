@@ -51,15 +51,46 @@ router.post('/update', auth, (req, res) => {
 
 
 /**
+   * @route GET /api/map/recent/add
+   * @desc  Add Recent mapы
+   * @acces Private
+   */
+  router.post('/recent/update', auth, (req, res) => {
+    Maps.find({ _id: { $in: req.body.reqArray } }).select('title')
+     .then(async function (maps) {
+         console.log(maps);
+         await User.updateOne({ _id: req.user.id }, { $set: { RecentMaps: req.body.reqArray } });
+         res.json({maps});           
+     })
+     .catch(err => res.status(404).json({success: false}));
+     
+ });
+
+/**
+   * @route GET /api/map/recent/add
+   * @desc  Add Recent mapы
+   * @acces Private
+   */
+router.delete('/private/:id', auth, (req, res) => {
+    User.updateOne({ _id: req.user.id }, { $pull: { PrivateMaps: req.params.id } })
+    .then(async function () {
+        await User.updateOne({ _id: req.user.id }, { $push: { TrashMaps: req.params.id } });
+        res.json('Success');
+    })
+    .catch(err => res.status(404).json({success: false}));
+     
+ });
+
+/**
    * @route DELETE api/map/:id
    * @desc  Delete map
    * @acces Private
    */
-router.delete('/:id', auth, (req, res) => {
+router.delete('/trash/:id', auth, (req, res) => {
    Maps.findById(req.params.id)
     .then(map => map.remove())
     .then(async function () {
-        await User.updateOne({ _id: req.user.id }, { $pull: { PrivateMaps: req.params.id } });
+        await User.updateOne({ _id: req.user.id }, { $pull: { TrashMaps: req.params.id } });
         res.json({success: true});           
     })
     .catch(err => res.status(404).json({success: false}));

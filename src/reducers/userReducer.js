@@ -27,10 +27,29 @@ export default function(state = initialState, action) {
                 privateMaps: [action.payload, ...state.privateMaps]                
             }
 
+        case types.user.ADD_RECENT_MAP:
+            return { 
+                ...state,                 
+                recentMaps: action.payload            
+            }
+
+            
+        case types.user.GET_TRASH_MAPS:
+            return { 
+                ...state,                 
+                trashMaps: action.payload            
+            }
+
+        case types.user.ADD_TRASH_MAP:
+            return { 
+                ...state,
+                privateMaps: state.privateMaps.filter(map => map._id !== action.payload)               
+            }
+
         case types.user.DELETE_MAP:
             return { 
                 ...state,
-                privateMaps: state.privateMaps.filter(map => map._id !== action.payload)                
+                trashMaps: state.trashMaps.filter(map => map._id !== action.payload)                
             }
 
 
