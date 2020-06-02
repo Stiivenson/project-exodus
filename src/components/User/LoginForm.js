@@ -21,7 +21,7 @@ export const LoginForm = (props) => {
 
     return(
         <div className='form-container'>
-            <form className='form'>
+            <form className='form' onSubmit={SubmitForm}>
                 <div className='form__body-container'>
                     <div className='form__input-wrapper'>
                         <input className='form__input' type="email" required value={storeInput.email} onChange={(e) => setStoreInput({...storeInput, email: e.target.value})}
@@ -34,7 +34,7 @@ export const LoginForm = (props) => {
                         <label>Пароль</label>
                     </div>
                 </div>
-                <button className='form__button' onClick={SubmitForm}>Вход</button>
+                <button className='form__button'>Вход</button>
                 <div className='form__info'>
                         Не зарегистрированы?
                         <span className='form__info-link' onClick={onSwitchForm}>Создать аккаунт</span>

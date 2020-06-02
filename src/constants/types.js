@@ -14,6 +14,7 @@ export const auth = {
 
 export const user = {
     GET_USER: 'user/get',
+    RECET_USER: 'user/recet',
     CREATE_MAP: 'user/map/create',
     DELETE_MAP: 'user/map/delete',
 
@@ -31,6 +32,7 @@ export const error = {
 export const map = {
     LOAD_MAP_ID: 'map/load/id',
     LOAD_MAP: 'map/load',
+    RECET_MAP: 'map/recet',
 
     ADD_NODE: 'map/node/add',
     MOVE_NODE: 'map/node/move',

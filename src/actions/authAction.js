@@ -52,10 +52,12 @@ export const login = (email, password) => (dispatch, getState) => {
         });
 };
 
-export const logout = () => {
-    return {
-        type: types.auth.LOGOUT_SUCCESS
-    }
+export const logout = () => dispatch => {
+    dispatch({type: types.auth.LOGOUT_SUCCESS});
+    dispatch({type: types.user.RECET_USER});
+    dispatch({type: types.map.RECET_MAP});
+    dispatch({type: types.docTree.REMOVE_DATA});
+    dispatch({type: types.textEditor.REMOVE_DATA});
 };
 
 // Check token & load user

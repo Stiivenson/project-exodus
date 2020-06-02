@@ -21,6 +21,16 @@ export default function(state = initialState, action) {
                 trashMaps: action.payload.maps.trashMaps
             };
 
+        case types.user.RECET_USER:    
+            return { 
+                ...state,
+                user: null,
+                privateMaps: [],
+                publicMaps: [],
+                recentMaps: [],
+                trashMaps: []
+            }
+
         case types.user.CREATE_MAP:
             return { 
                 ...state,                 

@@ -3,11 +3,13 @@ import * as types from '../constants/types';
 import { returnErrors } from "./errorAction";
 
 
-export const loadMapId = (id) => {
-    return {
+export const loadMapId = (id) => (dispatch) => {
+    dispatch({ type: types.map.RECET_MAP });  
+    dispatch({
         type: types.map.LOAD_MAP_ID,
         payload: id
-    }    
+    });
+     
 }
 
 export const loadMapData = (data) => {

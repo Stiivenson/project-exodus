@@ -28,6 +28,20 @@ export default function(state = initialState, action) {
                 }
             };
 
+        case types.map.RECET_MAP:           
+            return {
+                ...state,
+                mapIsEmpty: true,
+                mapisLoading: true,
+
+                map: {
+                    id: null,
+                    title: '',
+                    nodes: [],
+                    edges: []
+                }   
+            }
+
         case types.map.LOAD_MAP_ID:
             return {
                 ...state,             
