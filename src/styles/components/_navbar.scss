@@ -36,6 +36,27 @@
     }
 }
 
+.main-navbar__breadcrums{
+    display: flex;
+    align-items: center;
+    
+    a{
+        padding: 5px 10px;
+
+        border-radius: 5px;
+        color: white;
+        text-decoration: none;
+
+        &:hover{
+            background-color: #656565;
+        }
+    }
+
+    .breadcrums-separator{
+        margin: 0 10px;
+        cursor: default;
+    }    
+}
 
 .main-navbar__button{
     width: $main-navbar-height;
@@ -66,5 +87,59 @@
     }
     &.--question{
         background-image: url('#{$icons-path}map-navbar/icon-question.svg');
+    }
+    &.--user{
+        background-image: url('#{$icons-path}map-navbar/icon-user.svg');
+    }
+}
+
+.main-navbar__user-btns{
+    position: absolute;
+    right: 20px;
+    top: 50px;
+
+    width: 180px;
+    height: 40px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: center;
+
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: -2px 2px 4px rgba($color: #000000, $alpha: 0.25);
+
+    opacity: 0;
+    pointer-events: none;
+    &.--opened{
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .separator{
+        height: 100%;
+        width: 1px;
+        background-color: black;
+    }
+
+    .user-btns__button{
+        cursor: pointer;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 50%;
+
+        border-radius: 10px 0 0 10px;
+        &:nth-child(3){
+            border-radius: 0 10px 10px 0;
+        }
+
+        &:hover{
+            background-color: #eaeaea;
+        }
     }
 }

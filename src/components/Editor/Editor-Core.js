@@ -163,7 +163,7 @@ class EditorCore extends Component{
     } else if(id === this.props.textEditorDocument.id) {
        return;
     } else {
-      this.props.removeDocumentData();
+      //this.props.removeDocumentData();
       socket.emit('CLIENT--DocTree:GET_DOCUMENT_DATA',  id);
     }
   }

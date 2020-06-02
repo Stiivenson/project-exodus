@@ -82,7 +82,7 @@ class TextEditor extends Component{
 
     timerTxt = setTimeout(() => {
       socketTxt.emit('CLIENT--TextEditor:SAVE_NEW_DATA', { id: this.state.id, data: outputData.blocks } );
-    }, 1000);
+    }, 3500);
   }
 
   handleSave = () => {
