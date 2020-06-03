@@ -1,3 +1,4 @@
+import AttachesTool from '@editorjs/attaches';
 import Embed from '@editorjs/embed'
 import Table from '@editorjs/table'
 import Paragraph from '@editorjs/paragraph'
@@ -18,8 +19,19 @@ import SimpleImage from '@editorjs/simple-image'
 export const EDITOR_JS_TOOLS = {
     header: Header,
     list: List,
-    // linkTool: LinkTool,
-    image: Image,
+    linkTool: LinkTool,
+    attaches: AttachesTool,
+    image: {
+        class: Image,
+        config: {
+            endpoints: {
+              byFile: 'http://localhost:5000/uploadFile', // Your backend file uploader endpoint
+              byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+            },
+            additionalRequestHeaders:{
+            }
+        }
+    },
     simpleImage: SimpleImage,
     
 

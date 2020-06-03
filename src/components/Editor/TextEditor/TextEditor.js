@@ -38,7 +38,6 @@ class TextEditor extends Component{
       });
 
       socketTxt.on('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', (data) => {
-        console.log('SAVE_NEW_DATA_SUCCESS', data); 
         props.saveNewData(data);
       });
 

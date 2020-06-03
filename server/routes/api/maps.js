@@ -66,8 +66,9 @@ router.post('/update', auth, (req, res) => {
      
  });
 
+
 /**
-   * @route GET /api/map/recent/add
+   * @route GET /api/map/recent/:
    * @desc  Add Recent mapы
    * @acces Private
    */
