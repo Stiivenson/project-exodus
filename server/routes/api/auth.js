@@ -136,25 +136,6 @@ router.post('/login', (req, res) => {
 });
 
 
-router.get('/get/trash', auth, (req, res) => {
-    
-    async function getTrashMaps (id) {
-        let user = findUser(id);
-
-        let TrashMaps = user.then(function (user) {
-            return findMaps(user.TrashMaps);  
-        });
-
-        await TrashMaps;
-
-        res.json({
-            trashMaps: TrashMaps.value()
-        });
-    }
-
-    getTrashMaps(req.user.id);
-});
-
 /**
    * @route GET api/auth/user
    * @desc  Get user data
@@ -174,18 +155,8 @@ router.get('/user', auth, (req, res) => {
             return findMaps(user.PublicMaps);  
         });
 
-        let RecentMaps = user.then(function (user) {
-            return findMaps(user.RecentMaps);  
-        });
-
-        let TrashMaps = user.then(function (user) {
-            return findMaps(user.TrashMaps);  
-        });
-
         await PrivateMaps;
         await PublicMaps;
-        await RecentMaps;
-        await TrashMaps;
 
         res.json({
             user: {
@@ -195,14 +166,78 @@ router.get('/user', auth, (req, res) => {
             },
             maps: {
                 privateMaps: PrivateMaps.value(),
-                publicMaps: PublicMaps.value(),
-                recentMaps: RecentMaps.value(),
-                trashMaps: TrashMaps.value()
+                publicMaps: PublicMaps.value()
             }
         });
     }
 
     getAllUserData(req.user.id);
+});
+
+
+router.get('/get/maps', auth, (req, res) => {
+    
+    async function getMaps (id) {
+        let user = findUser(id);
+
+        let PrivateMaps = user.then(function (user) {
+            return findMaps(user.PrivateMaps);  
+        });
+
+        let PublicMaps = user.then(function (user) {
+            return findMaps(user.PublicMaps);  
+        });
+
+        await PrivateMaps;
+        await PublicMaps;
+
+        res.json({
+            maps: {
+                privateMaps: PrivateMaps.value(),
+                publicMaps: PublicMaps.value()
+            }
+        });
+    }
+
+    getMaps(req.user.id);
+});
+
+router.get('/get/recent', auth, (req, res) => {
+    
+    async function getRecentMaps (id) {
+        let user = findUser(id);
+
+        let RecentMaps = user.then(function (user) {
+            return findMaps(user.RecentMaps);  
+        });
+
+        await RecentMaps;
+
+        res.json({
+            recentMaps: RecentMaps.value()
+        });
+    }
+
+    getRecentMaps(req.user.id);
+});
+
+router.get('/get/trash', auth, (req, res) => {
+    
+    async function getTrashMaps (id) {
+        let user = findUser(id);
+
+        let TrashMaps = user.then(function (user) {
+            return findMaps(user.TrashMaps);  
+        });
+
+        await TrashMaps;
+
+        res.json({
+            trashMaps: TrashMaps.value()
+        });
+    }
+
+    getTrashMaps(req.user.id);
 });
 
 module.exports = router;

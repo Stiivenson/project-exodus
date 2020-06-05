@@ -26,7 +26,8 @@ export const register = (name, email, password) =>  (dispatch) => {
         });  
 };
 
-export const login = (email, password) => (dispatch, getState) => {
+
+export const login = (email, password) => (dispatch) => {
     // Headers
     const config = {
         headers: {
@@ -47,10 +48,11 @@ export const login = (email, password) => (dispatch, getState) => {
             });                        
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch(returnErrors(err.response.data, err.response.status, 'LOGIN_ERROR'));
             dispatch({ type: types.auth.AUTH_ERROR });
         });
 };
+
 
 export const logout = () => dispatch => {
     dispatch({type: types.auth.LOGOUT_SUCCESS});
@@ -59,6 +61,7 @@ export const logout = () => dispatch => {
     dispatch({type: types.docTree.REMOVE_DATA});
     dispatch({type: types.textEditor.REMOVE_DATA});
 };
+
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
@@ -75,10 +78,11 @@ export const loadUser = () => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            dispatch(returnErrors(err.response.data, err.response.status));
+            dispatch(returnErrors(err.response.data, err.response.status, 'USER_LOADING_FAIL'));
             dispatch({ type: types.auth.USER_LOADING_FAIL });
         });
 };
+
 
 // Setup config/headers and token
 export const tokenConfig = getState => {

@@ -14,7 +14,7 @@ import { loadDocumentData, removeDocumentData, saveNewData } from "../../actions
 import io from "socket.io-client";
 let socket;
 
-class EditorCore extends Component{
+class Editor extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -233,4 +233,4 @@ export default connect(mapStateToProps, {
   addEdge, deleteEdge,
   loadTreeData, updateTreeData, openningDocTree, addTreeItem,
   loadDocumentData, removeDocumentData, saveNewData
-})(EditorCore);
+})(Editor);

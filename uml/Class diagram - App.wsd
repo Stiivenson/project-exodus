@@ -1,0 +1,18 @@
+@startuml Use Case
+skinparam classAttributeIconSize 0
+
+class App {
+        +isAuthenticated: bool
+}
+
+class Auth{}
+class Navbar {}
+class Home {}
+class Editor {}
+
+App *--> Auth
+App *--> Navbar
+App *--> Home
+App *--> Editor
+
+@enduml

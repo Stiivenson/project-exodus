@@ -8,7 +8,7 @@ import {Home_FormAddMap} from './Home-FormAddMap';
 
 import { connect } from 'react-redux';
 import { loadUser } from "../../actions/authAction";
-import { createMap, deleteMap, updateRecentMap, loadTrashMaps, putToTrash } from '../../actions/homeAction';
+import { loadMaps, createMap, deleteMap, loadRecentMaps, addRecentMap, loadTrashMaps, putToTrash, reviveMap } from '../../actions/homeAction';
 import { loadMapId } from '../../actions/mapAction';
 
 
@@ -45,7 +45,16 @@ class Home extends Component{
 
     // Create new Map
     createNewMap = (title) => {
-        this.props.createMap(this.props.user.id, title);
+        this.props.createMap(title);
+    }
+
+    
+    loadMaps = () => {
+        this.props.loadMaps();
+    }
+    
+    loadRecentMaps = () => {
+        this.props.loadRecentMaps();
     }
 
     loadTrashMaps = () => {
@@ -61,9 +70,13 @@ class Home extends Component{
         this.props.deleteMap(id);
     }
 
+    reviveMap = (id) => {
+        this.props.reviveMap(id);
+    }
+
     getMapId = (id) => {
         this.props.loadMapId(id)
-        this.props.updateRecentMap(id);
+        this.props.addRecentMap(id);
     }
 
     render() {
@@ -74,10 +87,14 @@ class Home extends Component{
                     showFormAddMap={this.state.showFormAddMap}
                     closeFormAddMap={this.closeFormAddMap}
                     
-                    createNewMap={this.createNewMap}/>
+                    createNewMap={this.createNewMap}
+                />
 
                 <Home_Menu 
                     selectMenuSection={this.selectMenuSection} 
+
+                    loadMaps={this.loadMaps}
+                    loadRecentMaps={this.loadRecentMaps}
                     loadTrashMaps={this.loadTrashMaps}
                 />
 
@@ -105,6 +122,7 @@ class Home extends Component{
                             return <Home_MapsListTrash 
                                 TrashMaps={this.props.trashMaps}
                                 deleteMap={this.deleteMap}
+                                body={this.reviveMap}
                                 />;
 
                     default:
@@ -118,10 +136,7 @@ class Home extends Component{
 }
 
 const mapStateToProps = (state) => ({
-    token: state.auth.token,
     dataLoaded: state.auth.dataLoaded,
-
-    user: state.user_data.user,
 
     privateMaps: state.user_data.privateMaps,
     publicMaps: state.user_data.publicMaps,
@@ -129,4 +144,4 @@ const mapStateToProps = (state) => ({
     trashMaps: state.user_data.trashMaps
 });
 
-export default connect(mapStateToProps,{ loadUser, createMap, deleteMap, updateRecentMap, loadTrashMaps, putToTrash, loadMapId })(Home);
+export default connect(mapStateToProps,{ loadMaps, loadUser, createMap, deleteMap, loadRecentMaps, addRecentMap, loadTrashMaps, putToTrash, loadMapId, reviveMap })(Home);

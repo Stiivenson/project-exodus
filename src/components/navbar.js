@@ -70,9 +70,6 @@ class Navbar extends Component{
                     }
                 </div>
                 <div className='main-navbar__buttons --right'>
-                    {/* <div className='main-navbar__button --search'></div>
-                    <div className='main-navbar__button --folder' ></div>
-                    <div className='main-navbar__button --question'></div> */}
                     <div className='main-navbar__button --user' onClick={this.toggleUserIconMenu}></div>
                 </div>
                 <div className={userIconMenu.join(' ')}>

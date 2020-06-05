@@ -3,10 +3,12 @@ import axios from 'axios';
 import * as types from '../constants/types';
 import { tokenConfig } from './authAction';
 
+import { returnErrors } from "./errorAction";
 
-export const createMap = (owner, title) => (dispatch, getState) => {
+
+export const createMap = (title) => (dispatch, getState) => {
     // Request body
-    const body = JSON.stringify({ owner, title });
+    const body = JSON.stringify({ title });
 
     axios.post('/api/map/create', body, tokenConfig(getState))
         .then(res => { 
@@ -16,42 +18,49 @@ export const createMap = (owner, title) => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
-        })
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
 
 };
 
-export const updateRecentMap = (id) => (dispatch, getState) => {
 
-    let recentMaps = getState().user_data.recentMaps;
-    const length = recentMaps.length;
-    let selectedIndex = -1;
-    recentMaps.map((map, index) => { map._id == id ? selectedIndex = index : null });    
-    if(selectedIndex == 0){
-        return;
-    }
-    else {
-        if(selectedIndex > 0) {
-            recentMaps.splice(selectedIndex, 1);       
-        }
-        if(length == 8 && selectedIndex < 0 )
-        {  
-            recentMaps.pop();
-        }    
-    }    
-    let reqArray = [];
-    reqArray.push(id);
-    if(length > 0) recentMaps.map(map => { reqArray.push(map._id) });
-    
+export const loadMaps = () => (dispatch, getState) => {
+    axios.get('/api/auth/get/maps', tokenConfig(getState))
+        .then(res => dispatch({
+            type: types.user.GET_MAPS,
+            payload: res.data.maps
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+};
+export const putToTrash = (id) => (dispatch, getState) => {
+    axios.delete(`/api/map/private/${id}`, tokenConfig(getState))
+        .then(res => dispatch({
+            type: types.user.ADD_TRASH_MAP,
+            payload: id
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+};
 
+
+export const loadRecentMaps = () => (dispatch, getState) => {
+    axios.get('/api/auth/get/recent', tokenConfig(getState))
+        .then(res => dispatch({
+            type: types.user.GET_RECENT_MAPS,
+            payload: res.data.recentMaps
+        }))
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+};
+export const addRecentMap = (id) => (dispatch, getState) => {
     // Request body
-    const body = JSON.stringify({ reqArray });
-    axios.post('/api/map/recent/update', body, tokenConfig(getState))
+    const body = JSON.stringify({ id });
+
+    axios.post('/api/map/recent/add', body, tokenConfig(getState))
         .then(res => { 
             dispatch({ 
                 type:  types.user.ADD_RECENT_MAP,
@@ -59,13 +68,8 @@ export const updateRecentMap = (id) => (dispatch, getState) => {
             })
         })
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
-        })
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
 }
 
 
@@ -76,31 +80,9 @@ export const loadTrashMaps = () => (dispatch, getState) => {
             payload: res.data.trashMaps
         }))
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
-        })
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
 };
-
-export const putToTrash = (id) => (dispatch, getState) => {
-    axios.delete(`/api/map/private/${id}`, tokenConfig(getState))
-        .then(res => dispatch({
-            type: types.user.ADD_TRASH_MAP,
-            payload: id
-        }))
-        .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
-        })
-};
-
 export const deleteMap = (id) => (dispatch, getState) => {
     axios.delete(`/api/map/trash/${id}`, tokenConfig(getState))
         .then(res => dispatch({
@@ -108,11 +90,22 @@ export const deleteMap = (id) => (dispatch, getState) => {
             payload: id
         }))
         .catch(err => {
-            console.log(err);
-            
-            // dispatch(returnErrors(err.response.data, err.response.status));
-            // dispatch({
-            //     type: AUTH_ERROR
-            // })
-        })
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
 };
+export const reviveMap = (id) => (dispatch, getState) => {
+    // Request body
+    const body = JSON.stringify({ id });
+    console.log(id);
+    
+    axios.post('/api/map/revive', body, tokenConfig(getState))
+        .then(res => { 
+            dispatch({ 
+                type:  types.user.REVIVE_MAP,
+                payload: id
+            })
+        })
+        .catch(err => {
+            dispatch(returnErrors(err.response.data, err.response.status));
+        });
+}

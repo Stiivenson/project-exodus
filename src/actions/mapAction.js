@@ -64,7 +64,6 @@ export const addEdge = (data) => {
 
 export const deleteEdge = (data) => {
     return dispatch => {
-        console.log('deleteEdge', data);
         data.map(id => {           
             dispatch({
                 type: types.map.DELETE_EDGE,

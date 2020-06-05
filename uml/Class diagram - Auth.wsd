@@ -1,0 +1,18 @@
+@startuml Use Case
+skinparam classAttributeIconSize 0
+
+class Auth {
+  +register(name: string, email: string, password: string)
+  +login(email: string, password: string)      
+}
+interface LoginForm{
+        +SubmitForm(): array
+}
+interface RegisterForm{
+        +SubmitForm(): array
+}
+
+Auth *--> LoginForm
+Auth *--> RegisterForm
+
+@enduml

@@ -7,9 +7,12 @@ import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 
 
-class User extends Component{
-    state = {
-        selectedAuthForm: 'login'
+class Auth extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            selectedAuthForm: 'login'
+        }
     }
 
     selectAuthForm = (form) => {
@@ -48,8 +51,4 @@ class User extends Component{
     }
 }
 
-const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(mapStateToProps, {register, login})(User);
+export default connect(null, {register, login})(Auth);

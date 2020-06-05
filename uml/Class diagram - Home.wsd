@@ -1,0 +1,57 @@
+@startuml Use Case
+skinparam classAttributeIconSize 0
+left to right direction
+class Home {
+        +privateMaps: array
+        +publicMaps: array
+        +recentMaps: array
+        +trashMaps: array
+
+        +loadMaps(): void
+        +loadRecentMaps(): void
+        +loadTrashMaps(): void
+
+        +createMap(id: int, title: string)
+        +deleteMap(id: int)
+        
+        +addRecentMap(id: int)
+        +putToTrash(id: int)
+        +reviveMap(id: int)
+}
+
+
+
+interface Home_Menu {
+        +LoadMaps(): void
+        +LoadRecentMaps(): void
+        +LoadTrashMaps(): void
+}
+interface Home_MapsList {
+        +privateMaps: array
+        +publicMaps: array
+
+        +OpenFormAddMap(): void
+        +PutToTrash(int: id)
+        +OpenMapEditor(int: id)
+}
+interface Home_MapsListRecent  {
+        +recentMaps: array
+
+        +OpenMapEditor(int: id)
+}
+interface Home_MapsListTrash {
+        +trashMaps: array
+
+        +DeleteMap(id: int)
+        +ReviveMap(id: int)
+}
+interface Home_FormAddMap {}
+
+
+Home *--> Home_Menu
+Home *--> Home_MapsList
+Home *--> Home_MapsListRecent
+Home *--> Home_MapsListTrash
+Home *--> Home_FormAddMap
+
+@enduml

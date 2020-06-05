@@ -2,16 +2,14 @@ import React, { Component, Fragment } from 'react';
 
 import { Redirect, Route, Switch} from "react-router-dom";
 
-import User from './components/User/User-Core';
+import Auth from './components/Auth/Auth-Core';
 import Navbar from './components/Navbar';
 import Home from "./components/Home/Home-Core";
-import EditorCore from "./components/Editor/Editor-Core";
+import Editor from "./components/Editor/Editor-Core";
 import NotFound from "./components/404";
 
 import { connect } from 'react-redux';
 import { loadUser } from "./actions/authAction";
-
-import './App.css';
 
 
 const ProtectedRoute = ({ component: Comp, isAuthenticated, path, ...rest }) => {
@@ -58,9 +56,9 @@ class App extends Component {
                 <Switch>
 
                   <ProtectedRoute exact path='/' isAuthenticated={this.props.isAuthenticated} component={Home} />
-                  <ProtectedRoute path='/map-editor' isAuthenticated={this.props.isAuthenticated} component={EditorCore} />
-                  <ProtectedRoute path='/text-editor' isAuthenticated={this.props.isAuthenticated} component={EditorCore} />
-                  <Route exact path='/auth' component={User} >
+                  <ProtectedRoute path='/map-editor' isAuthenticated={this.props.isAuthenticated} component={Editor} />
+                  <ProtectedRoute path='/text-editor' isAuthenticated={this.props.isAuthenticated} component={Editor} />
+                  <Route exact path='/auth' component={Auth} >
                     {this.props.isAuthenticated ? <Redirect to='/' /> : null }
                   </Route>      
                   <Route path='*' component={NotFound}/>           

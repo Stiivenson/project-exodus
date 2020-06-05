@@ -21,13 +21,23 @@ export const Home_Menu = (props) => {
         }  
     }
 
+    const LoadMaps = () => {
+        props.loadMaps();
+    }
+
+    const LoadRecentMaps = () => {
+        props.loadRecentMaps();
+    }
+
     const LoadTrashMaps = () => {
         props.loadTrashMaps();
     }
 
+
+
     return(
         <div className='home-container__menu' onClick={onHomeMenuClick}>
-            <div className='menu-side --active' data='maps'>
+            <div className='menu-side --active' data='maps' onClick={LoadMaps}>
                 <div className='menu-side__icon'>
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
@@ -42,7 +52,7 @@ export const Home_Menu = (props) => {
                 </div>
                 <div className='menu-side__title'>Карты</div>                
             </div>
-            <div className='menu-side' data='recent'>
+            <div className='menu-side' data='recent' onClick={LoadRecentMaps}>
                 <div className='menu-side__icon' >
                     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0)">
