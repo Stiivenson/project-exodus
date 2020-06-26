@@ -38,6 +38,7 @@ class TextEditor extends Component{
       });
 
       socketTxt.on('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', (data) => {
+        console.log('SAVE_NEW_DATA_SUCCESS', data);
         props.saveNewData(data);
       });
 
@@ -57,31 +58,19 @@ class TextEditor extends Component{
       }
     }
     return null;
-}
-
-  componentDidUpdate() {
   }
 
   componentDidMount() {
     this.editorInstance // access editor-js    
   }
 
-  Render = () => {
-    if(editorInstance.current)
-      console.log(editorInstance.current);
-  }
-
   handleServerSave = (outputData) => {
     if (timerTxt) {		// проверка наличия таймера
       clearTimeout(timerTxt);	// сброс таймера, если он уже работает
-      console.log('reset');
-    } else {
-        console.log('start');
     }
-
     timerTxt = setTimeout(() => {
       socketTxt.emit('CLIENT--TextEditor:SAVE_NEW_DATA', { id: this.state.id, data: outputData.blocks } );
-    }, 3500);
+    }, 2000);
   }
 
   handleSave = () => {
@@ -93,10 +82,6 @@ class TextEditor extends Component{
     }).catch((error) => {
       console.log('Saving failed: ', error)
     });
-  }
-
-  rerender = () => {
-    this.setState({ enableReInitialize: true })
   }
 
   componentWillUnmount() {

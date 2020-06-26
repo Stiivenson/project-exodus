@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import { connect } from "react-redux";
 import Graph from "react-graph-vis";
-import { MapNavigationBar } from './MapNavigationBar';
+import { Map_ToolsBar } from './MapToolsBar';
 
 const map_options = {
   layout: {
@@ -140,7 +140,6 @@ class MapEditor extends Component {
 
     let manipulationOptions = {
         enabled: false,
-        initiallyActive: false,
         addNode: (data, callback) => {
           data.label = 'Новый раздел';
 
@@ -153,7 +152,6 @@ class MapEditor extends Component {
           
           this.props.socket.emit('CLIENT--MapEditor:CREATE_NODE', { id: this.state.id, node: serverData });
           this.props.addNode(data);
-          //this.setState({editNodeMode: true});
           this.state.network.addNodeMode();
         },
         addEdge: (data, callback) => {
@@ -192,7 +190,7 @@ class MapEditor extends Component {
 
     this.events = {
       click:        (event) => this.onClick(event.pointer.DOM),
-      doubleClick:  (event) => this.onDoubleClick(event),
+      doubleClick:  (event) => this.onDoubleClick(event.pointer.DOM),
       hold:         (event) => this.onHold(event.pointer.DOM),
       dragStart:    (event) => this.onDragStart(event.pointer.DOM),
       dragEnd:      (event) => this.onDragEnd(event.pointer.DOM),
@@ -225,24 +223,27 @@ class MapEditor extends Component {
    */
 
   onClick = (coords) => {
-    //let node = this.state.network.getNodeAt(coords);
   }
 
-  onDoubleClick = (e) => {
-    if(!this.state.editNodeMode){
-      let id = this.state.selectedNode,
-          label = this.state.network.body.nodes[id].options.label;
-      
-      this.setState({editNodeMode: true, editNodeLabel: label});
+  onDoubleClick = (coords) => {
+    const id = this.state.network.getNodeAt(coords);
+    console.log(id);
+    
+    if(id){
+      if(id === 'root'){
+
+      }
+      else if(!this.state.editNodeMode){
+        const label = this.state.network.body.nodes[id].options.label;        
+        this.setState({editNodeMode: true, editNodeLabel: label});
+      }
     }
+    
   }
 
   onHold= (coords) => {
     let id = this.state.network.getNodeAt(coords);
-    console.log(id);
-    
     this.props.socket.emit('CLIENT--MapEditor:GET_DOCTREE_DATA', { id: this.state.id, nodeId: id });
-    
   }
 
   onDragStart = (coords) => {
@@ -253,7 +254,7 @@ class MapEditor extends Component {
   onDragging = (e) => {
   }
 
-  onDragEnd = (coords) => {
+  onDragEnd = () => {
     let selectedNodes = this.state.network.getSelectedNodes();
     if(selectedNodes.length >= 1) {
       let positions = this.state.network.getPositions(selectedNodes);
@@ -293,7 +294,6 @@ class MapEditor extends Component {
   }
 
   onDeselectNode = (coords) => {
-    //let id = this.state.network.getNodeAt(coords);
   }
 
   /**
@@ -306,7 +306,7 @@ class MapEditor extends Component {
    * @function deleteNodeMode / delete node by id, except Root
    */
 
-  listenNavigationBar = (atrr) => {
+  listenToolsBar = (atrr) => {
     let attribute = atrr;
     this.setState({deleteNodeMode: false});
     switch(attribute){
@@ -471,13 +471,9 @@ class MapEditor extends Component {
     window.addEventListener("resize", this.measure);
   }
 
-  componentDidUpdate(){
+  componentDidUpdate(){    
     let network =  this.state.network.body.data;
     let value =  this.props.handlerValue, data = this.props.handlerData;
-
-    // console.log('value ', this.props.handlerValue);
-    // console.log('data ', this.props.handlerData);
-    // console.log('network ', this.state.network);    
 
     switch(value) {
       case 'add-node': {
@@ -485,6 +481,22 @@ class MapEditor extends Component {
         newNode = Object.assign(newNode, node_options);  
         network.nodes.add(newNode);
         return this.props.handlerClear();
+      }
+
+      case 'move-node': {
+        network.nodes.map(node => {            
+          let ind = 0;
+          let nodeToMove = data.find((el, index) => {
+            if(el.id == node.id) {
+              ind = index;
+              return node;
+            }
+          });
+          if(nodeToMove) {
+              network.nodes.update({id: node.id, x: data[ind].coords.x, y: data[ind].coords.y})
+          }
+        });   
+        return this.props.handlerClear();     
       }
 
       case 'add-edge': {
@@ -497,9 +509,7 @@ class MapEditor extends Component {
         let newEdges = this.state.network.getConnectedEdges(node.id);
         newEdges.map(edge => {
           if(!oldEdges.includes(edge)) {
-            let edgeData = network.edges._data[edge];
-            console.log(edgeData);
-            
+            let edgeData = network.edges._data[edge];            
             let serverData = {
               id: edgeData.id,
               from: edgeData.from,
@@ -567,8 +577,9 @@ class MapEditor extends Component {
           getEdges={this.getEdges}
           getNodes={this.getNodes}
           vis={vis => (this.vis = vis)}
-        /> 
-        <MapNavigationBar listenNavigationBar={this.listenNavigationBar}/>     
+        />
+         
+        <Map_ToolsBar listenToolsBar={this.listenToolsBar}/>     
 
         <div className={classEditForm.join(' ')}>
           <form className='form' onSubmit={this.saveNodeEditForm}>

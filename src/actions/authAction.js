@@ -37,8 +37,6 @@ export const login = (email, password) => (dispatch) => {
 
     // Request body
     const body = JSON.stringify(email, password);
-    console.log(body);
-    
 
     axios.post('/api/auth/login', body, config)
         .then(res => {
@@ -100,6 +98,6 @@ export const tokenConfig = getState => {
     if(token) {
         config.headers['x-auth-token'] = token;
     }
-
+    
     return config;
 }

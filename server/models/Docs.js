@@ -3,7 +3,15 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const DocSchema = new Schema({
+    owner_id: {
+        type: String,
+        required: true
+    },
     title: {
+        type: String,
+        required: true
+    },
+    mapReference: {
         type: String,
         required: true
     },

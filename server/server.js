@@ -3,7 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const config = require('config');
 const multer  = require("multer");
-var cors = require('cors');
+const cors = require('cors');
 
 
 const app = express();
@@ -12,6 +12,7 @@ const server = require('http').createServer(app);
 // Routes
 const auth = require('./routes/api/auth');
 const maps = require('./routes/api/maps');
+const search = require('./routes/api/search');
 
 
 // Bodyparser middleware
@@ -29,10 +30,7 @@ mongoose.connect(db, {useNewUrlParser: true, useUnifiedTopology: true, useCreate
 app.use(cors());
 
 
-console.log('dirname', __dirname);
-
 app.use(express.static('public'));
-//app.use(express.static(__dirname + './public'));
 
 const imageStorage = multer.diskStorage({
     destination: './public/uploads/',
@@ -54,8 +52,7 @@ app.post("/uploadFile", cors(),  (req, res) => {
         res.send({
             "success" : 1,
             "file": {
-                "url" : `http://localhost:5000/uploads/${req.file.filename}`,
-                // ... and any additional fields you want to store, such as width, height, color, extension, etc
+                "url" : `http://localhost:5000/uploads/${req.file.filename}`
             }
         });
         }
@@ -65,10 +62,10 @@ app.post("/uploadFile", cors(),  (req, res) => {
 // Use routes
 app.use('/api/auth', auth);
 app.use('/api/map', maps);
+app.use('/api/search', search);
 
 // Add sockets to server
 require('./socket/socket')(server);
-
 
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`Server started on port ${port}`));

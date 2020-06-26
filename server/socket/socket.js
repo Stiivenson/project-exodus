@@ -180,11 +180,13 @@ function getMapData (id) {
 /**
    * @function addDocument / Add new Document to DB & DocTree
    */
-  function addDocument (mapId, nodeId, data) {
+  function addDocument (userId, mapId, nodeId, data) {
     return new Promise(function (resolve, reject) {
         if (mapId) {
             const newDoc = new Docs({
+                owner_id: userId,
                 title: data.title,
+                mapReference: mapId,
                 nodeReference: nodeId
             });
             newDoc.save()
@@ -310,8 +312,7 @@ module.exports = function(server) {
          * @Section Handle Map-Editor actions
          */     
         socket.on('CLIENT:GET_MAP_DATA', (id) => {
-            console.log('GET_MAP_DATA', id);
-            
+            console.log('GET_MAP_DATA', id);            
             getMapData(id)
             .then(res => socket.emit('SERVER:SEND_MAP_DATA', res))
             .catch(err => console.log(err));          
@@ -319,12 +320,12 @@ module.exports = function(server) {
 
         socket.on('CLIENT--MapEditor:CREATE_NODE', function(data){
             addNode(data.id, data.node)
-            .then(() => socket.emit('SERVER--MapEditor:CREATE_NODE_SUCCESS', data.node ))
+            .then(() => socket.to(data.id).emit('SERVER--MapEditor:CREATE_NODE_SUCCESS', data.node ))
             .catch(() => socket.emit('SERVER:ERROR'));  
         });
         socket.on('CLIENT--MapEditor:MOVE_NODE', function(data){
             moveNode(data.id, data.positions)
-            .then(() => socket.emit('SERVER--MapEditor:MOVE_NODE_SUCCESS', data.positions ))
+            .then(() => socket.to(data.id).emit('SERVER--MapEditor:MOVE_NODE_SUCCESS', data.positions ))
             .catch(() => socket.emit('SERVER:ERROR'));  
         });
         socket.on('CLIENT--MapEditor:UPDATE_NODE', function(data){
@@ -335,12 +336,14 @@ module.exports = function(server) {
         socket.on('CLIENT--MapEditor:DELETE_NODE', function(data){
             deleteNode(data.id, data.nodes)
             .then(() => socket.emit('SERVER--MapEditor:DELETE_NODE_SUCCESS', data.nodes))
+            .then(() => socket.to(data.id).emit('SERVER--MapEditor:DELETE_NODE_SUCCESS', data.nodes ))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
 
         socket.on('CLIENT--MapEditor:CREATE_EDGE', function(data){
             addEdge(data.id, data.edge)
-            .then(() => socket.emit('SERVER--MapEditor:CREATE_EDGE_SUCCESS', data.edge ))
+            // .then(() => socket.emit('SERVER--MapEditor:CREATE_EDGE_SUCCESS', data.edge ))
+            .then(() => socket.to(data.id).emit('SERVER--MapEditor:CREATE_EDGE_SUCCESS', data.edge ))
             .catch(() => socket.emit('SERVER:ERROR'));  
         });
         socket.on('CLIENT--MapEditor:DELETE_EDGE', function(data){
@@ -365,7 +368,7 @@ module.exports = function(server) {
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
         socket.on('CLIENT--DocTree:CREATE_DOC', function(data){
-            addDocument(data.mapId, data.nodeId, data.document)
+            addDocument(data.userId, data.mapId, data.nodeId, data.document)
             .then((data) => socket.emit('SERVER--DocTree:CREATE_DOC_SUCCESS', data))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
@@ -395,7 +398,8 @@ module.exports = function(server) {
         });
         socket.on('CLIENT--TextEditor:SAVE_NEW_DATA', function(data){
             saveNewDocumentData(data.id, data.data)
-            .then(() => socket.emit('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', data.data))
+            // .then(() => socket.emit('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', data.data))
+            .then(() => socket.to(data.id).emit('SERVER--TextEditor:SAVE_NEW_DATA_SUCCESS', data.data ))
             .catch(err => {console.log('Error:', err), socket.emit('SERVER:ERROR')});  
         });
         

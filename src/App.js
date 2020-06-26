@@ -1,9 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 import { Redirect, Route, Switch} from "react-router-dom";
 
 import Auth from './components/Auth/Auth-Core';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import Home from "./components/Home/Home-Core";
 import Editor from "./components/Editor/Editor-Core";
 import NotFound from "./components/404";

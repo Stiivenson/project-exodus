@@ -87,12 +87,6 @@ router.post('/recent/add', auth, (req, res) => {
  });
 
 
-
-/**
-   * @route GET /api/map/recent/
-   * @desc  Add Recent map
-   * @acces Private
-   */
 router.delete('/private/:id', auth, (req, res) => {
     User.updateOne({ _id: req.user.id }, { $pull: { PrivateMaps: req.params.id } })
     .then(async function () {
@@ -104,10 +98,8 @@ router.delete('/private/:id', auth, (req, res) => {
  });
 
 
-
-
 /**
-   * @route DELETE api/map/:id
+   * @route DELETE api/map/trash/:id
    * @desc  Delete map
    * @acces Private
    */

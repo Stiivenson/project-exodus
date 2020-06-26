@@ -47,12 +47,8 @@ function findMaps (arr) {
    * @acces Public
    */ 
 router.post('/register', (req, res) => {
-
     const { name, email, password } = req.body;
 
-    console.log(req.body);
-    
-    
     // Simple validation
     if(!name || !email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields!' });

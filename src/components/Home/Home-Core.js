@@ -121,6 +121,7 @@ class Home extends Component{
                         case 'trash':
                             return <Home_MapsListTrash 
                                 TrashMaps={this.props.trashMaps}
+                                reviveMap={this.props.reviveMap}
                                 deleteMap={this.deleteMap}
                                 body={this.reviveMap}
                                 />;

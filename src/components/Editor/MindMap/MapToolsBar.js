@@ -1,8 +1,8 @@
-import React, { Component} from 'react';
+import React from 'react';
 
-export const MapNavigationBar = (props) => {  
+export const Map_ToolsBar = (props) => {  
 
-    const onNavigationBarClick = (e) => {
+    const onToolsBarClick = (e) => {
         let child = e.target,
             childrens = Array.from(e.target.parentNode.childNodes);
             
@@ -14,11 +14,11 @@ export const MapNavigationBar = (props) => {
             child.classList.add('--selected');
 
         let attribute = e.target.getAttribute('data');
-        return props.listenNavigationBar(attribute);
+        return props.listenToolsBar(attribute);
     }
 
     return(
-        <div className='map-selection-bar' onClick={onNavigationBarClick}>
+        <div className='map-selection-bar' onClick={onToolsBarClick}>
             <div className='map-selection-bar__item --cursor --selected' data='cursor'></div>
             <div className='map-selection-bar__item --node'              data='node'></div>
             <div className='map-selection-bar__item --edge'              data='edge'></div>

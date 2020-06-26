@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import * as types from '../constants/types';
 import { tokenConfig } from './authAction';
-
 import { returnErrors } from "./errorAction";
 
 
@@ -20,7 +19,6 @@ export const createMap = (title) => (dispatch, getState) => {
         .catch(err => {
             dispatch(returnErrors(err.response.data, err.response.status));
         });
-
 };
 
 
@@ -96,7 +94,6 @@ export const deleteMap = (id) => (dispatch, getState) => {
 export const reviveMap = (id) => (dispatch, getState) => {
     // Request body
     const body = JSON.stringify({ id });
-    console.log(id);
     
     axios.post('/api/map/revive', body, tokenConfig(getState))
         .then(res => { 

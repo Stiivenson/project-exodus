@@ -62,3 +62,10 @@ export const textEditor = {
     REMOVE_DATA: 'text_editor/remove',
     SAVE_DATA: 'text_editor/save'
 };
+
+export const search = {
+    FIND_MAPS: 'search/maps',
+    DROP_MAPS: 'search/maps/drop',
+    FIND_DOCS: 'search/docs',
+    DROP_DOCS: 'search/docs/drop'
+};

@@ -5,7 +5,7 @@ export const Home_FormAddMap = (props) => {
 
     const [storeInput, setStoreInput] = useState('');
 
-    const saveForm = (e) => {
+    const SubmitForm = (e) => {
         e.preventDefault();
 
         props.createNewMap(storeInput);
@@ -25,7 +25,7 @@ export const Home_FormAddMap = (props) => {
 
     return(
         <div className={class_FormAddMap.join(' ')}>
-          <form className='form' onSubmit={saveForm}>
+          <form className='form' onSubmit={SubmitForm}>
 
             <div className='form__label-container'>
               <div className='form__label'>Создание карты</div>

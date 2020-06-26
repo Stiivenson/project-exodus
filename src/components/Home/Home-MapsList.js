@@ -66,7 +66,9 @@ export const Home_MapsList = (props) => {
                     <div className='maps-grid__container'>
                     { PublicMaps.map(({_id, title}) => (
                         <div className='map-card' key={_id}>
-                            <div className='map-card__title'>{title}</div>                            
+                            <div className='map-card__body' onClick={() => OpenMapEditor(_id)}>
+                                <div className='map-card__title'>{title}</div>
+                            </div>                                
                         </div>
                     ))}
                     </div>

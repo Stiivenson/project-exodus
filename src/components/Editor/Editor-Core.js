@@ -1,6 +1,5 @@
-import React, {ReactDOM, Component } from 'react';
-import { Redirect, Route, Switch} from "react-router-dom";
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { Route} from "react-router-dom";
 
 import MapEditor from './MindMap/MapEditor';
 import TextEditor from './TextEditor/TextEditor';
@@ -18,18 +17,38 @@ class Editor extends Component{
   constructor(props){
     super(props);
     this.state = {
-      handlerValue: null, //Values to handle node/edge operations
+      handlerValue: null, // Values to handle MapEditor operations
       handlerData: null
-    }
-
-    
+    }    
   }
 
-  componentDidMount() {
+  componentDidUpdate(prevProps, prevState) {
+    const oldId = prevProps.map.id;
+    const newId = this.props.map.id;
 
+    if(oldId !== newId) {
+      socket.disconnect();
+
+      socket = io.connect("http://localhost:5000", {query: {token: this.props.token}});
+
+      socket.on('connect', () => {
+        socket.emit('JOIN_ROOM', this.props.map.id);
+      });
+
+      socket.on('Connected', (room) => {
+        console.log('Connected to room', room);
+        socket.emit('CLIENT:GET_MAP_DATA', this.props.map.id);
+        socket.on('SERVER:SEND_MAP_DATA', data => {
+          this.props.loadMapData(data);  
+        });
+      });
+    }
+  }
+  
+
+  componentDidMount() {
     socket = io.connect("http://localhost:5000", {query: {token: this.props.token}});
     socket.on('connect', () => {
-      console.log('try to join room');
       socket.emit('JOIN_ROOM', this.props.map.id);
     });
 
@@ -44,12 +63,14 @@ class Editor extends Component{
     console.log(socket); 
 
     socket.on('SERVER--MapEditor:CREATE_NODE_SUCCESS', (node) => {
-      console.log('CREATE_NODE_SUCCESS', node);      
-      this.props.addNode(node);   
+      console.log('CREATE_NODE_SUCCESS', node);    
+      this.addNode(node);  
+      //this.props.addNode(node);   
     });
     socket.on('SERVER--MapEditor:MOVE_NODE_SUCCESS', (positions) => {
-      console.log('MOVE_NODE_SUCCESS', positions);      
-      this.props.moveNode(positions);   
+      console.log('MOVE_NODE_SUCCESS', positions);     
+      this.moveNode(positions); 
+      //this.props.moveNode(positions);   
     });
     socket.on('SERVER--MapEditor:UPDATE_NODE_SUCCESS', (node) => {
       console.log('UPDATE_NODE_SUCCESS', node);      
@@ -57,12 +78,15 @@ class Editor extends Component{
     });
     socket.on('SERVER--MapEditor:DELETE_NODE_SUCCESS', (nodes) => {
       console.log('DELETE_NODE_SUCCESS', nodes); 
-      this.props.deleteNode(nodes);     
+      //this.props.deleteNode(nodes);     
+      let data = { nodes: nodes, edges: [] }
+      this.setState({ handlerValue: 'delete', handlerData: data });
     });
 
     socket.on('SERVER--MapEditor:CREATE_EDGE_SUCCESS', (edge) => {
       console.log('CREATE_EDGE_SUCCESS', edge);      
-      this.props.addEdge(edge);   
+      //this.props.addEdge(edge);   
+      // this.setState({ handlerValue: 'add-edge', handlerData: edge });
     });
 
     socket.on('SERVER--MapEditor:GET_DOCTREE_DATA_SUCCESS', (data) => {
@@ -121,6 +145,10 @@ class Editor extends Component{
     this.setState({ handlerValue: 'add-node', handlerData: data });
   }
 
+  moveNode = (data) => {
+    this.setState({ handlerValue: 'move-node', handlerData: data });
+  }
+
   // Add Edge to Editor
   addEdge = (data) => {
     this.setState({ handlerValue: 'add-edge', handlerData: data });
@@ -160,12 +188,15 @@ class Editor extends Component{
   initialDocumentLoad = (id) => {
     if(this.props.textEditorIsEmpty) {      
       socket.emit('CLIENT--DocTree:GET_DOCUMENT_DATA',  id);
-    } else if(id === this.props.textEditorDocument.id) {
+    } else if(id === this.props.document.id) {
        return;
     } else {
-      //this.props.removeDocumentData();
       socket.emit('CLIENT--DocTree:GET_DOCUMENT_DATA',  id);
     }
+  }
+
+  saveNewData = (data) => {
+    this.props.saveNewData(data);
   }
 
 
@@ -180,7 +211,7 @@ class Editor extends Component{
           : 
           <>
             <DndDocTree socket={socket} history={this.props.history}
-                isEmpty={this.props.treeIsEmpty} isOpened={this.props.treeIsOpened} docTree={this.props.docTree} mapId={this.props.map.id}
+                isEmpty={this.props.treeIsEmpty} isOpened={this.props.treeIsOpened} docTree={this.props.docTree} mapId={this.props.map.id} userId={this.props.userId}
                 openningDocTree={this.openningDocTree} initialDocumentLoad={this.initialDocumentLoad}
             />
 
@@ -197,7 +228,7 @@ class Editor extends Component{
             </Route> 
 
             <Route path='/text-editor'>
-              <TextEditor document={this.props.textEditorDocument} token={this.props.token}
+              <TextEditor document={this.props.document} token={this.props.token}
                 saveNewData={this.props.saveNewData}
               />
             </Route>
@@ -214,6 +245,7 @@ class Editor extends Component{
 const mapStateToProps = state => {  
   return {
     token: state.auth.token,
+    userId: state.user_data.user.id,
 
     map: state.map_data.map,
     mapIsEmpty: state.map_data.mapIsEmpty,
@@ -224,7 +256,7 @@ const mapStateToProps = state => {
     docTree:  state.doc_tree.tree,
 
     textEditorIsEmpty: state.text_editor.isEmpty,
-    textEditorDocument: state.text_editor.document
+    document: state.text_editor.document
   };
 };
 

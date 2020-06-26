@@ -1,7 +1,5 @@
 import * as types from '../constants/types';
 
-import { returnErrors } from "./errorAction";
-
 
 export const loadMapId = (id) => (dispatch) => {
     dispatch({ type: types.map.RECET_MAP });  

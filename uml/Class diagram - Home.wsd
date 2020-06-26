@@ -1,6 +1,6 @@
 @startuml Use Case
 skinparam classAttributeIconSize 0
-left to right direction
+' left to right direction
 class Home {
         +privateMaps: array
         +publicMaps: array
@@ -31,13 +31,13 @@ interface Home_MapsList {
         +publicMaps: array
 
         +OpenFormAddMap(): void
-        +PutToTrash(int: id)
-        +OpenMapEditor(int: id)
+        +PutToTrash(id: int)
+        +OpenMapEditor(id: int)
 }
 interface Home_MapsListRecent  {
         +recentMaps: array
 
-        +OpenMapEditor(int: id)
+        +OpenMapEditor(id: int)
 }
 interface Home_MapsListTrash {
         +trashMaps: array
@@ -45,7 +45,9 @@ interface Home_MapsListTrash {
         +DeleteMap(id: int)
         +ReviveMap(id: int)
 }
-interface Home_FormAddMap {}
+interface Home_FormAddMap {
+        +SubmitForm(): string
+}
 
 
 Home *--> Home_Menu

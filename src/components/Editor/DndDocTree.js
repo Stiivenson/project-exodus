@@ -57,22 +57,18 @@ class DndDocTree extends Component{
       // The second to last entry (accessed here) is the parent node's key
       parent: path.length > 1 ? path[path.length - 2] : null,
     }));
-
-    console.log('flatData: ', flatData);  
-    console.log('updateTreeData: ', treeData);
-    let nodeId = this.props.docTree.id, mapId = this.props.mapId;
+    let nodeId = this.props.docTree.id, mapId = this.props.mapId;    
     this.props.socket.emit('CLIENT--DocTree:UPDATE_TREE_DATA', { mapId: mapId, nodeId: nodeId, flatData: flatData});
   }
 
   createNewDoc = () => {
-    //this.props.history.push('/text-editor')
     let nodeId = this.props.docTree.id, mapId = this.props.mapId;
     let document = {
       title: 'Новая запись',
       isDirectory: false,
       parent: null
     }
-    this.props.socket.emit('CLIENT--DocTree:CREATE_DOC', { mapId: mapId, nodeId: nodeId, document: document});
+    this.props.socket.emit('CLIENT--DocTree:CREATE_DOC', { userId: this.props.userId, mapId: mapId, nodeId: nodeId, document: document});
   }
 
   createNewFolder = () => {

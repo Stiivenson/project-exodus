@@ -26,6 +26,6 @@ const MapSchema = new Schema({
     }
 });
 
-
+MapSchema.index({ title: 'text' });
 
 module.exports = Maps = mongoose.model('map', MapSchema);

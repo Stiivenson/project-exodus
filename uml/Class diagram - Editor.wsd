@@ -1,0 +1,90 @@
+@startuml Use Case
+skinparam classAttributeIconSize 0
+
+class Editor {  
+        +map: obj
+        +docTree: obj
+        +document: obj
+
+        --MapEditor functions--
+        +loadMapData(map: obj)
+
+        +addNode(node: obj)
+        +moveNode(positions: arr)
+        +updateNode(node: obj)
+        +deleteNode(id: int)
+
+        +addEdge(edge: obj)
+        +deleteEdge(id: int)
+
+        ..DndDocTree functions..
+        +loadTreeData(tree: obj)
+        +updateTreeData(treeData: arr)
+        +addTreeItem(item: obj)
+
+        ..TextEditor functions..
+        +loadDocumentData(document: obj)
+        +saveNewData(docBody: arr)
+}
+
+class MapEditor {
+        +map: obj
+        
+        +onDoubleClick(): void
+        +onHold(): void
+
+        +disableEditMode(): void
+        +addNodeMode(): void
+        +addEdgeMode(): void
+        +deleteNodeMode(): void      
+
+        +saveNodeEditForm(): void  
+}
+' class Graph{
+'         -graph: obj
+'         -options: obj
+'         -events: obj
+' }
+' interface Map_ToolsBar{
+'         -onToolsBarClick(): void
+' }
+
+class DndDocTree {
+        +nodeId: int
+        +mapId: int
+        +docTree: obj
+
+        +createNewDoc(): void
+        +createNewFolder(): void
+        +updateTreeData(treeData: obj)
+}
+' class SortableTree{
+'         -treeData: arr
+'         -label: string
+'         -generateNodeProps: obj
+' }
+        
+
+class TextEditor  {
+        +document: obj
+
+        +handleServerSave(outputData: arr)
+}
+' class EditorJs{
+'         -data: obj
+'         -tools: obj
+
+'         -onChange(): void
+' }
+
+Editor *--> MapEditor
+Editor *--> DndDocTree
+Editor *--> TextEditor
+
+' MapEditor *--> Graph
+' MapEditor *--> Map_ToolsBar
+' DndDocTree *--> SortableTree
+' TextEditor *--> EditorJs
+
+
+@enduml

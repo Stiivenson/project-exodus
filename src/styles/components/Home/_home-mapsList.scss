@@ -3,11 +3,13 @@
 \*------------------------------------*/
 
 .home-container__maps-grid{
+    width: 1060px;
+
     display: flex;
     flex-flow: column;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-basis: 80%;
+    //flex-basis: 80%;
 }
 
 .maps-grid__title{
@@ -33,6 +35,7 @@
     cursor: pointer;
     overflow: hidden;
 
+    min-width: 200px;
     display: flex;
     flex-basis: 20%;
     height: 100px;

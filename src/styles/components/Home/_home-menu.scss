@@ -3,6 +3,10 @@
 \*------------------------------------*/
 
 .home-container__menu{
+    max-width: 200px;
+    width: 100%;
+    margin-right: 100px;
+
     display: flex;
     flex-flow: column;
 
@@ -11,8 +15,6 @@
 
 .menu-side{
     cursor: pointer;
-    max-width: 200px;
-    width: 100%;
 
     padding: 10px 15px;
     margin-bottom: 20px;
