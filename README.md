@@ -1,68 +1,61 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Project "Exodus"
+Кодовое название **"ИСХОД"** - Информационная Система Хранения Обработанных Данных.
 
-## Available Scripts
+Меня всегда вдохновляли "MindMap" или "Диаграммы Связей", за их возможность легко и просто графически отобразить большое количество данных, объединенных общей тематикой. Наравне с картами мне нравятся различные онлайн-блокноты и хранилища. У этих двух видов приложений есть свои плюсы и минусы, при этом плюсы карт могут компенсировать минусы блокнотов, и наоборот.
+Эта идея вдохновила меня на создание гибридного приложения – это обычный блокнот, однако разделы в нем отображаются в виде MindMap. При этом каждый раздел может содержать любое количество записей.
 
-In the project directory, you can run:
+# Структура приложения
+Приложение состоит из клиента и сервера.
+<br /><br />
+**Клиентская часть:**
+- использована библиотека React;
+- управлять состоянием помогает Redux;
+- перемещение при помощи react-router.
 
-### `npm start`
+**Серверная часть:**
+- построена на платформе Node.js, используется фреймворк Express;
+- СУБД MongoDB;
+- jwt-аутентификация;
+- используются WebSockets.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Клиентская часть
+Клиент состоит из 4х главных компонентов:
+- Главное меню;
+- Редактор карт;
+- Список записей;
+- Текстовый редактор.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Главное меню
+Содержит внутреннее меню для перемещения между разными списками карт, а также отображает выбранные списки.
 
-### `npm test`
+### Редактор карт
+Компонент для отображения и редактирования карт связей, представляет собой область, на которой можно создавать разделы и связи между ними. При выборе одного из разделов откроется компонент, содержащий список записей выбранного раздела.
+<br />
+Для создания интерактивной карты связей была выбрана библиотека *vis.js*, для использования с React есть готовый компонент *react-graph-vis*.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Список записей
+Данный компонент будет показан при выборе пользователем одного из разделов на карте, содержит список записей, сохраненных в выбранном разделе. При выборе одной из записи откроется компонент с текстовым редактором.
+<br />
+Используется готовый компонент *react-sortable-tree*, для обеспечения интерактивности списка.
 
-### `npm run build`
+### Текстовый редактор
+Обычный текстовый редактор 😊
+<br />
+Для реализации редактора было выбрано готовое решение *Editor.js*. Отличительная особенность данного редактора – это хранение и представление данных в формате json.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Панель навигации
+Пользователю доступен поиск карт и записей (локально и глобально), а также переход между главным меню и редакторами. 
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+# Серверная часть
+Для общения с сервером был разработан API.
+<br />
+При этом, приложение поддерживает возможность совместного доступа – как к одной карте, так и к одной записи. Для этого используется библиотека *WebSockets*.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Дополнительно
+На данной gif плохого качества (видео будет позже) представлен пример работы приложения, а именно – разрешение совместного доступа и его проверка.
 
-### `npm run eject`
+![Работа_приложения](https://user-images.githubusercontent.com/26305610/89256159-ace90680-d64d-11ea-8654-95407a8dc4bc.gif)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**Данный проект также был сделан в рамках дипломного проекта в институте и защищен на 5 (думаю, это что-то да значит).**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Сейчас я понимаю, что многие вещи были сделаны неправильно или слишком сложно, поэтому в скором времени буду работать над версией 2.0, улучшенной и готовой к наполнению новым функционалом. Помимо этого - загрузка приложения на хостинг.
